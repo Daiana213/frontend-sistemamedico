@@ -1,11 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
+import RegistroPaciente from './pages/RegistroPaciente'
 import RutaProtegida from './components/RutaProtegida'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/registro-paciente" element={<RegistroPaciente />} />
 
       <Route element={<RutaProtegida />}>
         <Route

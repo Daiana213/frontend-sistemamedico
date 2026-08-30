@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
+import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
 
 function Login() {
   const [dni, setDni] = useState('')
@@ -47,38 +48,61 @@ function Login() {
 
   if (roles) {
     return (
-      <div>
-        <h2>¿Con qué rol querés ingresar?</h2>
-        {roles.map((rol) => (
-          <button key={rol} onClick={() => handleSeleccionRol(rol)}>
-            {rol}
-          </button>
-        ))}
-        {error && <p>{error}</p>}
+      <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-10">
+        <h2 className="text-2xl font-medium text-[var(--text-h)]">¿Con qué rol querés ingresar?</h2>
+        <div className="flex flex-col gap-3">
+          {roles.map((rol) => (
+            <button key={rol} onClick={() => handleSeleccionRol(rol)} className={buttonClass}>
+              {rol}
+            </button>
+          ))}
+        </div>
+        {error && <p className={errorClass}>{error}</p>}
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Iniciar sesión</h2>
-      <input
-        type="text"
-        placeholder="DNI"
-        value={dni}
-        onChange={(e) => setDni(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      {error && <p>{error}</p>}
-      <button type="submit">Ingresar</button>
-    </form>
+    <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-10">
+      <h2 className="text-2xl font-medium text-[var(--text-h)]">Iniciar sesión</h2>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <label className={labelClass}>
+          DNI
+          <input
+            type="text"
+            className={inputClass}
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            required
+          />
+        </label>
+
+        <label className={labelClass}>
+          Contraseña
+          <input
+            type="password"
+            className={inputClass}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+
+        {error && <p className={errorClass}>{error}</p>}
+
+        <button type="submit" className={buttonClass}>
+          Ingresar
+        </button>
+
+        <p className="text-sm text-[var(--text)]">
+          ¿No tenés cuenta?{' '}
+          <Link to="/registro-paciente" className="text-[var(--accent)] underline">
+            Registrate
+          </Link>
+        </p>
+      </form>
+    </div>
   )
 }
 
