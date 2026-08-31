@@ -3,6 +3,8 @@ import Login from './pages/Login'
 import RegistroPaciente from './pages/RegistroPaciente'
 import RutaProtegida from './components/RutaProtegida'
 import AprobacionMenores from './pages/AprobacionMenores'
+import RegistroAdministrativo from './pages/RegistroAdministrativo'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
@@ -14,23 +16,7 @@ function App() {
         path="/dashboard"
         element={
           <RutaProtegida>
-            <div>
-              <p>Dashboard (placeholder)</p>
-              {localStorage.getItem('rolActivo') === 'ADMINISTRATIVO' && (
-                <>
-                  <a href="/menores-pendientes">Ver menores pendientes de aprobación</a>
-                  <br />
-                </>
-              )}
-              <button
-                onClick={() => {
-                  localStorage.clear()
-                  window.location.href = '/'
-                }}
-              >
-                Cerrar sesión
-              </button>
-            </div>
+            <Dashboard />
           </RutaProtegida>
         }
       />
@@ -43,7 +29,17 @@ function App() {
           </RutaProtegida>
         }
       />
+
+            <Route
+        path="/registro-administrativo"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
+            <RegistroAdministrativo />
+          </RutaProtegida>
+        }
+      />
     </Routes>
+    
   )
 }
 

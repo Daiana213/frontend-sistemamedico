@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../api/axios'
 import { buttonClass, errorClass, inputClass } from '../utils/formStyles'
+import { Link } from 'react-router-dom'
 
 function AprobacionMenores() {
   const [menores, setMenores] = useState([])
@@ -70,7 +71,10 @@ function AprobacionMenores() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <h2 className="text-2xl font-medium text-[var(--text-h)]">Menores pendientes de aprobación</h2>
-
+      
+      <Link to="/dashboard" className="text-sm text-[var(--accent)] underline">
+        ← Volver al dashboard
+      </Link>
       {error && <p className={errorClass}>{error}</p>}
 
       {menores.length === 0 && !error && (
