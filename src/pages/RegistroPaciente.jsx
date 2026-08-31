@@ -1,12 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
-
-// Temporal: hasta que el backend tenga un endpoint para listar esto de verdad
-const OBRAS_SOCIALES = [
-  { idObraSocial: 1, nombre: 'OSDE', planes: [{ idPlan: 1, nombre: 'Plan Básico' }] },
-]
 
 function calcularEdad(fechaNacimiento) {
   if (!fechaNacimiento) return null
@@ -40,12 +35,31 @@ function RegistroPaciente() {
   const [documento, setDocumento] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [obrasSociales, setObrasSociales] = useState([])
+  const [planes, setPlanes] = useState([])
 
   const edad = calcularEdad(form.fechaNacimiento)
   const esMenor = edad !== null && edad < 18
 
-  const planesDisponibles =
-    OBRAS_SOCIALES.find((o) => String(o.idObraSocial) === form.idObraSocial)?.planes ?? []
+  // Carga las obras sociales una sola vez, al montar el componente
+  useEffect(() => {
+    api
+      .get('/obras-sociales')
+      .then(({ data }) => setObrasSociales(data))
+      .catch(() => setError('No se pudieron cargar las obras sociales. Recargá la página.'))
+  }, [])
+
+  // Cada vez que cambia la obra social elegida, trae sus planes
+  useEffect(() => {
+    if (!form.idObraSocial) {
+      setPlanes([])
+      return
+    }
+    api
+      .get(`/obras-sociales/${form.idObraSocial}/planes`)
+      .then(({ data }) => setPlanes(data))
+      .catch(() => setError('No se pudieron cargar los planes de esa obra social.'))
+  }, [form.idObraSocial])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -82,12 +96,12 @@ function RegistroPaciente() {
       await api.post('/pacientes/registro', formData)
       navigate('/', { state: { registroExitoso: true } })
     } catch (err) {
-    const mensaje = err.response?.data?.error
-    if (err.response?.status === 409) {
+      const mensaje = err.response?.data?.error
+      if (err.response?.status === 409) {
         setError(`${mensaje} Si ya tenés una cuenta, iniciá sesión en lugar de registrarte.`)
-    } else {
+      } else {
         setError(mensaje || 'Error al registrar. Intentá nuevamente.')
-    }
+      }
     } finally {
       setLoading(false)
     }
@@ -190,7 +204,7 @@ function RegistroPaciente() {
               required
             >
               <option value="">Seleccionar</option>
-              {OBRAS_SOCIALES.map((o) => (
+              {obrasSociales.map((o) => (
                 <option key={o.idObraSocial} value={o.idObraSocial}>
                   {o.nombre}
                 </option>
@@ -208,7 +222,7 @@ function RegistroPaciente() {
               disabled={!form.idObraSocial}
             >
               <option value="">Seleccionar</option>
-              {planesDisponibles.map((p) => (
+              {planes.map((p) => (
                 <option key={p.idPlan} value={p.idPlan}>
                   {p.nombre}
                 </option>
@@ -275,17 +289,9 @@ function RegistroPaciente() {
           </fieldset>
         )}
 
-        {error && (
-          <p className="rounded-md border border-red-400/40 bg-red-400/10 px-3 py-2 text-sm text-red-400">
-            {error}
-          </p>
-        )}
+        {error && <p className={errorClass}>{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading} className={buttonClass}>
           {loading ? 'Registrando...' : 'Registrarme'}
         </button>
 
