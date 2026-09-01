@@ -1,18 +1,19 @@
 import { Link } from 'react-router-dom'
+import '../styles/Dashboard.css'
 
 function Dashboard() {
   const rolActivo = localStorage.getItem('rolActivo')
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-4 px-4 py-10">
-      <p className="text-[var(--text-h)]">Dashboard (placeholder)</p>
+    <div className="dashboard-container">
+      <p className="dashboard-placeholder">Dashboard (placeholder)</p>
 
       {rolActivo === 'ADMINISTRATIVO' && (
-        <div className="flex flex-col gap-2">
-          <Link to="/menores-pendientes" className="text-[var(--accent)] underline">
+        <div className="dashboard-links">
+          <Link to="/menores-pendientes" className="dashboard-logout">
             Ver menores pendientes de aprobación
           </Link>
-          <Link to="/registro-administrativo" className="text-[var(--accent)] underline">
+          <Link to="/registro-administrativo" className="dashboard-logout">
             Registrar administrativo
           </Link>
         </div>
