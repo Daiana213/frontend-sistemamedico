@@ -68,6 +68,14 @@ function RegistroAdministrativo() {
   }
 
   return (
+  <div className="regadmin-split">
+    <div className="regadmin-visual">
+      <div className="regadmin-visual-content">
+        <h3>Equipo administrativo</h3>
+        <p>Gestioná altas de personal y accesos del sanatorio de forma centralizada.</p>
+      </div>
+    </div>
+
     <div className="regadmin-page">
       <h2 className="regadmin-title">Registro de administrativo</h2>
 
@@ -153,11 +161,7 @@ function RegistroAdministrativo() {
         </label>
 
         {error && <p className="regadmin-error">{error}</p>}
-        {exito && (
-          <p className="regadmin-success">
-            {exito}
-          </p>
-        )}
+        {exito && <p className="regadmin-success">{exito}</p>}
 
         <button type="submit" disabled={loading} className="regadmin-button">
           {loading ? 'Registrando...' : 'Registrar administrativo'}
@@ -168,7 +172,8 @@ function RegistroAdministrativo() {
         </Link>
       </form>
     </div>
-  )
+  </div>
+)
 }
 
 export default RegistroAdministrativo

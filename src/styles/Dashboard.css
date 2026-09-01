@@ -4,7 +4,7 @@
    ============================================ */
 
 .dashboard-container {
-  max-width: 480px;
+  max-width: 1820px;
   margin: 0 auto;
   padding: 56px 24px;
   display: flex;
@@ -13,6 +13,10 @@
   min-height: 100vh;
   box-sizing: border-box;
   background: var(--color-background, #EAF2FE);
+}
+
+.dashboard-container{
+  width: 100%;
 }
 
 .dashboard-placeholder {

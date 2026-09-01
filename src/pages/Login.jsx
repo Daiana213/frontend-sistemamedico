@@ -49,7 +49,7 @@ function Login() {
       <div className="login-form-side">
         <div className="login-brand">
           <div className="mark">+</div>
-          <span className="name">Sanatorio San Agustín</span>
+          <span className="name">Sanatorio Antonia</span>
         </div>
 
         <div className="login-content">
