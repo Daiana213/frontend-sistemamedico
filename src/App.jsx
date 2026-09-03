@@ -4,6 +4,7 @@ import RegistroPaciente from './pages/RegistroPaciente'
 import RutaProtegida from './components/RutaProtegida'
 import AprobacionMenores from './pages/AprobacionMenores'
 import RegistroAdministrativo from './pages/RegistroAdministrativo'
+import CambiarPassword from './pages/CambiarPassword'
 import Dashboard from './pages/Dashboard'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/registro-paciente" element={<RegistroPaciente />} />
+      <Route path="/cambiar-password" element={<CambiarPassword />} />
 
       <Route
         path="/dashboard"
