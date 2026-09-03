@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import api from '../api/axios'
 import { buttonClass, errorClass, inputClass } from '../utils/formStyles'
-import { Link } from 'react-router-dom'
 
 function AprobacionMenores() {
   const [menores, setMenores] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [procesando, setProcesando] = useState(null) // idPaciente en curso
-  const [motivos, setMotivos] = useState({}) // { [idPaciente]: texto }
-  const [mostrarRechazo, setMostrarRechazo] = useState(null) // idPaciente con el form de rechazo abierto
+  const [procesando, setProcesando] = useState(null)
+  const [cargandoDocumento, setCargandoDocumento] = useState(null)
+  const [motivos, setMotivos] = useState({})
+  const [mostrarRechazo, setMostrarRechazo] = useState(null)
 
   const cargarMenores = () => {
     setLoading(true)
@@ -64,17 +65,40 @@ function AprobacionMenores() {
     }
   }
 
+  const handleVerDocumento = async (idDocumento) => {
+    setCargandoDocumento(idDocumento)
+    setError('')
+    try {
+      const { data } = await api.get(`/documentos/${idDocumento}`)
+      window.open(data.url, '_blank', 'noopener,noreferrer')
+    } catch (err) {
+      const status = err.response?.status
+      if (status === 401) {
+        setError('No estás autenticado. Iniciá sesión nuevamente.')
+      } else if (status === 403) {
+        setError('No tenés permisos para ver este documento.')
+      } else if (status === 404) {
+        setError('El documento no fue encontrado.')
+      } else {
+        setError('No se pudo abrir el documento. Intentá nuevamente.')
+      }
+    } finally {
+      setCargandoDocumento(null)
+    }
+  }
+
   if (loading) {
     return <p className="p-6 text-[var(--text)]">Cargando registros pendientes...</p>
   }
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Menores pendientes de aprobación</h2>
-      
       <Link to="/dashboard" className="text-sm text-[var(--accent)] underline">
         ← Volver al dashboard
       </Link>
+
+      <h2 className="text-2xl font-medium text-[var(--text-h)]">Menores pendientes de aprobación</h2>
+
       {error && <p className={errorClass}>{error}</p>}
 
       {menores.length === 0 && !error && (
@@ -101,10 +125,20 @@ function AprobacionMenores() {
                 </p>
               )}
               {menor.documento ? (
-                <p className="text-sm text-[var(--text)]">
-                  Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
-                  {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
-                </p>
+                <div className="flex items-center gap-2 text-sm text-[var(--text)]">
+                  <span>
+                    Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
+                    {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
+                  </span>
+                  <button
+                    type="button"
+                    className="text-[var(--accent)] underline disabled:opacity-50"
+                    disabled={cargandoDocumento === menor.documento.idDocumento}
+                    onClick={() => handleVerDocumento(menor.documento.idDocumento)}
+                  >
+                    {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
+                  </button>
+                </div>
               ) : (
                 <p className="text-sm text-[var(--text)]">Sin documento adjunto.</p>
               )}
