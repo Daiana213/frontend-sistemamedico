@@ -11,11 +11,17 @@ function Login() {
   const [preSessionToken, setPreSessionToken] = useState('')
   const navigate = useNavigate()
 
-  const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo) => {
+  const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo, primerLogin) => {
     localStorage.setItem('accessToken', accessToken)
     if (refreshToken) localStorage.setItem('refreshToken', refreshToken)
     localStorage.setItem('rolActivo', rolActivo)
-    navigate('/dashboard')
+    if (primerLogin) {
+      localStorage.setItem('primerLogin', 'true')
+      navigate('/cambiar-password')
+    } else {
+      localStorage.removeItem('primerLogin')
+      navigate('/dashboard')
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -28,7 +34,7 @@ function Login() {
         setPreSessionToken(data.preSessionToken)
         return
       }
-      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo)
+      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al iniciar sesión')
     }
@@ -38,7 +44,7 @@ function Login() {
     setError('')
     try {
       const { data } = await api.post('/auth/seleccionar-rol', { preSessionToken, rol })
-      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo)
+      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al seleccionar rol')
     }

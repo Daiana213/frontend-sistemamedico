@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
-import api from '../api/axios'
 import { Link } from 'react-router-dom'
+import api from '../api/axios'
 import '../styles/AprobacionMenores.css'
 
 function AprobacionMenores() {
   const [menores, setMenores] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [procesando, setProcesando] = useState(null) // idPaciente en curso
-  const [motivos, setMotivos] = useState({}) // { [idPaciente]: texto }
-  const [mostrarRechazo, setMostrarRechazo] = useState(null) // idPaciente con el form de rechazo abierto
+  const [procesando, setProcesando] = useState(null)
+  const [cargandoDocumento, setCargandoDocumento] = useState(null)
+  const [motivos, setMotivos] = useState({})
+  const [mostrarRechazo, setMostrarRechazo] = useState(null)
 
   const cargarMenores = () => {
     setLoading(true)
@@ -64,17 +65,41 @@ function AprobacionMenores() {
     }
   }
 
+  const handleVerDocumento = async (idDocumento) => {
+    setCargandoDocumento(idDocumento)
+    setError('')
+    try {
+      const { data } = await api.get(`/documentos/${idDocumento}`)
+      window.open(data.url, '_blank', 'noopener,noreferrer')
+    } catch (err) {
+      const status = err.response?.status
+      if (status === 401) {
+        setError('No estás autenticado. Iniciá sesión nuevamente.')
+      } else if (status === 403) {
+        setError('No tenés permisos para ver este documento.')
+      } else if (status === 404) {
+        setError('El documento no fue encontrado.')
+      } else {
+        setError('No se pudo abrir el documento. Intentá nuevamente.')
+      }
+    } finally {
+      setCargandoDocumento(null)
+    }
+  }
+
   if (loading) {
     return <p className="menores-loading">Cargando registros pendientes...</p>
   }
 
   return (
+
     <div className="menores-page">
-      <h2 className="menores-title">Menores pendientes de aprobación</h2>
-      
       <Link to="/dashboard" className="menores-back-link">
         ← Volver al dashboard
       </Link>
+
+      <h2 className="menores-title">Menores pendientes de aprobación</h2>
+
       {error && <p className="menores-error">{error}</p>}
 
       {menores.length === 0 && !error && (
@@ -101,11 +126,21 @@ function AprobacionMenores() {
                 </p>
               )}
               {menor.documento ? (
-                <p className="menor-detail">
-                  Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
-                  {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
-                </p>
-              ) : (
+                <div className="menor-detail">
+                  <span>
+                    Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
+                    {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
+                  </span>
+                  <button
+                    type="button"
+                    className="menor-detail"
+                    disabled={cargandoDocumento === menor.documento.idDocumento}
+                    onClick={() => handleVerDocumento(menor.documento.idDocumento)}
+                  >
+                    {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
+                  </button>
+                </div>  )
+               : (
                 <p className="menor-detail">Sin documento adjunto.</p>
               )}
             </div>
