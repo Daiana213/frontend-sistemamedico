@@ -5,29 +5,34 @@ function Dashboard() {
   const rolActivo = localStorage.getItem('rolActivo')
 
   return (
-    <div className="dashboard-container">
-      <p className="dashboard-placeholder">Dashboard (placeholder)</p>
+    <div className="dashboard-page">
+      <header className="dashboard-banner">
+        <div className="dashboard-banner-text">
+          <h1 className="dashboard-banner-title">Bienvenido</h1>
+          <p className="dashboard-banner-subtitle">Rol activo: {rolActivo}</p>
+        </div>
+
+        <button
+          className="dashboard-logout"
+          onClick={() => {
+            localStorage.clear()
+            window.location.href = '/'
+          }}
+        >
+          Cerrar sesión
+        </button>
+      </header>
 
       {rolActivo === 'ADMINISTRATIVO' && (
-        <div className="dashboard-links">
-          <Link to="/menores-pendientes" className="dashboard-logout">
+        <div className="dashboard-chips">
+          <Link to="/menores-pendientes" className="dashboard-chip dashboard-chip--blue">
             Ver menores pendientes de aprobación
           </Link>
-          <Link to="/registro-administrativo" className="dashboard-logout">
+          <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">
             Registrar administrativo
           </Link>
         </div>
       )}
-
-      <button
-        className="w-fit rounded-md border border-[var(--border)] px-4 py-2 text-[var(--text-h)]"
-        onClick={() => {
-          localStorage.clear()
-          window.location.href = '/'
-        }}
-      >
-        Cerrar sesión
-      </button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 /* ============================================
    AprobacionMenores.jsx
-   Tema azul (interno/admin)
+   Tema azul — ensanchado, cards en grid
    ============================================ */
 
 .menores-loading {
@@ -9,24 +9,16 @@
   color: var(--color-text-secondary, #6B7280);
 }
 
+/* Después */
 .menores-page {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 48px 24px;
+  width: 100%;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   min-height: 100vh;
   box-sizing: border-box;
   background: var(--color-background, #EAF2FE);
-}
-
-.menores-title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-text, #111827);
-  letter-spacing: -0.01em;
 }
 
 .menores-back-link {
@@ -41,6 +33,14 @@
   text-decoration: underline;
 }
 
+.menores-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+  letter-spacing: -0.01em;
+}
+
 .menores-error {
   font-size: 13px;
   color: #DC2626;
@@ -52,10 +52,11 @@
   color: var(--color-text-secondary, #6B7280);
 }
 
+/* ===== Grid de cards en vez de columna angosta ===== */
 .menores-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
 }
 
 .menor-card {
@@ -88,6 +89,36 @@
   color: var(--color-text-secondary, #6B7280);
 }
 
+/* Fila del documento: texto + botón, con espacio entre ambos */
+.menor-document-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.menor-btn-doc {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--color-primary, #2F5EE0);
+  background: #EFF4FF;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: filter 0.12s;
+}
+
+.menor-btn-doc:hover {
+  filter: brightness(0.96);
+}
+
+.menor-btn-doc:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .menor-reject-form {
   display: flex;
   flex-direction: column;
@@ -116,6 +147,7 @@
 .menor-actions {
   display: flex;
   gap: 10px;
+  margin-top: auto;
 }
 
 .menor-btn-primary {
@@ -174,7 +206,11 @@
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
   .menores-page {
-    padding: 32px 16px;
+    padding: 20px;
+  }
+
+  .menores-list {
+    grid-template-columns: 1fr;
   }
 
   .menor-actions {

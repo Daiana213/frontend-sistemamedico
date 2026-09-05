@@ -126,23 +126,23 @@ function AprobacionMenores() {
                 </p>
               )}
               {menor.documento ? (
-                <div className="menor-detail">
-                  <span>
-                    Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
-                    {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
-                  </span>
-                  <button
-                    type="button"
-                    className="menor-detail"
-                    disabled={cargandoDocumento === menor.documento.idDocumento}
-                    onClick={() => handleVerDocumento(menor.documento.idDocumento)}
-                  >
-                    {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
-                  </button>
-                </div>  )
-               : (
-                <p className="menor-detail">Sin documento adjunto.</p>
-              )}
+  <div className="menor-document-row">
+    <span className="menor-detail">
+      Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
+      {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
+    </span>
+    <button
+      type="button"
+      className="menor-btn-doc"
+      disabled={cargandoDocumento === menor.documento.idDocumento}
+      onClick={() => handleVerDocumento(menor.documento.idDocumento)}
+    >
+      {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
+    </button>
+  </div>
+) : (
+  <p className="menor-detail">Sin documento adjunto.</p>
+)}
             </div>
 
             {mostrarRechazo === menor.idPaciente ? (
