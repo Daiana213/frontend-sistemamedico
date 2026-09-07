@@ -1,0 +1,107 @@
+/* ============================================
+   Dashboard.jsx
+   Banner + chips, estilo dashboard WebMed
+   ============================================ */
+
+.dashboard-page {
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--color-background, #EAF2FE);
+}
+
+/* ===== Banner de bienvenida ===== */
+.dashboard-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 32px;
+  border-radius: var(--radius-lg, 16px);
+  background: linear-gradient(135deg, var(--color-primary, #2F5EE0), #1E3FAE);
+  color: #fff;
+}
+
+.dashboard-banner-title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dashboard-banner-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dashboard-logout {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #DC2626;
+  background: #fff;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: filter 0.12s;
+}
+
+.dashboard-logout:hover {
+  filter: brightness(0.96);
+}
+
+/* ===== Chips de acciones ===== */
+.dashboard-chips {
+  display: inline-grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.dashboard-chip {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: var(--radius-lg, 14px);
+  background: var(--color-surface, #fff);
+  box-shadow: var(--shadow-sm, 0 4px 16px -8px rgba(47, 94, 224, 0.15));
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #111827);
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.dashboard-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 10px 24px -10px rgba(47, 94, 224, 0.25));
+}
+
+.dashboard-chip--blue {
+  border-left-color: var(--color-primary, #2F5EE0);
+}
+
+.dashboard-chip--green {
+  border-left-color: var(--color-secondary, #22A55C);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .dashboard-page {
+    padding: 20px;
+  }
+
+  .dashboard-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-logout {
+    align-self: flex-end;
+  }
+}

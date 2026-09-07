@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
-import { buttonClass, errorClass, inputClass } from '../utils/formStyles'
+import '../styles/AprobacionMenores.css'
 
 function AprobacionMenores() {
   const [menores, setMenores] = useState([])
@@ -88,66 +88,67 @@ function AprobacionMenores() {
   }
 
   if (loading) {
-    return <p className="p-6 text-[var(--text)]">Cargando registros pendientes...</p>
+    return <p className="menores-loading">Cargando registros pendientes...</p>
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
-      <Link to="/dashboard" className="text-sm text-[var(--accent)] underline">
+
+    <div className="menores-page">
+      <Link to="/dashboard" className="menores-back-link">
         ← Volver al dashboard
       </Link>
 
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Menores pendientes de aprobación</h2>
+      <h2 className="menores-title">Menores pendientes de aprobación</h2>
 
-      {error && <p className={errorClass}>{error}</p>}
+      {error && <p className="menores-error">{error}</p>}
 
       {menores.length === 0 && !error && (
-        <p className="text-[var(--text)]">No hay registros pendientes por ahora.</p>
+        <p className="menores-empty">No hay registros pendientes por ahora.</p>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="menores-list">
         {menores.map((menor) => (
           <div
             key={menor.idPaciente}
-            className="flex flex-col gap-3 rounded-md border border-[var(--border)] p-4"
+            className="menor-card"
           >
-            <div className="flex flex-col gap-1">
-              <p className="font-medium text-[var(--text-h)]">
+            <div className="menor-info">
+              <p className="menor-name">
                 {menor.nombre} {menor.apellido} — DNI {menor.dni}
               </p>
-              <p className="text-sm text-[var(--text)]">
+              <p className="menor-detail">
                 Registrado el {new Date(menor.fechaRegistro).toLocaleDateString('es-AR')}
               </p>
               {menor.responsable && (
-                <p className="text-sm text-[var(--text)]">
+                <p className="menor-detail">
                   Adulto responsable: {menor.responsable.nombre} {menor.responsable.apellido} (DNI{' '}
                   {menor.responsable.dni})
                 </p>
               )}
               {menor.documento ? (
-                <div className="flex items-center gap-2 text-sm text-[var(--text)]">
-                  <span>
-                    Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
-                    {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-[var(--accent)] underline disabled:opacity-50"
-                    disabled={cargandoDocumento === menor.documento.idDocumento}
-                    onClick={() => handleVerDocumento(menor.documento.idDocumento)}
-                  >
-                    {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
-                  </button>
-                </div>
-              ) : (
-                <p className="text-sm text-[var(--text)]">Sin documento adjunto.</p>
-              )}
+  <div className="menor-document-row">
+    <span className="menor-detail">
+      Documento: {menor.documento.tipoDocumento} — {menor.documento.nombreArchivo}
+      {menor.documento.intentos > 0 && ` (intento n.º ${menor.documento.intentos + 1})`}
+    </span>
+    <button
+      type="button"
+      className="menor-btn-doc"
+      disabled={cargandoDocumento === menor.documento.idDocumento}
+      onClick={() => handleVerDocumento(menor.documento.idDocumento)}
+    >
+      {cargandoDocumento === menor.documento.idDocumento ? 'Abriendo...' : 'Ver documento'}
+    </button>
+  </div>
+) : (
+  <p className="menor-detail">Sin documento adjunto.</p>
+)}
             </div>
 
             {mostrarRechazo === menor.idPaciente ? (
-              <div className="flex flex-col gap-2">
+              <div className="menor-reject-form">
                 <textarea
-                  className={inputClass}
+                  className="menor-textarea"
                   placeholder="Motivo del rechazo"
                   value={motivos[menor.idPaciente] || ''}
                   onChange={(e) =>
@@ -155,9 +156,9 @@ function AprobacionMenores() {
                   }
                   rows={2}
                 />
-                <div className="flex gap-2">
+                <div className="menor-actions">
                   <button
-                    className={buttonClass}
+                    className="menor-btn-primary"
                     disabled={procesando === menor.idPaciente}
                     onClick={() => handleRechazar(menor.idPaciente)}
                   >
@@ -165,7 +166,7 @@ function AprobacionMenores() {
                   </button>
                   <button
                     type="button"
-                    className="rounded-md border border-[var(--border)] px-4 py-2 text-[var(--text-h)]"
+                    className="menor-btn-cancel"
                     onClick={() => setMostrarRechazo(null)}
                   >
                     Cancelar
@@ -173,9 +174,9 @@ function AprobacionMenores() {
                 </div>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="menor-actions">
                 <button
-                  className={buttonClass}
+                  className="menor-btn-primary"
                   disabled={procesando === menor.idPaciente}
                   onClick={() => handleAprobar(menor.idPaciente)}
                 >
@@ -183,7 +184,7 @@ function AprobacionMenores() {
                 </button>
                 <button
                   type="button"
-                  className="rounded-md border border-red-400/40 px-4 py-2 text-red-400"
+                  className="menor-btn-reject"
                   onClick={() => setMostrarRechazo(menor.idPaciente)}
                 >
                   Rechazar

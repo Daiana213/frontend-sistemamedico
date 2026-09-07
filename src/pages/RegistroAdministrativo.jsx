@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
-import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
+import '../styles/RegistroAdministrativo.css'
 
 function RegistroAdministrativo() {
   const navigate = useNavigate()
@@ -68,73 +68,81 @@ function RegistroAdministrativo() {
   }
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-6 px-4 py-10">
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Registro de administrativo</h2>
+  <div className="regadmin-split">
+    <div className="regadmin-visual">
+      <div className="regadmin-visual-content">
+        <h3>Equipo administrativo</h3>
+        <p>Gestioná altas de personal y accesos del sanatorio de forma centralizada.</p>
+      </div>
+    </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
+    <div className="regadmin-page">
+      <h2 className="regadmin-title">Registro de administrativo</h2>
+
+      <form onSubmit={handleSubmit} className="regadmin-form">
+        <div className="regadmin-row">
+          <label className="regadmin-label">
             Nombre
-            <input name="nombre" className={inputClass} value={form.nombre} onChange={handleChange} required />
+            <input name="nombre" className="regadmin-input" value={form.nombre} onChange={handleChange} required />
           </label>
-          <label className={labelClass}>
+          <label className="regadmin-label">
             Apellido
-            <input name="apellido" className={inputClass} value={form.apellido} onChange={handleChange} required />
+            <input name="apellido" className="regadmin-input" value={form.apellido} onChange={handleChange} required />
           </label>
         </div>
 
-        <label className={labelClass}>
+        <label className="regadmin-label">
           DNI
-          <input name="dni" className={inputClass} value={form.dni} onChange={handleChange} required />
+          <input name="dni" className="regadmin-input" value={form.dni} onChange={handleChange} required />
         </label>
 
-        <label className={labelClass}>
+        <label className="regadmin-label">
           Puesto
           <input
             name="puesto"
             placeholder="Ej: recepción, facturación"
-            className={inputClass}
+            className="regadmin-input"
             value={form.puesto}
             onChange={handleChange}
             required
           />
         </label>
 
-        <label className={labelClass}>
+        <label className="regadmin-label">
           Teléfono
-          <input name="telefono" className={inputClass} value={form.telefono} onChange={handleChange} required />
+          <input name="telefono" className="regadmin-input" value={form.telefono} onChange={handleChange} required />
         </label>
 
-        <label className={labelClass}>
+        <label className="regadmin-label">
           Email
           <input
             name="email"
             type="email"
-            className={inputClass}
+            className="regadmin-input"
             value={form.email}
             onChange={handleChange}
             required
           />
         </label>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
+        <div className="regadmin-row">
+          <label className="regadmin-label">
             Contraseña
             <input
               name="password"
               type="password"
-              className={inputClass}
+              className="regadmin-input"
               value={form.password}
               onChange={handleChange}
               required
             />
           </label>
-          <label className={labelClass}>
+          <label className="regadmin-label">
             Confirmar contraseña
             <input
               name="confirmarPassword"
               type="password"
-              className={inputClass}
+              className="regadmin-input"
               value={form.confirmarPassword}
               onChange={handleChange}
               required
@@ -142,7 +150,7 @@ function RegistroAdministrativo() {
           </label>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-[var(--text-h)]">
+        <label className="regadmin-checkbox">
           <input
             type="checkbox"
             name="permisoGestionUsuarios"
@@ -152,23 +160,20 @@ function RegistroAdministrativo() {
           Puede gestionar usuarios (dar de alta otros administrativos/profesionales)
         </label>
 
-        {error && <p className={errorClass}>{error}</p>}
-        {exito && (
-          <p className="rounded-md border border-green-400/40 bg-green-400/10 px-3 py-2 text-sm text-green-400">
-            {exito}
-          </p>
-        )}
+        {error && <p className="regadmin-error">{error}</p>}
+        {exito && <p className="regadmin-success">{exito}</p>}
 
-        <button type="submit" disabled={loading} className={buttonClass}>
+        <button type="submit" disabled={loading} className="regadmin-button">
           {loading ? 'Registrando...' : 'Registrar administrativo'}
         </button>
 
-        <Link to="/dashboard" className="text-sm text-[var(--accent)] underline">
+        <Link to="/dashboard" className="regadmin-link">
           Volver al dashboard
         </Link>
       </form>
     </div>
-  )
+  </div>
+)
 }
 
 export default RegistroAdministrativo

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import api from '../api/axios'
-import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
+import '../styles/CambiarPassword.css'
 
 function CambiarPassword() {
   const navigate = useNavigate()
@@ -85,77 +85,78 @@ function CambiarPassword() {
   }
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-6 px-4 py-10">
-      <div>
-        <h2 className="text-2xl font-medium text-[var(--text-h)]">Cambio obligatorio de contraseña</h2>
-        <p className="mt-1 text-sm text-[var(--text)]">
+  <div className="cambiarpass-split">
+    <div className="cambiarpass-visual">
+      <div className="cambiarpass-visual-content">
+        <h3>Tu seguridad primero</h3>
+        <p>Antes de continuar, definí una contraseña personal y segura para tu cuenta.</p>
+      </div>
+    </div>
+
+    <div className="cambiarpass-page">
+      <div className="cambiarpass-header">
+        <h2 className="cambiarpass-title">Cambio obligatorio de contraseña</h2>
+        <p className="cambiarpass-description">
           Por seguridad, al iniciar sesión por primera vez debés establecer una nueva contraseña personal.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className={labelClass}>
+      <form onSubmit={handleSubmit} className="cambiarpass-form">
+        <label className="cambiarpass-label">
           Contraseña actual
           <input
             type="password"
             name="passwordActual"
             placeholder="Ingresá la contraseña con la que iniciaste sesión"
-            className={inputClass}
+            className="cambiarpass-input"
             value={form.passwordActual}
             onChange={handleChange}
             required
           />
         </label>
 
-        <label className={labelClass}>
+        <label className="cambiarpass-label">
           Nueva contraseña
           <input
             type="password"
             name="nuevoPassword"
             placeholder="Mínimo 8 caracteres, mayúscula, minúscula y número"
-            className={inputClass}
+            className="cambiarpass-input"
             value={form.nuevoPassword}
             onChange={handleChange}
             required
           />
         </label>
 
-        <label className={labelClass}>
+        <label className="cambiarpass-label">
           Confirmar nueva contraseña
           <input
             type="password"
             name="confirmarPassword"
             placeholder="Repetí la nueva contraseña"
-            className={inputClass}
+            className="cambiarpass-input"
             value={form.confirmarPassword}
             onChange={handleChange}
             required
           />
         </label>
 
-        {error && <p className={errorClass}>{error}</p>}
-        {exito && (
-          <p className="rounded-md border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-400">
-            {exito}
-          </p>
-        )}
+        {error && <p className="cambiarpass-error">{error}</p>}
+        {exito && <p className="cambiarpass-success">{exito}</p>}
 
-        <button type="submit" disabled={loading} className={buttonClass}>
+        <button type="submit" disabled={loading} className="cambiarpass-button">
           {loading ? 'Actualizando...' : 'Guardar nueva contraseña'}
         </button>
       </form>
 
-      <div className="flex justify-center">
-        <button
-          type="button"
-          onClick={handleCerrarSesion}
-          className="text-sm text-[var(--text)] underline hover:text-[var(--text-h)]"
-        >
+      <div className="cambiarpass-footer">
+        <button type="button" onClick={handleCerrarSesion} className="cambiarpass-logout-link">
           Cerrar sesión
         </button>
       </div>
     </div>
-  )
+  </div>
+)
 }
 
 export default CambiarPassword

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
-import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
+import '../styles/Login.css'
 
 function Login() {
   const [dni, setDni] = useState('')
@@ -29,13 +29,11 @@ function Login() {
     setError('')
     try {
       const { data } = await api.post('/auth/login', { dni, password })
-
       if (data.requiereSeleccionRol) {
         setRoles(data.rolesDisponibles)
         setPreSessionToken(data.preSessionToken)
         return
       }
-
       guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al iniciar sesión')
@@ -52,62 +50,77 @@ function Login() {
     }
   }
 
-  if (roles) {
-    return (
-      <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-10">
-        <h2 className="text-2xl font-medium text-[var(--text-h)]">¿Con qué rol querés ingresar?</h2>
-        <div className="flex flex-col gap-3">
-          {roles.map((rol) => (
-            <button key={rol} onClick={() => handleSeleccionRol(rol)} className={buttonClass}>
-              {rol}
-            </button>
-          ))}
-        </div>
-        {error && <p className={errorClass}>{error}</p>}
-      </div>
-    )
-  }
-
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 px-4 py-10">
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Iniciar sesión</h2>
+    <div className="login-split">
+      <div className="login-form-side">
+        <div className="login-brand">
+          <div className="mark">+</div>
+          <span className="name">Sanatorio Antonia</span>
+        </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className={labelClass}>
-          DNI
-          <input
-            type="text"
-            className={inputClass}
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            required
-          />
-        </label>
+        <div className="login-content">
+          {roles ? (
+            <>
+              <h2 className="login-title">Elegí tu rol</h2>
+              <p className="login-subtitle">Tu cuenta tiene más de un perfil asociado.</p>
+              <div className="role-list">
+                {roles.map((rol) => (
+                  <button key={rol} onClick={() => handleSeleccionRol(rol)} className="role-button">
+                    {rol}
+                  </button>
+                ))}
+              </div>
+              {error && <p className="login-error">{error}</p>}
+            </>
+          ) : (
+            <>
+              <h2 className="login-title">Bienvenido</h2>
+              <p className="login-subtitle">Ingresá con tu DNI y contraseña para continuar.</p>
 
-        <label className={labelClass}>
-          Contraseña
-          <input
-            type="password"
-            className={inputClass}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
+              <form onSubmit={handleSubmit} className="login-form">
+                <label>
+                  <span className="login-label">DNI</span>
+                  <input
+                    type="text"
+                    className="login-input"
+                    value={dni}
+                    onChange={(e) => setDni(e.target.value)}
+                    required
+                  />
+                </label>
 
-        {error && <p className={errorClass}>{error}</p>}
+                <label>
+                  <span className="login-label">Contraseña</span>
+                  <input
+                    type="password"
+                    className="login-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </label>
 
-        <button type="submit" className={buttonClass}>
-          Ingresar
-        </button>
+                {error && <p className="login-error">{error}</p>}
 
-        <p className="text-sm text-[var(--text)]">
-          ¿No tenés cuenta?{' '}
-          <Link to="/registro-paciente" className="text-[var(--accent)] underline">
-            Registrate
-          </Link>
-        </p>
-      </form>
+                <button type="submit" className="login-button">
+                  Ingresar
+                </button>
+
+                <p className="login-footer">
+                  ¿No tenés cuenta? <Link to="/registro-paciente">Registrate</Link>
+                </p>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="login-visual">
+        <div className="login-visual-content">
+          <h3>Tu turno, tu ficha y tu historial en un solo lugar.</h3>
+          <p>Gestioná tus consultas médicas de forma simple, segura y sin esperas.</p>
+        </div>
+      </div>
     </div>
   )
 }

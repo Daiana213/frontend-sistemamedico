@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
-import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
+import '../styles/RegistroPaciente.css'
 
 function calcularEdad(fechaNacimiento) {
   if (!fechaNacimiento) return null
@@ -108,61 +108,68 @@ function RegistroPaciente() {
   }
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-6 px-4 py-10">
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Registro de paciente</h2>
+    <div className="registro-split">
+    <div className="registro-visual">
+      <div className="registro-visual-content">
+        <h3>Unite a nosotros</h3>
+        <p>Creá tu cuenta y empezá a gestionar tu salud en un solo lugar.</p>
+      </div>
+    </div>
+    <div className="registro-page">
+      <h2 className="registro-title">Registro de paciente</h2>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
+      <form onSubmit={handleSubmit} className="registro-form">
+        <div className="registro-row">
+          <label className="registro-label">
             Nombre
-            <input name="nombre" className={inputClass} value={form.nombre} onChange={handleChange} required />
+            <input name="nombre" className="registro-input" value={form.nombre} onChange={handleChange} required />
           </label>
-          <label className={labelClass}>
+          <label className="registro-label">
             Apellido
-            <input name="apellido" className={inputClass} value={form.apellido} onChange={handleChange} required />
+            <input name="apellido" className="registro-input" value={form.apellido} onChange={handleChange} required />
           </label>
         </div>
 
-        <label className={labelClass}>
+        <label className="registro-label">
           DNI
-          <input name="dni" className={inputClass} value={form.dni} onChange={handleChange} required />
+          <input name="dni" className="registro-input" value={form.dni} onChange={handleChange} required />
         </label>
 
-        <label className={labelClass}>
+        <label className="registro-label">
           Teléfono
-          <input name="telefono" className={inputClass} value={form.telefono} onChange={handleChange} required />
+          <input name="telefono" className="registro-input" value={form.telefono} onChange={handleChange} required />
         </label>
 
-        <label className={labelClass}>
+        <label className="registro-label">
           Email
           <input
             name="email"
             type="email"
-            className={inputClass}
+            className="registro-input"
             value={form.email}
             onChange={handleChange}
             required
           />
         </label>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
+        <div className="registro-row">
+          <label className="registro-label">
             Contraseña
             <input
               name="password"
               type="password"
-              className={inputClass}
+              className="registro-input"
               value={form.password}
               onChange={handleChange}
               required
             />
           </label>
-          <label className={labelClass}>
+          <label className="registro-label">
             Confirmar contraseña
             <input
               name="confirmarPassword"
               type="password"
-              className={inputClass}
+              className="registro-input"
               value={form.confirmarPassword}
               onChange={handleChange}
               required
@@ -170,12 +177,12 @@ function RegistroPaciente() {
           </label>
         </div>
 
-        <label className={labelClass}>
+        <label className="registro-label">
           Fecha de nacimiento
           <input
             name="fechaNacimiento"
             type="date"
-            className={inputClass}
+            className="registro-input"
             value={form.fechaNacimiento}
             onChange={handleChange}
             max={new Date().toISOString().split('T')[0]}
@@ -183,9 +190,9 @@ function RegistroPaciente() {
           />
         </label>
 
-        <label className={labelClass}>
+        <label className="registro-label">
           Sexo
-          <select name="sexo" className={inputClass} value={form.sexo} onChange={handleChange} required>
+          <select name="sexo" className="registro-input" value={form.sexo} onChange={handleChange} required>
             <option value="">Seleccionar</option>
             <option value="MASCULINO">Masculino</option>
             <option value="FEMENINO">Femenino</option>
@@ -193,12 +200,12 @@ function RegistroPaciente() {
           </select>
         </label>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
+        <div className="registro-row">
+          <label className="registro-label">
             Obra social
             <select
               name="idObraSocial"
-              className={inputClass}
+              className="registro-input"
               value={form.idObraSocial}
               onChange={handleChange}
               required
@@ -211,11 +218,11 @@ function RegistroPaciente() {
               ))}
             </select>
           </label>
-          <label className={labelClass}>
+          <label className="registro-label">
             Plan
             <select
               name="idPlan"
-              className={inputClass}
+              className="registro-input"
               value={form.idPlan}
               onChange={handleChange}
               required
@@ -232,39 +239,39 @@ function RegistroPaciente() {
         </div>
 
         {esMenor && (
-          <fieldset className="flex flex-col gap-4 rounded-md border border-[var(--border)] p-4">
-            <legend className="px-1 text-sm text-[var(--text)]">
+          <fieldset className="registro-fieldset">
+            <legend className="registro-legend">
               Datos del adulto responsable (paciente menor de edad)
             </legend>
 
-            <label className={labelClass}>
+            <label className="registro-label">
               DNI del responsable
               <input
                 name="dniResponsable"
-                className={inputClass}
+                className="registro-input"
                 value={form.dniResponsable}
                 onChange={handleChange}
                 required
               />
             </label>
 
-            <label className={labelClass}>
+            <label className="registro-label">
               Parentesco
               <input
                 name="parentesco"
                 placeholder="Ej: madre, padre, tutor"
-                className={inputClass}
+                className="registro-input"
                 value={form.parentesco}
                 onChange={handleChange}
                 required
               />
             </label>
 
-            <label className={labelClass}>
+            <label className="registro-label">
               Tipo de documento
               <select
                 name="tipoDocumento"
-                className={inputClass}
+                className="registro-input"
                 value={form.tipoDocumento}
                 onChange={handleChange}
                 required
@@ -276,12 +283,12 @@ function RegistroPaciente() {
               </select>
             </label>
 
-            <label className={labelClass}>
+            <label className="registro-label">
               Documento adjunto (PDF, JPG o PNG)
               <input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
-                className={inputClass}
+                className="registro-input"
                 onChange={(e) => setDocumento(e.target.files[0])}
                 required
               />
@@ -289,19 +296,20 @@ function RegistroPaciente() {
           </fieldset>
         )}
 
-        {error && <p className={errorClass}>{error}</p>}
+        {error && <p className="registro-error">{error}</p>}
 
-        <button type="submit" disabled={loading} className={buttonClass}>
+        <button type="submit" disabled={loading} className="registro-button">
           {loading ? 'Registrando...' : 'Registrarme'}
         </button>
 
-        <p className="text-sm text-[var(--text)]">
+        <p className="registro-footer">
           ¿Ya tenés cuenta?{' '}
-          <Link to="/" className="text-[var(--accent)] underline">
+          <Link to="/">
             Iniciar sesión
           </Link>
         </p>
       </form>
+    </div>
     </div>
   )
 }

@@ -1,0 +1,211 @@
+/* ============================================
+   RegistroAdministrativo.jsx
+   Split screen con panel verde, igual a RegistroPaciente
+   ============================================ */
+
+.regadmin-split {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  background: var(--color-background, #EAFBF1);
+}
+
+/* ===== Panel decorativo (izquierda) — fijo ===== */
+.regadmin-visual {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 56px;
+  box-sizing: border-box;
+  background: var(--color-secondary, #22A55C);
+  background-image:
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.15) 0, transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.10) 0, transparent 40%);
+}
+
+.regadmin-visual-content {
+  color: #fff;
+  max-width: 380px;
+}
+
+.regadmin-visual-content h3 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.regadmin-visual-content p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== Columna del formulario (derecha) ===== */
+.regadmin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.regadmin-page > * {
+  width: 100%;
+  max-width: 480px;
+}
+
+.regadmin-title {
+  margin: 0 0 24px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.regadmin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: var(--shadow-md, 0 20px 40px -12px rgba(34, 165, 92, 0.15));
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.regadmin-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.regadmin-label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+}
+
+.regadmin-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 16px;
+  font-size: 14px;
+  color: var(--color-text, #111827);
+  background: var(--color-surface, #fff);
+  border: 1.5px solid #D1D5DB;
+  border-radius: 9999px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.regadmin-input:focus {
+  border-color: var(--color-secondary, #22A55C);
+}
+
+.regadmin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-text, #111827);
+  line-height: 1.4;
+}
+
+.regadmin-checkbox input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-secondary, #22A55C);
+  flex-shrink: 0;
+}
+
+.regadmin-error {
+  font-size: 13px;
+  color: #DC2626;
+  margin: 0;
+}
+
+.regadmin-success {
+  font-size: 13px;
+  color: #15803D;
+  background: #ECFDF5;
+  border: 1.5px solid #BBF7D0;
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 14px;
+  margin: 0;
+}
+
+.regadmin-button {
+  margin-top: 4px;
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-secondary, #22A55C);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: filter 0.12s, transform 0.05s;
+}
+
+.regadmin-button:hover {
+  filter: brightness(1.08);
+}
+
+.regadmin-button:active {
+  transform: translateY(1px);
+}
+
+.regadmin-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.regadmin-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-secondary, #22A55C);
+  text-decoration: none;
+}
+
+.regadmin-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .regadmin-split {
+    grid-template-columns: 1fr;
+  }
+
+  .regadmin-visual {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .regadmin-form {
+    padding: 28px;
+  }
+
+  .regadmin-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
