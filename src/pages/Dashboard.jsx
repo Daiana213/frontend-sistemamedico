@@ -31,6 +31,9 @@ function Dashboard() {
           <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">
             Registrar administrativo
           </Link>
+          <Link to="/registro-profesional" className="text-[var(--accent)] underline">
+            Registrar profesional
+          </Link>
         </div>
       )}
     </div>

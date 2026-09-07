@@ -4,6 +4,7 @@ import RegistroPaciente from './pages/RegistroPaciente'
 import RutaProtegida from './components/RutaProtegida'
 import AprobacionMenores from './pages/AprobacionMenores'
 import RegistroAdministrativo from './pages/RegistroAdministrativo'
+import RegistroProfesional from './pages/RegistroProfesional'
 import CambiarPassword from './pages/CambiarPassword'
 import Dashboard from './pages/Dashboard'
 
@@ -37,6 +38,15 @@ function App() {
         element={
           <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
             <RegistroAdministrativo />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/registro-profesional"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
+            <RegistroProfesional />
           </RutaProtegida>
         }
       />
