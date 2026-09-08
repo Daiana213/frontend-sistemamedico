@@ -1,35 +1,35 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import api from '../api/axios'
-import { inputClass, labelClass, buttonClass, errorClass } from '../utils/formStyles'
+﻿import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import api from "../api/axios"
+import "../styles/RegistroProfesional.css"
 
 const FORM_INICIAL = {
-  matricula: '',
-  nombre: '',
-  apellido: '',
-  dni: '',
-  telefono: '',
-  email: '',
-  password: '',
-  confirmarPassword: '',
-  telefonoAlternativo: '',
-  emailAlternativo: '',
+  matricula: "",
+  nombre: "",
+  apellido: "",
+  dni: "",
+  telefono: "",
+  email: "",
+  password: "",
+  confirmarPassword: "",
+  telefonoAlternativo: "",
+  emailAlternativo: "",
 }
 
 function RegistroProfesional() {
   const [form, setForm] = useState(FORM_INICIAL)
   const [especialidades, setEspecialidades] = useState([])
   const [especialidadesSeleccionadas, setEspecialidadesSeleccionadas] = useState([])
-  const [error, setError] = useState('')
-  const [exito, setExito] = useState('')
+  const [error, setError] = useState("")
+  const [exito, setExito] = useState("")
   const [loading, setLoading] = useState(false)
   const [cargandoEspecialidades, setCargandoEspecialidades] = useState(true)
 
   useEffect(() => {
     api
-      .get('/especialidades')
+      .get("/especialidades")
       .then((res) => setEspecialidades(res.data))
-      .catch(() => setError('No se pudieron cargar las especialidades. Recargá la página.'))
+      .catch(() => setError("No se pudieron cargar las especialidades. Recarga la pagina."))
       .finally(() => setCargandoEspecialidades(false))
   }, [])
 
@@ -46,16 +46,16 @@ function RegistroProfesional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
-    setExito('')
+    setError("")
+    setExito("")
 
     if (form.password !== form.confirmarPassword) {
-      setError('Las contraseñas no coinciden.')
+      setError("Las contraseñas no coinciden.")
       return
     }
 
     if (especialidadesSeleccionadas.length === 0) {
-      setError('Seleccioná al menos una especialidad.')
+      setError("Seleccioná al menos una especialidad.")
       return
     }
 
@@ -74,18 +74,18 @@ function RegistroProfesional() {
 
     setLoading(true)
     try {
-      const res = await api.post('/profesionales/registro', payload)
-      setExito(res.data.mensaje || 'Profesional registrado correctamente en el sistema.')
+      const res = await api.post("/profesionales/registro", payload)
+      setExito(res.data.mensaje || "Profesional registrado correctamente en el sistema.")
       setForm(FORM_INICIAL)
       setEspecialidadesSeleccionadas([])
     } catch (err) {
       const mensaje = err.response?.data?.error || err.response?.data?.message
       if (err.response?.status === 409) {
-        setError(mensaje || 'Ya existe un profesional con ese DNI o matrícula.')
+        setError(mensaje || "Ya existe un profesional con ese DNI o matrícula.")
       } else if (err.response?.status === 400) {
-        setError(mensaje || 'Error de validación. Revisá los datos ingresados.')
+        setError(mensaje || "Error de validación. Revisa los datos ingresados.")
       } else {
-        setError(mensaje || 'Error al registrar. Intentá nuevamente.')
+        setError(mensaje || "Error al registrar. Intenta nuevamente.")
       }
     } finally {
       setLoading(false)
@@ -93,173 +93,196 @@ function RegistroProfesional() {
   }
 
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
-      <h2 className="text-2xl font-medium text-[var(--text-h)]">Registro de profesional</h2>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className={labelClass}>
-          Matrícula
-          <input
-            name="matricula"
-            placeholder="Ej: MN-12345"
-            className={inputClass}
-            value={form.matricula}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
-            Nombre
-            <input
-              name="nombre"
-              className={inputClass}
-              value={form.nombre}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label className={labelClass}>
-            Apellido
-            <input
-              name="apellido"
-              className={inputClass}
-              value={form.apellido}
-              onChange={handleChange}
-              required
-            />
-          </label>
+    <div className="regpro-split">
+      {/* Panel decorativo izquierdo */}
+      <div className="regpro-visual">
+        <div className="regpro-visual-content">
+          <h3>Cuerpo médico</h3>
+          <p>Registra profesionales de la salud y asignales sus especialidades de forma centralizada.</p>
         </div>
+      </div>
 
-        <label className={labelClass}>
-          DNI
-          <input
-            name="dni"
-            className={inputClass}
-            value={form.dni}
-            onChange={handleChange}
-            required
-          />
-        </label>
+      {/* Columna del formulario */}
+      <div className="regpro-page">
+        <h2 className="regpro-title">Registro de profesional</h2>
 
-        <label className={labelClass}>
-          Teléfono
-          <input
-            name="telefono"
-            className={inputClass}
-            value={form.telefono}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <form onSubmit={handleSubmit} className="regpro-form">
 
-        <label className={labelClass}>
-          Email
-          <input
-            name="email"
-            type="email"
-            className={inputClass}
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          {/* Matrícula */}
+          <label className="regpro-label">
+            Matrícula
+            <input
+              name="matricula"
+              placeholder="Ej: MN-12345"
+              className="regpro-input"
+              value={form.matricula}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <fieldset className="flex flex-col gap-2">
-          <legend className="text-sm text-[var(--text)]">
-            Especialidades <span className="text-red-400">*</span>
-          </legend>
-          {cargandoEspecialidades ? (
-            <p className="text-sm text-[var(--text)]">Cargando especialidades...</p>
-          ) : especialidades.length === 0 && !error ? (
-            <p className="text-sm text-[var(--text)]">No hay especialidades disponibles.</p>
-          ) : (
-            <div className="flex flex-col gap-1 rounded-md border border-[var(--border)] px-3 py-2">
-              {especialidades.map((esp) => (
-                <label
-                  key={esp.idEspecialidad}
-                  className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text-h)]"
-                >
-                  <input
-                    type="checkbox"
-                    checked={especialidadesSeleccionadas.includes(esp.idEspecialidad)}
-                    onChange={() => toggleEspecialidad(esp.idEspecialidad)}
-                  />
-                  {esp.nombre}
-                </label>
-              ))}
-            </div>
-          )}
-        </fieldset>
-
-        <details>
-          <summary className="cursor-pointer select-none text-sm text-[var(--text)]">
-            Datos opcionales (teléfono y email alternativos)
-          </summary>
-          <div className="mt-3 flex flex-col gap-4">
-            <label className={labelClass}>
-              Teléfono alternativo
+          {/* Nombre y Apellido */}
+          <div className="regpro-row">
+            <label className="regpro-label">
+              Nombre
               <input
-                name="telefonoAlternativo"
-                className={inputClass}
-                value={form.telefonoAlternativo}
+                name="nombre"
+                placeholder="Ej: Maria"
+                className="regpro-input"
+                value={form.nombre}
                 onChange={handleChange}
+                required
               />
             </label>
-            <label className={labelClass}>
-              Email alternativo
+            <label className="regpro-label">
+              Apellido
               <input
-                name="emailAlternativo"
-                type="email"
-                className={inputClass}
-                value={form.emailAlternativo}
+                name="apellido"
+                placeholder="Ej: Lopez"
+                className="regpro-input"
+                value={form.apellido}
                 onChange={handleChange}
+                required
               />
             </label>
           </div>
-        </details>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className={labelClass}>
-            Contraseña
+          {/* DNI */}
+          <label className="regpro-label">
+            DNI
             <input
-              name="password"
-              type="password"
-              className={inputClass}
-              value={form.password}
+              name="dni"
+              placeholder="Ej: 30123456"
+              className="regpro-input"
+              value={form.dni}
               onChange={handleChange}
               required
             />
           </label>
-          <label className={labelClass}>
-            Confirmar contraseña
+
+          {/* Telefono */}
+          <label className="regpro-label">
+            Teléfono
             <input
-              name="confirmarPassword"
-              type="password"
-              className={inputClass}
-              value={form.confirmarPassword}
+              name="telefono"
+              placeholder="Ej: 3564123456"
+              className="regpro-input"
+              value={form.telefono}
               onChange={handleChange}
               required
             />
           </label>
-        </div>
 
-        {error && <p className={errorClass}>{error}</p>}
-        {exito && (
-          <p className="rounded-md border border-green-400/40 bg-green-400/10 px-3 py-2 text-sm text-green-400">
-            {exito}
+          {/* Email */}
+          <label className="regpro-label">
+            Email
+            <input
+              name="email"
+              type="email"
+              placeholder="Ej: medico@sanatorio.com"
+              className="regpro-input"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          {/* Especialidades */}
+          <fieldset className="regpro-fieldset">
+            <legend>
+              Especialidades <span style={{ color: "#DC2626" }}>*</span>
+            </legend>
+            {cargandoEspecialidades ? (
+              <p style={{ fontSize: 13, color: "#6B7280", margin: 0 }}>Cargando especialidades...</p>
+            ) : especialidades.length === 0 && !error ? (
+              <p style={{ fontSize: 13, color: "#6B7280", margin: 0 }}>No hay especialidades disponibles.</p>
+            ) : (
+              <div className="regpro-especialidades">
+                {especialidades.map((esp) => (
+                  <label key={esp.idEspecialidad}>
+                    <input
+                      type="checkbox"
+                      checked={especialidadesSeleccionadas.includes(esp.idEspecialidad)}
+                      onChange={() => toggleEspecialidad(esp.idEspecialidad)}
+                    />
+                    {esp.nombre}
+                  </label>
+                ))}
+              </div>
+            )}
+          </fieldset>
+
+          {/* Datos opcionales */}
+          <details className="regpro-details">
+            <summary>Datos opcionales (teléfono y email alternativos)</summary>
+            <div className="regpro-details-body">
+              <label className="regpro-label">
+                Teléfono alternativo
+                <input
+                  name="telefonoAlternativo"
+                  placeholder="Ej: 3564123456"
+                  className="regpro-input"
+                  value={form.telefonoAlternativo}
+                  onChange={handleChange}
+                />
+              </label>
+              <label className="regpro-label">
+                Email alternativo
+                <input
+                  name="emailAlternativo"
+                  type="email"
+                  placeholder="Ej: contacto@gmail.com"
+                  className="regpro-input"
+                  value={form.emailAlternativo}
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+          </details>
+
+          {/* Contraseña */}
+          <div className="regpro-row">
+            <label className="regpro-label">
+              Contraseña
+              <input
+                name="password"
+                type="password"
+                placeholder="Min. 8 carácteres"
+                className="regpro-input"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <label className="regpro-label">
+              Confirmar contraseña
+              <input
+                name="confirmarPassword"
+                type="password"
+                placeholder="Repetir contraseña"
+                className="regpro-input"
+                value={form.confirmarPassword}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <p className="regpro-password-hint">
+            Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.
           </p>
-        )}
 
-        <button type="submit" disabled={loading} className={buttonClass}>
-          {loading ? 'Registrando...' : 'Registrar Profesional'}
-        </button>
+          {error && <p className="regpro-error">{error}</p>}
+          {exito && <p className="regpro-success">{exito}</p>}
 
-        <Link to="/dashboard" className="text-sm text-[var(--accent)] underline">
-          Volver al dashboard
-        </Link>
-      </form>
+          <button type="submit" disabled={loading} className="regpro-button">
+            {loading ? "Registrando..." : "Registrar Profesional"}
+          </button>
+
+          <Link to="/dashboard" className="regpro-link">
+            Volver al dashboard
+          </Link>
+        </form>
+      </div>
     </div>
   )
 }

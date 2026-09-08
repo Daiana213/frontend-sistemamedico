@@ -132,6 +132,14 @@
   flex-shrink: 0;
 }
 
+.regadmin-password-hint {
+  font-size: 11.5px;
+  color: #6B7280;
+  margin: -10px 0 0;
+  padding-left: 4px;
+  line-height: 1.5;
+}
+
 .regadmin-error {
   font-size: 13px;
   color: #DC2626;

@@ -31,7 +31,7 @@ function Dashboard() {
           <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">
             Registrar administrativo
           </Link>
-          <Link to="/registro-profesional" className="text-[var(--accent)] underline">
+          <Link to="/registro-profesional" className="dashboard-chip dashboard-chip--red">
             Registrar profesional
           </Link>
         </div>
