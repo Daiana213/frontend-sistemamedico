@@ -122,22 +122,22 @@ function RegistroPaciente() {
         <div className="registro-row">
           <label className="registro-label">
             Nombre
-            <input name="nombre" className="registro-input" value={form.nombre} onChange={handleChange} required />
+            <input name="nombre" placeholder="Ej: Ana" className="registro-input" value={form.nombre} onChange={handleChange} required />
           </label>
           <label className="registro-label">
             Apellido
-            <input name="apellido" className="registro-input" value={form.apellido} onChange={handleChange} required />
+            <input name="apellido" placeholder="Ej: González" className="registro-input" value={form.apellido} onChange={handleChange} required />
           </label>
         </div>
 
         <label className="registro-label">
           DNI
-          <input name="dni" className="registro-input" value={form.dni} onChange={handleChange} required />
+          <input name="dni" placeholder="Ej: 30123456" className="registro-input" value={form.dni} onChange={handleChange} required />
         </label>
 
         <label className="registro-label">
           Teléfono
-          <input name="telefono" className="registro-input" value={form.telefono} onChange={handleChange} required />
+          <input name="telefono" placeholder="Ej: 3564123456" className="registro-input" value={form.telefono} onChange={handleChange} required />
         </label>
 
         <label className="registro-label">
@@ -145,6 +145,7 @@ function RegistroPaciente() {
           <input
             name="email"
             type="email"
+            placeholder="Ej: ana@gmail.com"
             className="registro-input"
             value={form.email}
             onChange={handleChange}
@@ -158,6 +159,7 @@ function RegistroPaciente() {
             <input
               name="password"
               type="password"
+              placeholder="Mín. 8 caracteres"
               className="registro-input"
               value={form.password}
               onChange={handleChange}
@@ -169,6 +171,7 @@ function RegistroPaciente() {
             <input
               name="confirmarPassword"
               type="password"
+              placeholder="Repetir contraseña"
               className="registro-input"
               value={form.confirmarPassword}
               onChange={handleChange}
@@ -176,6 +179,9 @@ function RegistroPaciente() {
             />
           </label>
         </div>
+        <p className="registro-password-hint">
+          Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.
+        </p>
 
         <label className="registro-label">
           Fecha de nacimiento
@@ -248,6 +254,7 @@ function RegistroPaciente() {
               DNI del responsable
               <input
                 name="dniResponsable"
+                placeholder="Ej: 25987654"
                 className="registro-input"
                 value={form.dniResponsable}
                 onChange={handleChange}

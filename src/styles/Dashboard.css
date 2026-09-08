@@ -90,6 +90,10 @@
   border-left-color: var(--color-secondary, #22A55C);
 }
 
+.dashboard-chip--red {
+  border-left-color: var(--color-danger, #DC2626);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
   .dashboard-page {
