@@ -83,19 +83,16 @@ function RegistroAdministrativo() {
         <div className="regadmin-row">
           <label className="regadmin-label">
             Nombre
-            <input name="nombre" className="regadmin-input" value={form.nombre} onChange={handleChange} required />
             <input name="nombre" placeholder="Ej: Juan" className="regadmin-input" value={form.nombre} onChange={handleChange} required />
           </label>
           <label className="regadmin-label">
             Apellido
-            <input name="apellido" className="regadmin-input" value={form.apellido} onChange={handleChange} required />
             <input name="apellido" placeholder="Ej: García" className="regadmin-input" value={form.apellido} onChange={handleChange} required />
           </label>
         </div>
 
         <label className="regadmin-label">
           DNI
-          <input name="dni" className="regadmin-input" value={form.dni} onChange={handleChange} required />
           <input name="dni" placeholder="Ej: 30123456" className="regadmin-input" value={form.dni} onChange={handleChange} required />
         </label>
 
@@ -113,7 +110,6 @@ function RegistroAdministrativo() {
 
         <label className="regadmin-label">
           Teléfono
-          <input name="telefono" className="regadmin-input" value={form.telefono} onChange={handleChange} required />
           <input name="telefono" placeholder="Ej: 3564123456" className="regadmin-input" value={form.telefono} onChange={handleChange} required />
         </label>
 
