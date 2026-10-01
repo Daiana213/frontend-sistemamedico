@@ -1,8 +1,21 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import api from '../api/axios'
+import CompletarPerfil from '../components/CompletarPerfil'
 import '../styles/Dashboard.css'
 
 function Dashboard() {
   const rolActivo = localStorage.getItem('rolActivo')
+  const [perfilIncompleto, setPerfilIncompleto] = useState(false)
+
+  useEffect(() => {
+    if (rolActivo !== 'PACIENTE') return
+
+    api
+      .get('/pacientes/perfil')
+      .then(({ data }) => setPerfilIncompleto(!data.perfilCompleto))
+      .catch(() => setPerfilIncompleto(false))
+  }, [rolActivo])
 
   return (
     <div className="dashboard-page">
@@ -36,6 +49,11 @@ function Dashboard() {
           </Link>
         </div>
       )}
+
+      <CompletarPerfil
+        abierto={perfilIncompleto}
+        alCompletar={() => setPerfilIncompleto(false)}
+      />
     </div>
   )
 }
