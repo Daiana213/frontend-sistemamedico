@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import '../styles/RegistroPaciente.css'
@@ -21,11 +21,7 @@ function RegistroPaciente() {
     apellido: '',
     dni: '',
     telefono: '',
-    idObraSocial: '',
-    idPlan: '',
     fechaNacimiento: '',
-    sexo: '',
-    email: '',
     password: '',
     confirmarPassword: '',
     dniResponsable: '',
@@ -35,38 +31,15 @@ function RegistroPaciente() {
   const [documento, setDocumento] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [obrasSociales, setObrasSociales] = useState([])
-  const [planes, setPlanes] = useState([])
 
   const edad = calcularEdad(form.fechaNacimiento)
   const esMenor = edad !== null && edad < 18
-
-  // Carga las obras sociales una sola vez, al montar el componente
-  useEffect(() => {
-    api
-      .get('/obras-sociales')
-      .then(({ data }) => setObrasSociales(data))
-      .catch(() => setError('No se pudieron cargar las obras sociales. Recargá la página.'))
-  }, [])
-
-  // Cada vez que cambia la obra social elegida, trae sus planes
-  useEffect(() => {
-    if (!form.idObraSocial) {
-      setPlanes([])
-      return
-    }
-    api
-      .get(`/obras-sociales/${form.idObraSocial}/planes`)
-      .then(({ data }) => setPlanes(data))
-      .catch(() => setError('No se pudieron cargar los planes de esa obra social.'))
-  }, [form.idObraSocial])
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === 'idObraSocial' ? { idPlan: '' } : {}),
     }))
   }
 
@@ -140,19 +113,6 @@ function RegistroPaciente() {
           <input name="telefono" placeholder="Ej: 3564123456" className="registro-input" value={form.telefono} onChange={handleChange} required />
         </label>
 
-        <label className="registro-label">
-          Email
-          <input
-            name="email"
-            type="email"
-            placeholder="Ej: ana@gmail.com"
-            className="registro-input"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
         <div className="registro-row">
           <label className="registro-label">
             Contraseña
@@ -195,54 +155,6 @@ function RegistroPaciente() {
             required
           />
         </label>
-
-        <label className="registro-label">
-          Sexo
-          <select name="sexo" className="registro-input" value={form.sexo} onChange={handleChange} required>
-            <option value="">Seleccionar</option>
-            <option value="MASCULINO">Masculino</option>
-            <option value="FEMENINO">Femenino</option>
-            <option value="OTRO">Otro</option>
-          </select>
-        </label>
-
-        <div className="registro-row">
-          <label className="registro-label">
-            Obra social
-            <select
-              name="idObraSocial"
-              className="registro-input"
-              value={form.idObraSocial}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Seleccionar</option>
-              {obrasSociales.map((o) => (
-                <option key={o.idObraSocial} value={o.idObraSocial}>
-                  {o.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="registro-label">
-            Plan
-            <select
-              name="idPlan"
-              className="registro-input"
-              value={form.idPlan}
-              onChange={handleChange}
-              required
-              disabled={!form.idObraSocial}
-            >
-              <option value="">Seleccionar</option>
-              {planes.map((p) => (
-                <option key={p.idPlan} value={p.idPlan}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
 
         {esMenor && (
           <fieldset className="registro-fieldset">
