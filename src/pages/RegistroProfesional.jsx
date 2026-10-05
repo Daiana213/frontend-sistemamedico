@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 import api from "../api/axios"
 import "../styles/RegistroProfesional.css"
+import { nombreValido } from "../utils/sesion"
 
 const FORM_INICIAL = {
   matricula: "",
@@ -48,6 +49,11 @@ function RegistroProfesional() {
     e.preventDefault()
     setError("")
     setExito("")
+
+    if (!nombreValido(form.nombre) || !nombreValido(form.apellido)) {
+      setError("El nombre y el apellido solo pueden contener letras y espacios.")
+      return
+    }
 
     if (form.password !== form.confirmarPassword) {
       setError("Las contraseñas no coinciden.")
@@ -132,6 +138,8 @@ function RegistroProfesional() {
                 value={form.nombre}
                 onChange={handleChange}
                 required
+                pattern="[\p{L}\p{M} ]+"
+                title="Ingresá solo letras y espacios."
               />
             </label>
             <label className="regpro-label">
@@ -143,6 +151,8 @@ function RegistroProfesional() {
                 value={form.apellido}
                 onChange={handleChange}
                 required
+                pattern="[\p{L}\p{M} ]+"
+                title="Ingresá solo letras y espacios."
               />
             </label>
           </div>

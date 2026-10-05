@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom'
+import { tienePermiso } from '../utils/sesion'
 
-function RutaProtegida({ rolesPermitidos, children }) {
+function RutaProtegida({ rolesPermitidos, permisosRequeridos = [], children }) {
   const token = localStorage.getItem('accessToken')
   const rolActivo = localStorage.getItem('rolActivo')
 
@@ -14,6 +15,14 @@ function RutaProtegida({ rolesPermitidos, children }) {
   }
 
   if (rolesPermitidos && !rolesPermitidos.includes(rolActivo)) {
+    return <Navigate to="/dashboard" replace />
+  }
+
+  if (!rolesPermitidos && rolActivo === 'PROFESIONAL') {
+    return <Navigate to="/agenda" replace />
+  }
+
+  if (!permisosRequeridos.every(tienePermiso)) {
     return <Navigate to="/dashboard" replace />
   }
 

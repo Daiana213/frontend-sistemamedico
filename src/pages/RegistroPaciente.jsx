@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import '../styles/RegistroPaciente.css'
+import { nombreValido } from '../utils/sesion'
 
 function calcularEdad(fechaNacimiento) {
   if (!fechaNacimiento) return null
@@ -46,6 +47,11 @@ function RegistroPaciente() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
+    if (!nombreValido(form.nombre) || !nombreValido(form.apellido)) {
+      setError('El nombre y el apellido solo pueden contener letras y espacios.')
+      return
+    }
 
     if (form.password !== form.confirmarPassword) {
       setError('Las contraseñas no coinciden.')
@@ -95,11 +101,11 @@ function RegistroPaciente() {
         <div className="registro-row">
           <label className="registro-label">
             Nombre
-            <input name="nombre" placeholder="Ej: Ana" className="registro-input" value={form.nombre} onChange={handleChange} required />
+            <input name="nombre" placeholder="Ej: Ana" className="registro-input" value={form.nombre} onChange={handleChange} required pattern="[\p{L}\p{M} ]+" title="Ingresá solo letras y espacios." />
           </label>
           <label className="registro-label">
             Apellido
-            <input name="apellido" placeholder="Ej: González" className="registro-input" value={form.apellido} onChange={handleChange} required />
+            <input name="apellido" placeholder="Ej: González" className="registro-input" value={form.apellido} onChange={handleChange} required pattern="[\p{L}\p{M} ]+" title="Ingresá solo letras y espacios." />
           </label>
         </div>
 

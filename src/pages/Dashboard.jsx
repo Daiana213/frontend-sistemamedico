@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
 import CompletarPerfil from '../components/CompletarPerfil'
+import { tienePermiso } from '../utils/sesion'
 import '../styles/Dashboard.css'
 
 function Dashboard() {
   const rolActivo = localStorage.getItem('rolActivo')
   const [perfilIncompleto, setPerfilIncompleto] = useState(false)
+  const puedeGestionarUsuarios = tienePermiso('gestion_usuarios')
 
   useEffect(() => {
     if (rolActivo !== 'PACIENTE') return
@@ -41,12 +43,22 @@ function Dashboard() {
           <Link to="/menores-pendientes" className="dashboard-chip dashboard-chip--blue">
             Ver menores pendientes de aprobación
           </Link>
-          <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">
-            Registrar administrativo
-          </Link>
-          <Link to="/registro-profesional" className="dashboard-chip dashboard-chip--red">
-            Registrar profesional
-          </Link>
+          {puedeGestionarUsuarios && (
+            <>
+              <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">
+                Registrar administrativo
+              </Link>
+              <Link to="/registro-profesional" className="dashboard-chip dashboard-chip--red">
+                Registrar profesional
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+
+      {rolActivo === 'PROFESIONAL' && (
+        <div className="dashboard-chips">
+          <Link to="/agenda" className="dashboard-chip dashboard-chip--green">Agenda e historia clínica</Link>
         </div>
       )}
 

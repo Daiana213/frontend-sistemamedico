@@ -7,6 +7,7 @@ import RegistroAdministrativo from './pages/RegistroAdministrativo'
 import RegistroProfesional from './pages/RegistroProfesional'
 import CambiarPassword from './pages/CambiarPassword'
 import Dashboard from './pages/Dashboard'
+import AgendaProfesional from './pages/AgendaProfesional'
 
 function App() {
   return (
@@ -33,10 +34,10 @@ function App() {
         }
       />
 
-            <Route
+      <Route
         path="/registro-administrativo"
         element={
-          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <RegistroAdministrativo />
           </RutaProtegida>
         }
@@ -45,8 +46,26 @@ function App() {
       <Route
         path="/registro-profesional"
         element={
-          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <RegistroProfesional />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/agenda"
+        element={
+          <RutaProtegida rolesPermitidos={['PROFESIONAL']}>
+            <AgendaProfesional />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/agenda/turnos/:idTurno"
+        element={
+          <RutaProtegida rolesPermitidos={['PROFESIONAL']}>
+            <AgendaProfesional />
           </RutaProtegida>
         }
       />
