@@ -70,7 +70,7 @@ function CambiarPassword() {
       }
 
       setTimeout(() => {
-        navigate('/dashboard')
+        navigate((data.rolActivo || localStorage.getItem('rolActivo')) === 'PROFESIONAL' ? '/agenda' : '/dashboard')
       }, 1500)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al cambiar la contraseña. Verificá los datos ingresados.')

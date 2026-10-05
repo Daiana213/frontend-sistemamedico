@@ -20,7 +20,7 @@ function Login() {
       navigate('/cambiar-password')
     } else {
       localStorage.removeItem('primerLogin')
-      navigate('/dashboard')
+      navigate(rolActivo === 'PROFESIONAL' ? '/agenda' : '/dashboard')
     }
   }
 

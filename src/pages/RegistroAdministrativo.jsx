@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import '../styles/RegistroAdministrativo.css'
+import { nombreValido } from '../utils/sesion'
 
 function RegistroAdministrativo() {
   const navigate = useNavigate()
@@ -32,6 +33,11 @@ function RegistroAdministrativo() {
     e.preventDefault()
     setError('')
     setExito('')
+
+    if (!nombreValido(form.nombre) || !nombreValido(form.apellido)) {
+      setError('El nombre y el apellido solo pueden contener letras y espacios.')
+      return
+    }
 
     if (form.password !== form.confirmarPassword) {
       setError('Las contraseñas no coinciden.')
@@ -83,11 +89,11 @@ function RegistroAdministrativo() {
         <div className="regadmin-row">
           <label className="regadmin-label">
             Nombre
-            <input name="nombre" placeholder="Ej: Juan" className="regadmin-input" value={form.nombre} onChange={handleChange} required />
+            <input name="nombre" placeholder="Ej: Juan" className="regadmin-input" value={form.nombre} onChange={handleChange} required pattern="[\p{L}\p{M} ]+" title="Ingresá solo letras y espacios." />
           </label>
           <label className="regadmin-label">
             Apellido
-            <input name="apellido" placeholder="Ej: García" className="regadmin-input" value={form.apellido} onChange={handleChange} required />
+            <input name="apellido" placeholder="Ej: García" className="regadmin-input" value={form.apellido} onChange={handleChange} required pattern="[\p{L}\p{M} ]+" title="Ingresá solo letras y espacios." />
           </label>
         </div>
 
