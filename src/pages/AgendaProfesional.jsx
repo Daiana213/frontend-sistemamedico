@@ -53,6 +53,13 @@ function AgendaProfesional() {
   const [total, setTotal] = useState(0)
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState('')
+  const [consultasPaciente, setConsultasPaciente] = useState([])
+  const [consultaForm, setConsultaForm] = useState({ motivoConsulta: '', diagnostico: '', tratamiento: '', notasAdicionales: '' })
+  const [guardandoConsulta, setGuardandoConsulta] = useState(false)
+  const [mensajeConsulta, setMensajeConsulta] = useState('')
+  const [errorConsulta, setErrorConsulta] = useState('')
+  const [cargandoHistoria, setCargandoHistoria] = useState(false)
+  const [turnoConsultaRegistrada, setTurnoConsultaRegistrada] = useState(null)
 
   const estaEnAtencion = Boolean(idTurno)
   const hora = new Date().getHours()
@@ -97,6 +104,49 @@ function AgendaProfesional() {
 
   const turnoSeleccionado = turnoDesdeNavegacion || turnos.find((turno) => String(turno.idTurno) === idTurno)
 
+  useEffect(() => {
+    if (!estaEnAtencion || !turnoSeleccionado?.paciente?.idPaciente) return
+    let cancelado = false
+    setCargandoHistoria(true)
+    api.get('/turnos')
+      .then(({ data }) => {
+        const lista = Array.isArray(data) ? data : data.turnos || []
+        const consultas = lista
+          .filter((turno) => turno.paciente?.idPaciente === turnoSeleccionado.paciente.idPaciente && turno.consulta)
+          .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora))
+        if (!cancelado) setConsultasPaciente(consultas)
+      })
+      .catch(() => { if (!cancelado) setConsultasPaciente([]) })
+      .finally(() => { if (!cancelado) setCargandoHistoria(false) })
+    return () => { cancelado = true }
+  }, [estaEnAtencion, turnoSeleccionado?.paciente?.idPaciente])
+
+  const registrarConsulta = async (event) => {
+    event.preventDefault()
+    setGuardandoConsulta(true)
+    setErrorConsulta('')
+    setMensajeConsulta('')
+    try {
+      await api.post('/consultas', { idTurno: Number(idTurno), ...consultaForm })
+      setTurnoConsultaRegistrada(String(idTurno))
+      setMensajeConsulta('Consulta registrada con éxito.')
+      setConsultaForm({ motivoConsulta: '', diagnostico: '', tratamiento: '', notasAdicionales: '' })
+      try {
+        const { data } = await api.get('/turnos')
+        const lista = Array.isArray(data) ? data : data.turnos || []
+        setConsultasPaciente(lista
+          .filter((turno) => turno.paciente?.idPaciente === turnoSeleccionado.paciente.idPaciente && turno.consulta)
+          .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora)))
+      } catch {
+        setErrorConsulta('La consulta quedó guardada, pero no se pudo actualizar la historia clínica. Recargá la página para verla.')
+      }
+    } catch (err) {
+      setErrorConsulta(err.response?.data?.error || 'No se pudo registrar la consulta. Intentá nuevamente.')
+    } finally {
+      setGuardandoConsulta(false)
+    }
+  }
+
   const cambiarDia = (cantidad) => {
     const nuevoDia = new Date(`${fecha}T12:00:00`)
     nuevoDia.setDate(nuevoDia.getDate() + cantidad)
@@ -140,10 +190,18 @@ function AgendaProfesional() {
             {pestanaAtencion === 'ficha' ? <section className="agenda-card agenda-patient-card">
               <h2>Datos disponibles del paciente</h2>
               <dl className="agenda-patient-data"><div><dt>Documento</dt><dd>{turnoSeleccionado.paciente.dni}</dd></div><div><dt>Teléfono</dt><dd>{turnoSeleccionado.paciente.telefono || 'Sin teléfono informado'}</dd></div><div><dt>Obra social y plan</dt><dd>{turnoSeleccionado.paciente.planObraSocial}</dd></div><div><dt>Motivo de cancelación</dt><dd>{turnoSeleccionado.motivoCancelacion || '—'}</dd></div></dl>
-              <div className="agenda-api-pending"><strong>Historia clínica y antecedentes</strong><p>Esta información todavía no está incluida en la API disponible. El backend deberá exponer la ficha del paciente antes de que podamos mostrar antecedentes, estudios y consultas previas.</p></div>
+              <h2>Consultas anteriores</h2>
+              {cargandoHistoria ? <p className="agenda-description">Cargando historia clínica…</p> : consultasPaciente.length ? <div className="agenda-consult-history">{consultasPaciente.map((item) => <article key={item.idTurno} className="agenda-consult-entry"><p>{fechaLegible(fechaLocal(new Date(item.fechaHora)))} · {horaLegible(item.fechaHora)}</p><strong>{item.consulta.motivoConsulta}</strong><dl><div><dt>Diagnóstico</dt><dd>{item.consulta.diagnostico}</dd></div><div><dt>Tratamiento</dt><dd>{item.consulta.tratamiento}</dd></div>{item.consulta.notasAdicionales && <div><dt>Notas</dt><dd>{item.consulta.notasAdicionales}</dd></div>}</dl></article>)}</div> : <p className="agenda-description">No hay consultas previas registradas para este paciente. Los antecedentes y estudios aún no están disponibles en la API para la ficha profesional.</p>}
             </section> : <section className="agenda-card agenda-patient-card">
-              <h2>Registrar consulta</h2><p className="agenda-description">La API actual no publica todavía una operación para guardar la consulta asociada al turno. Cuando esté disponible, este formulario podrá registrar motivo, diagnóstico y tratamiento.</p>
-              <div className="agenda-api-pending"><strong>Integración pendiente de HU7</strong><p>Por ahora no se habilita un formulario que aparente guardar información clínica sin persistirla en el sistema.</p></div>
+              <h2>Registrar consulta</h2><p className="agenda-description">Completá la evolución de esta atención. Al finalizar, el turno quedará marcado como completado.</p>
+              {turnoConsultaRegistrada === String(idTurno) ? <p className="agenda-consult-success" role="status">Consulta registrada con éxito. Este turno quedó completado.</p> : turnoSeleccionado.estado === 'COMPLETADO' ? <div className="agenda-state">Este turno ya fue atendido.</div> : <form className="agenda-consult-form" onSubmit={registrarConsulta}>
+                <label>Motivo de consulta<textarea required value={consultaForm.motivoConsulta} onChange={(event) => setConsultaForm({ ...consultaForm, motivoConsulta: event.target.value })} /></label>
+                <label>Diagnóstico o posible diagnóstico<textarea required value={consultaForm.diagnostico} onChange={(event) => setConsultaForm({ ...consultaForm, diagnostico: event.target.value })} /></label>
+                <label>Tratamiento y recomendaciones<textarea required value={consultaForm.tratamiento} onChange={(event) => setConsultaForm({ ...consultaForm, tratamiento: event.target.value })} /></label>
+                <label>Notas adicionales (opcional)<textarea value={consultaForm.notasAdicionales} onChange={(event) => setConsultaForm({ ...consultaForm, notasAdicionales: event.target.value })} /></label>
+                {errorConsulta && <p className="agenda-state agenda-state--error">{errorConsulta}</p>}{mensajeConsulta && <p className="agenda-consult-success" role="status">{mensajeConsulta}</p>}
+                <button className="agenda-primary-button" disabled={guardandoConsulta}>{guardandoConsulta ? 'Guardando…' : 'Finalizar consulta'}</button>
+              </form>}
             </section>}
           </>}
         </section>

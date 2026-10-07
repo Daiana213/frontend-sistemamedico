@@ -243,3 +243,5 @@
     font-size: 22px;
   }
 }
+
+.login-link-button{align-self:flex-start;padding:0;border:0;background:none;color:#287a70;font:inherit;font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer}.login-recovery-result{display:grid;gap:16px;color:#5b6f7e;line-height:1.55}.login-recovery-link{display:block;text-align:center;text-decoration:none}.login-button:disabled{opacity:.65;cursor:wait}

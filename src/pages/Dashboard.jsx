@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 import CompletarPerfil from '../components/CompletarPerfil'
 import { tienePermiso } from '../utils/sesion'
@@ -7,6 +7,7 @@ import '../styles/Dashboard.css'
 
 function Dashboard() {
   const rolActivo = localStorage.getItem('rolActivo')
+  const location = useLocation()
   const [perfilIncompleto, setPerfilIncompleto] = useState(false)
   const puedeGestionarUsuarios = tienePermiso('gestion_usuarios')
 
@@ -38,6 +39,10 @@ function Dashboard() {
         </button>
       </header>
 
+      {location.state?.antecedentesGuardados && (
+        <p className="dashboard-success" role="status">Antecedentes guardados correctamente.</p>
+      )}
+
       {rolActivo === 'ADMINISTRATIVO' && (
         <div className="dashboard-chips">
           <Link to="/menores-pendientes" className="dashboard-chip dashboard-chip--blue">
@@ -53,6 +58,12 @@ function Dashboard() {
               </Link>
             </>
           )}
+        </div>
+      )}
+
+      {rolActivo === 'PACIENTE' && (
+        <div className="dashboard-chips">
+          <Link to="/mis-antecedentes" className="dashboard-chip dashboard-chip--green">Mis antecedentes médicos</Link>
         </div>
       )}
 

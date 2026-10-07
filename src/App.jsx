@@ -8,6 +8,8 @@ import RegistroProfesional from './pages/RegistroProfesional'
 import CambiarPassword from './pages/CambiarPassword'
 import Dashboard from './pages/Dashboard'
 import AgendaProfesional from './pages/AgendaProfesional'
+import RestablecerPassword from './pages/RestablecerPassword'
+import AntecedentesPaciente from './pages/AntecedentesPaciente'
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/registro-paciente" element={<RegistroPaciente />} />
       <Route path="/cambiar-password" element={<CambiarPassword />} />
+      <Route path="/reset-password" element={<RestablecerPassword />} />
 
       <Route
         path="/dashboard"
@@ -59,6 +62,11 @@ function App() {
             <AgendaProfesional />
           </RutaProtegida>
         }
+      />
+
+      <Route
+        path="/mis-antecedentes"
+        element={<RutaProtegida rolesPermitidos={['PACIENTE']}><AntecedentesPaciente /></RutaProtegida>}
       />
 
       <Route
