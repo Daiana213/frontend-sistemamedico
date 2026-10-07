@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard'
 import AgendaProfesional from './pages/AgendaProfesional'
 import RestablecerPassword from './pages/RestablecerPassword'
 import AntecedentesPaciente from './pages/AntecedentesPaciente'
+import MisTurnos from './pages/MisTurnos'
 
 function App() {
   return (
@@ -67,6 +68,11 @@ function App() {
       <Route
         path="/mis-antecedentes"
         element={<RutaProtegida rolesPermitidos={['PACIENTE']}><AntecedentesPaciente /></RutaProtegida>}
+      />
+
+      <Route
+        path="/mis-turnos"
+        element={<RutaProtegida rolesPermitidos={['PACIENTE']}><MisTurnos /></RutaProtegida>}
       />
 
       <Route

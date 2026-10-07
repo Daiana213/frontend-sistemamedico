@@ -63,6 +63,7 @@ function Dashboard() {
 
       {rolActivo === 'PACIENTE' && (
         <div className="dashboard-chips">
+          <Link to="/mis-turnos" className="dashboard-chip dashboard-chip--blue">Mis turnos</Link>
           <Link to="/mis-antecedentes" className="dashboard-chip dashboard-chip--green">Mis antecedentes médicos</Link>
         </div>
       )}
