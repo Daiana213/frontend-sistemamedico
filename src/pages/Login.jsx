@@ -9,6 +9,10 @@ function Login() {
   const [error, setError] = useState('')
   const [roles, setRoles] = useState(null)
   const [preSessionToken, setPreSessionToken] = useState('')
+  const [recuperar, setRecuperar] = useState(false)
+  const [emailRecuperacion, setEmailRecuperacion] = useState('')
+  const [recuperacionEnviada, setRecuperacionEnviada] = useState(false)
+  const [enlaceRecuperacion, setEnlaceRecuperacion] = useState('')
   const navigate = useNavigate()
 
   const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo, primerLogin) => {
@@ -50,6 +54,18 @@ function Login() {
     }
   }
 
+  const handleRecuperacion = async (e) => {
+    e.preventDefault()
+    setError('')
+    try {
+      const { data } = await api.post('/auth/solicitar-recuperacion', { dni, email: emailRecuperacion })
+      setRecuperacionEnviada(true)
+      if (data._debugToken) setEnlaceRecuperacion(`/reset-password?token=${encodeURIComponent(data._debugToken)}`)
+    } catch (err) {
+      setError(err.response?.data?.error || 'No se pudo procesar la solicitud. Verificá los datos e intentá nuevamente.')
+    }
+  }
+
   return (
     <div className="login-split">
       <div className="login-form-side">
@@ -59,7 +75,21 @@ function Login() {
         </div>
 
         <div className="login-content">
-          {roles ? (
+          {recuperar ? (
+            <>
+              <h2 className="login-title">Recuperar contraseña</h2>
+              {!recuperacionEnviada ? <>
+                <p className="login-subtitle">Ingresá el DNI y el correo registrado en tu cuenta.</p>
+                <form onSubmit={handleRecuperacion} className="login-form">
+                  <label><span className="login-label">DNI</span><input className="login-input" value={dni} onChange={(e) => setDni(e.target.value)} required inputMode="numeric" /></label>
+                  <label><span className="login-label">Correo electrónico</span><input className="login-input" type="email" value={emailRecuperacion} onChange={(e) => setEmailRecuperacion(e.target.value)} required /></label>
+                  {error && <p className="login-error">{error}</p>}
+                  <button type="submit" className="login-button">Solicitar enlace</button>
+                  <button type="button" className="login-link-button" onClick={() => { setRecuperar(false); setError('') }}>Volver al inicio de sesión</button>
+                </form>
+              </> : <div className="login-recovery-result"><p>Si los datos corresponden a una cuenta activa, recibirás un enlace para restablecer la contraseña.</p>{enlaceRecuperacion && <Link className="login-button login-recovery-link" to={enlaceRecuperacion}>Abrir enlace de restablecimiento</Link>}<button type="button" className="login-link-button" onClick={() => { setRecuperar(false); setRecuperacionEnviada(false); setEnlaceRecuperacion('') }}>Volver al inicio de sesión</button></div>}
+            </>
+          ) : roles ? (
             <>
               <h2 className="login-title">Elegí tu rol</h2>
               <p className="login-subtitle">Tu cuenta tiene más de un perfil asociado.</p>
@@ -88,6 +118,8 @@ function Login() {
                     required
                   />
                 </label>
+
+                <button type="button" className="login-link-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>
 
                 <label>
                   <span className="login-label">Contraseña</span>
