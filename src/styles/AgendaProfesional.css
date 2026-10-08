@@ -1,5 +1,783 @@
-.agenda-page{min-height:100vh;background:#f5f7fa;color:#1d2d3e}.agenda-topbar{height:66px;padding:0 clamp(20px,5vw,76px);display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid #e4e9ef}.agenda-brand{display:flex;align-items:center;gap:10px;color:#173958;text-decoration:none;font-size:14px;font-weight:800}.agenda-brand-mark{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#167d76;color:#fff;font-size:21px}.agenda-user-label{color:#75869a;font-size:12px;font-weight:600}.agenda-content{max-width:1180px;margin:0 auto;padding:34px 24px 72px}.agenda-page-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:27px}.agenda-overline{margin:0 0 7px;color:#16837b;font-size:10px;font-weight:800;letter-spacing:.14em}.agenda-page-heading h1{margin:0 0 6px;color:#173858;font-size:32px;letter-spacing:-.04em}.agenda-page-heading p:last-child{margin:0;color:#738397;font-size:13px}.agenda-heading-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#e5f3f1;color:#16837b;font-size:22px}.agenda-tabs{display:flex;gap:5px;border-bottom:1px solid #dce4eb;margin-bottom:22px}.agenda-tabs button{position:relative;border:0;background:transparent;padding:13px 17px;color:#718296;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.agenda-tabs button.is-active{color:#177e76}.agenda-tabs button.is-active::after{position:absolute;content:'';height:2px;left:12px;right:12px;bottom:-1px;background:#177e76;border-radius:2px}.agenda-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 22px;padding:15px 17px;background:#fff;border:1px solid #e4eaf0;border-radius:12px}.agenda-date-control{display:flex;align-items:center;gap:7px}.agenda-date-control>button{height:34px;min-width:34px;border:1px solid #e2e9ef;background:#fff;color:#37536e;border-radius:8px;font-size:18px;cursor:pointer}.agenda-date-control label,.agenda-filter,.agenda-history-filter label{display:grid;gap:5px;color:#75869a;font-size:10px;font-weight:700}.agenda-date-control input,.agenda-filter select,.agenda-history-filter input,.agenda-history-filter select{height:34px;border:1px solid #e1e8ee;border-radius:7px;padding:0 9px;background:#fff;color:#344d65;font:inherit;font-size:12px}.agenda-date-control .agenda-today{padding:0 12px;font-size:11px;font-weight:700}.agenda-filter{margin-left:auto}.agenda-filter select{min-width:155px}.agenda-list-heading{display:flex;align-items:end;justify-content:space-between;margin:0 0 12px}.agenda-list-heading h2,.agenda-history-toolbar h2{margin:0;color:#213e5a;font-size:17px}.agenda-list-heading p,.agenda-history-toolbar p{margin:5px 0 0;color:#8492a1;font-size:11px}.agenda-appointments{display:grid;gap:9px}.agenda-appointment{width:100%;display:grid;grid-template-columns:74px minmax(0,1fr) auto 110px;align-items:center;gap:17px;text-align:left;padding:16px 18px;border:1px solid #e5ebf1;border-radius:12px;background:#fff;color:#243d55;cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .15s}.agenda-appointment:hover{transform:translateY(-1px);border-color:#b9dcd7;box-shadow:0 6px 18px #243e5610}.appointment-time{font-size:14px;font-weight:800;color:#177e76}.appointment-main{min-width:0}.appointment-main strong,.appointment-main small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.appointment-main strong{font-size:13px;color:#243e58}.appointment-main small{margin-top:5px;color:#8492a1;font-size:11px}.agenda-status{display:inline-flex;align-items:center;justify-content:center;padding:6px 9px;border-radius:30px;background:#eef2f5;color:#596b7e;font-size:10px;font-weight:800;white-space:nowrap}.agenda-status--solicitado{background:#fff4df;color:#936816}.agenda-status--confirmado{background:#e8f5ed;color:#287249}.agenda-status--reprogramado{background:#eaf1fb;color:#476994}.agenda-status--cancelado{background:#fbecec;color:#9e4b4b}.agenda-status--completado{background:#edf0f7;color:#5f6686}.appointment-open{display:flex;justify-content:flex-end;gap:8px;color:#426681;font-size:11px;font-weight:700;white-space:nowrap}.agenda-state{padding:32px 18px;border:1px solid #e6ebf0;border-radius:12px;background:#fff;text-align:center;color:#738397;font-size:13px}.agenda-state--error{color:#9b4141;background:#fff8f8;border-color:#f0dada}.agenda-state--empty{display:grid;justify-items:center;gap:7px}.agenda-state--empty>span{font-size:24px;color:#77a69e}.agenda-state--empty strong{color:#365169}.agenda-state--empty p{margin:0;font-size:12px}.agenda-history-toolbar{align-items:flex-end}.agenda-history-toolbar>div{padding-bottom:4px}.agenda-history-filter{display:flex;align-items:flex-end;gap:10px}.agenda-history-filter label{min-width:125px}.agenda-primary-button{height:34px;padding:0 14px;border:0;border-radius:7px;background:#167d76;color:#fff;font:inherit;font-size:11px;font-weight:800;cursor:pointer}.agenda-range-caption{margin:0 0 12px;color:#75869a;font-size:11px}.agenda-registration-pending{max-width:690px;margin:28px auto;padding:34px}.agenda-pending-icon{display:grid;place-items:center;width:42px;height:42px;margin-bottom:19px;border-radius:12px;background:#e8f4f2;color:#167d76;font-size:23px}.agenda-registration-pending h2,.agenda-patient-card h2{margin:0 0 12px;color:#203d59;font-size:20px}.agenda-registration-pending>p:not(.agenda-overline),.agenda-description{color:#718296;font-size:13px;line-height:1.65}.agenda-detail-heading{align-items:flex-end}.agenda-detail-heading h1{font-size:27px}.agenda-detail-heading .agenda-status{margin-bottom:4px}.agenda-back{margin-bottom:20px;padding:0;border:0;background:transparent;color:#41637e;font:inherit;font-size:12px;font-weight:700;cursor:pointer}.agenda-detail-tabs{margin-top:2px}.agenda-patient-card{max-width:none}.agenda-patient-data{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:20px 0;gap:1px;background:#e8edf2;border:1px solid #e8edf2;border-radius:10px;overflow:hidden}.agenda-patient-data>div{padding:14px;background:#fff}.agenda-patient-data dt{margin-bottom:5px;color:#8492a1;font-size:10px;font-weight:700}.agenda-patient-data dd{margin:0;color:#344d65;font-size:13px;font-weight:600}.agenda-api-pending{padding:17px;border:1px solid #e5ecef;border-radius:10px;background:#f6f9fa}.agenda-api-pending strong{color:#355269;font-size:12px}.agenda-api-pending p{margin:6px 0 0;color:#718296;font-size:12px;line-height:1.6}
-@media(max-width:760px){.agenda-content{padding:26px 16px 50px}.agenda-toolbar,.agenda-history-toolbar{align-items:stretch;flex-direction:column}.agenda-filter{margin-left:0}.agenda-history-filter{display:grid;grid-template-columns:1fr 1fr}.agenda-history-filter label{min-width:0}.agenda-history-filter label:nth-child(3){grid-column:1}.agenda-primary-button{height:37px}.agenda-appointment{grid-template-columns:60px 1fr auto;gap:10px;padding:13px}.appointment-open{grid-column:2/-1;justify-content:flex-start}.agenda-status{font-size:9px}.agenda-detail-heading{align-items:flex-start;flex-direction:column;gap:12px}}
-@media(max-width:520px){.agenda-topbar{height:58px;padding:0 15px}.agenda-page-heading h1{font-size:27px}.agenda-tabs{overflow:auto}.agenda-tabs button{padding:12px 11px;white-space:nowrap;font-size:12px}.agenda-date-control{flex-wrap:wrap}.agenda-date-control label{flex:1;min-width:132px}.agenda-date-control input{width:100%;box-sizing:border-box}.agenda-patient-data{grid-template-columns:1fr}.agenda-appointment{grid-template-columns:52px 1fr}.agenda-appointment .agenda-status{grid-column:1}.appointment-open{grid-column:2;grid-row:2}.agenda-registration-pending{padding:24px 18px}}
-.agenda-topbar-actions{display:flex;align-items:center;gap:17px}.agenda-logout{padding:8px 12px;border:1px solid #dfe7ed;border-radius:8px;background:#fff;color:#516b82;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
-.agenda-consult-form{display:grid;gap:16px;margin-top:20px}.agenda-consult-form label{display:grid;gap:7px;font-weight:600;color:#263a4f}.agenda-consult-form textarea{width:100%;min-height:92px;resize:vertical;padding:12px;border:1px solid #cad6df;border-radius:10px;font:inherit;color:#24384b}.agenda-consult-form textarea:focus{outline:2px solid #91c7bd;border-color:#388e80}.agenda-consult-success{padding:12px 14px;border-radius:9px;background:#e8f5ed;color:#21633d}.agenda-consult-history{display:grid;gap:14px;margin-top:16px}.agenda-consult-entry{padding:16px;border:1px solid #dce5e9;border-radius:12px}.agenda-consult-entry>p{margin:0 0 8px;color:#637789;font-size:.9rem}.agenda-consult-entry>strong{display:block;margin-bottom:10px}.agenda-consult-entry dl{display:grid;gap:9px;margin:0}.agenda-consult-entry dl div{display:grid;grid-template-columns:150px 1fr;gap:12px}.agenda-consult-entry dt{color:#637789}.agenda-consult-entry dd{margin:0;white-space:pre-wrap}
+/* ============================================
+   Agenda profesional (agenda-*)
+   Paleta: azules y rojos del login / dashboard
+   ============================================ */
+
+.agenda-page {
+  --ag-primary: var(--color-primary, #2F5EE0);
+  --ag-primary-dark: #1E3FAE;
+  --ag-danger: var(--color-danger, #DC2626);
+  --ag-text: var(--color-text, #111827);
+  --ag-text-soft: var(--color-text-secondary, #6B7280);
+  --ag-surface: var(--color-surface, #FFFFFF);
+  --ag-line: #E1E8F5;
+  --ag-primary-tint: #EAF1FF;
+  --ag-primary-soft: #DCE8FD;
+
+  min-height: 100vh;
+  background: var(--color-background, #EAF2FE);
+  color: var(--ag-text);
+}
+
+/* ===== Barra superior ===== */
+.agenda-topbar {
+  height: 66px;
+  padding: 0 clamp(20px, 5vw, 76px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ag-surface);
+  border-bottom: 1px solid var(--ag-line);
+}
+
+.agenda-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ag-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.agenda-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--ag-primary);
+  color: #fff;
+  font-size: 21px;
+}
+
+.agenda-user-label {
+  color: var(--ag-text-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.agenda-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.agenda-logout {
+  padding: 8px 14px;
+  border: 1px solid #F3C7C7;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--ag-danger);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.agenda-logout:hover {
+  background: #FEECEC;
+}
+
+/* ===== Contenido ===== */
+.agenda-content {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 34px 24px 72px;
+}
+
+.agenda-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 27px;
+}
+
+.agenda-overline {
+  margin: 0 0 7px;
+  color: var(--ag-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.agenda-page-heading h1 {
+  margin: 0 0 6px;
+  color: var(--ag-text);
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.agenda-page-heading p:last-child {
+  margin: 0;
+  color: var(--ag-text-soft);
+  font-size: 13px;
+}
+
+.agenda-heading-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--ag-primary-soft);
+  color: var(--ag-primary);
+  font-size: 22px;
+}
+
+/* ===== Pestañas ===== */
+.agenda-tabs {
+  display: flex;
+  gap: 5px;
+  border-bottom: 1px solid #D5DFF2;
+  margin-bottom: 22px;
+}
+
+.agenda-tabs button {
+  position: relative;
+  border: 0;
+  background: transparent;
+  padding: 13px 17px;
+  color: var(--ag-text-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.agenda-tabs button:hover {
+  color: var(--ag-primary);
+}
+
+.agenda-tabs button.is-active {
+  color: var(--ag-primary);
+}
+
+.agenda-tabs button.is-active::after {
+  position: absolute;
+  content: '';
+  height: 2px;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  background: var(--ag-primary);
+  border-radius: 2px;
+}
+
+/* ===== Barra de herramientas ===== */
+.agenda-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 22px;
+  padding: 15px 17px;
+  background: var(--ag-surface);
+  border: 1px solid var(--ag-line);
+  border-radius: 14px;
+}
+
+.agenda-date-control {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.agenda-date-control > button {
+  height: 34px;
+  min-width: 34px;
+  border: 1px solid var(--ag-line);
+  background: #fff;
+  color: var(--ag-primary);
+  border-radius: 9px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.agenda-date-control > button:hover {
+  background: var(--ag-primary);
+  color: #fff;
+}
+
+.agenda-date-control label,
+.agenda-filter,
+.agenda-history-filter label {
+  display: grid;
+  gap: 5px;
+  color: var(--ag-text-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.agenda-date-control input,
+.agenda-filter select,
+.agenda-history-filter input,
+.agenda-history-filter select {
+  height: 34px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 9px;
+  padding: 0 10px;
+  background: #fff;
+  color: var(--ag-text);
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.agenda-date-control input:focus,
+.agenda-filter select:focus,
+.agenda-history-filter input:focus,
+.agenda-history-filter select:focus {
+  border-color: var(--ag-primary);
+}
+
+.agenda-date-control .agenda-today {
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.agenda-filter {
+  margin-left: auto;
+}
+
+.agenda-filter select {
+  min-width: 155px;
+}
+
+/* ===== Listado ===== */
+.agenda-list-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin: 0 0 12px;
+}
+
+.agenda-list-heading h2,
+.agenda-history-toolbar h2 {
+  margin: 0;
+  color: var(--ag-text);
+  font-size: 17px;
+}
+
+.agenda-list-heading p,
+.agenda-history-toolbar p {
+  margin: 5px 0 0;
+  color: var(--ag-text-soft);
+  font-size: 11px;
+}
+
+.agenda-appointments {
+  display: grid;
+  gap: 9px;
+}
+
+.agenda-appointment {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) auto 110px;
+  align-items: center;
+  gap: 17px;
+  text-align: left;
+  padding: 16px 18px;
+  border: 1px solid var(--ag-line);
+  border-radius: 14px;
+  background: var(--ag-surface);
+  color: var(--ag-text);
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.agenda-appointment:hover {
+  transform: translateY(-1px);
+  border-color: #B5C8F5;
+  box-shadow: 0 8px 20px -8px rgba(47, 94, 224, 0.3);
+}
+
+.agenda-appointment:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 2px;
+}
+
+.appointment-time {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ag-primary);
+}
+
+.appointment-main {
+  min-width: 0;
+}
+
+.appointment-main strong,
+.appointment-main small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.appointment-main strong {
+  font-size: 13px;
+  color: var(--ag-text);
+}
+
+.appointment-main small {
+  margin-top: 5px;
+  color: var(--ag-text-soft);
+  font-size: 11px;
+}
+
+.appointment-open {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--ag-primary);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== Estados ===== */
+.agenda-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 30px;
+  background: #F1F3F7;
+  color: var(--ag-text-soft);
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.agenda-status--solicitado {
+  background: #FFF4DF;
+  color: #936816;
+}
+
+.agenda-status--confirmado {
+  background: var(--ag-primary-soft);
+  color: var(--ag-primary-dark);
+}
+
+.agenda-status--reprogramado {
+  background: #E6EAF8;
+  color: #3B4A8C;
+}
+
+.agenda-status--cancelado {
+  background: #FEECEC;
+  color: var(--ag-danger);
+}
+
+.agenda-status--completado {
+  background: #EEF0F4;
+  color: #4B5563;
+}
+
+/* ===== Mensajes de estado (cargando / vacio / error) ===== */
+.agenda-state {
+  padding: 32px 18px;
+  border: 1px solid var(--ag-line);
+  border-radius: 14px;
+  background: var(--ag-surface);
+  text-align: center;
+  color: var(--ag-text-soft);
+  font-size: 13px;
+}
+
+.agenda-state--error {
+  color: var(--ag-danger);
+  background: #FFF6F6;
+  border-color: #F7D4D4;
+}
+
+.agenda-state--empty {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+}
+
+.agenda-state--empty > span {
+  font-size: 24px;
+  color: #8FA9EE;
+}
+
+.agenda-state--empty strong {
+  color: var(--ag-text);
+}
+
+.agenda-state--empty p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* ===== Historial ===== */
+.agenda-history-toolbar {
+  align-items: flex-end;
+}
+
+.agenda-history-toolbar > div {
+  padding-bottom: 4px;
+}
+
+.agenda-history-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.agenda-history-filter label {
+  min-width: 125px;
+}
+
+.agenda-primary-button {
+  height: 34px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--ag-primary);
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 0.12s;
+}
+
+.agenda-primary-button:hover {
+  filter: brightness(1.08);
+}
+
+.agenda-range-caption {
+  margin: 0 0 12px;
+  color: var(--ag-text-soft);
+  font-size: 11px;
+}
+
+/* ===== Registro pendiente ===== */
+.agenda-registration-pending {
+  max-width: 690px;
+  margin: 28px auto;
+  padding: 34px;
+}
+
+.agenda-pending-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 19px;
+  border-radius: 12px;
+  background: var(--ag-primary-soft);
+  color: var(--ag-primary);
+  font-size: 23px;
+}
+
+.agenda-registration-pending h2,
+.agenda-patient-card h2 {
+  margin: 0 0 12px;
+  color: var(--ag-text);
+  font-size: 20px;
+}
+
+.agenda-registration-pending > p:not(.agenda-overline),
+.agenda-description {
+  color: var(--ag-text-soft);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ===== Detalle de cita ===== */
+.agenda-detail-heading {
+  align-items: flex-end;
+}
+
+.agenda-detail-heading h1 {
+  font-size: 27px;
+}
+
+.agenda-detail-heading .agenda-status {
+  margin-bottom: 4px;
+}
+
+.agenda-back {
+  margin-bottom: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ag-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.agenda-back:hover {
+  text-decoration: underline;
+}
+
+.agenda-detail-tabs {
+  margin-top: 2px;
+}
+
+.agenda-patient-card {
+  max-width: none;
+}
+
+.agenda-patient-data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 20px 0;
+  gap: 1px;
+  background: var(--ag-line);
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.agenda-patient-data > div {
+  padding: 14px;
+  background: var(--ag-surface);
+}
+
+.agenda-patient-data dt {
+  margin-bottom: 5px;
+  color: var(--ag-text-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.agenda-patient-data dd {
+  margin: 0;
+  color: var(--ag-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.agenda-api-pending {
+  padding: 17px;
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  background: var(--ag-primary-tint);
+}
+
+.agenda-api-pending strong {
+  color: var(--ag-primary-dark);
+  font-size: 12px;
+}
+
+.agenda-api-pending p {
+  margin: 6px 0 0;
+  color: var(--ag-text-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ===== Formulario de consulta ===== */
+.agenda-consult-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.agenda-consult-form label {
+  display: grid;
+  gap: 7px;
+  font-weight: 700;
+  color: var(--ag-text);
+}
+
+.agenda-consult-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 92px;
+  resize: vertical;
+  padding: 12px 16px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 14px;
+  font: inherit;
+  color: var(--ag-text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.agenda-consult-form textarea:focus {
+  border-color: var(--ag-primary);
+}
+
+.agenda-consult-success {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--ag-primary-soft);
+  color: var(--ag-primary-dark);
+}
+
+/* ===== Historial de consultas ===== */
+.agenda-consult-history {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.agenda-consult-entry {
+  padding: 16px;
+  border: 1px solid var(--ag-line);
+  border-radius: 14px;
+  background: var(--ag-surface);
+}
+
+.agenda-consult-entry > p {
+  margin: 0 0 8px;
+  color: var(--ag-text-soft);
+  font-size: 0.9rem;
+}
+
+.agenda-consult-entry > strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--ag-text);
+}
+
+.agenda-consult-entry dl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.agenda-consult-entry dl div {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px;
+}
+
+.agenda-consult-entry dt {
+  color: var(--ag-text-soft);
+}
+
+.agenda-consult-entry dd {
+  margin: 0;
+  color: var(--ag-text);
+  white-space: pre-wrap;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 760px) {
+  .agenda-content {
+    padding: 26px 16px 50px;
+  }
+
+  .agenda-toolbar,
+  .agenda-history-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .agenda-filter {
+    margin-left: 0;
+  }
+
+  .agenda-history-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .agenda-history-filter label {
+    min-width: 0;
+  }
+
+  .agenda-history-filter label:nth-child(3) {
+    grid-column: 1;
+  }
+
+  .agenda-primary-button {
+    height: 37px;
+  }
+
+  .agenda-appointment {
+    grid-template-columns: 60px 1fr auto;
+    gap: 10px;
+    padding: 13px;
+  }
+
+  .appointment-open {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+  }
+
+  .agenda-status {
+    font-size: 9px;
+  }
+
+  .agenda-detail-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .agenda-topbar {
+    height: 58px;
+    padding: 0 15px;
+  }
+
+  .agenda-page-heading h1 {
+    font-size: 27px;
+  }
+
+  .agenda-tabs {
+    overflow: auto;
+  }
+
+  .agenda-tabs button {
+    padding: 12px 11px;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .agenda-date-control {
+    flex-wrap: wrap;
+  }
+
+  .agenda-date-control label {
+    flex: 1;
+    min-width: 132px;
+  }
+
+  .agenda-date-control input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .agenda-patient-data {
+    grid-template-columns: 1fr;
+  }
+
+  .agenda-appointment {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .agenda-appointment .agenda-status {
+    grid-column: 1;
+  }
+
+  .appointment-open {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .agenda-registration-pending {
+    padding: 24px 18px;
+  }
+
+  .agenda-consult-entry dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

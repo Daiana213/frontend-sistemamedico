@@ -1,2 +1,237 @@
-.health-page{min-height:100vh;background:#f2f6f8;padding:24px}.health-header{max-width:980px;margin:0 auto 28px;display:flex;justify-content:space-between;color:#345367}.health-header a{color:#287968;text-decoration:none}.health-card{max-width:760px;margin:0 auto;background:#fff;border:1px solid #e0e8ec;border-radius:18px;padding:32px;box-shadow:0 12px 36px #264b5b12}.health-eyebrow{color:#398b79;font-size:.76rem;font-weight:700;letter-spacing:.12em}.health-card h1{margin:8px 0}.health-card>p:not(.health-eyebrow){color:#627787}.health-card form{display:grid;gap:18px;margin-top:24px}.health-card label{display:grid;gap:8px;color:#31495a;font-weight:600}.health-card textarea,.health-card select{padding:12px;border:1px solid #cad8df;border-radius:10px;font:inherit;color:#263a4b}.health-card textarea{min-height:94px;resize:vertical}.health-card button,.reset-submit{padding:13px 18px;border:0;border-radius:10px;background:#247966;color:white;font:inherit;font-weight:700;cursor:pointer;text-align:center;text-decoration:none}.health-card button:disabled,.reset-submit:disabled{opacity:.65}.health-error,.reset-error{color:#a23d3d}.health-success,.reset-success{padding:12px;border-radius:8px;background:#e8f5ed;color:#21633d}.health-note{margin-top:24px;padding:14px;background:#f3f6f8;border-radius:10px;color:#5f7180;font-size:.92rem}
-.health-details{display:grid;gap:0;margin:24px 0;border:1px solid #e0e8ec;border-radius:12px;overflow:hidden}.health-details>div{display:grid;grid-template-columns:190px 1fr;gap:15px;padding:15px;border-bottom:1px solid #e9eef1}.health-details>div:last-child{border-bottom:0}.health-details dt{font-weight:700;color:#587080}.health-details dd{margin:0;color:#283f50;white-space:pre-wrap}.health-actions{display:flex;gap:10px;flex-wrap:wrap}.health-actions .health-secondary-button{background:#eef3f5;color:#456070;border:1px solid #d6e0e5}.dashboard-success{max-width:980px;margin:18px auto;padding:12px 16px;border:1px solid #cbe5d5;border-radius:10px;background:#eaf6ee;color:#24633d}
+/* ============================================
+   Pantallas de salud (health-*) y restablecer clave
+   Paleta: azules y rojos del login / dashboard
+   ============================================ */
+
+.health-page {
+  --hp-primary: var(--color-primary, #2F5EE0);
+  --hp-primary-dark: #1E3FAE;
+  --hp-danger: var(--color-danger, #DC2626);
+  --hp-text: var(--color-text, #111827);
+  --hp-text-soft: var(--color-text-secondary, #6B7280);
+  --hp-surface: var(--color-surface, #FFFFFF);
+  --hp-line: #E1E8F5;
+  --hp-primary-tint: #EAF1FF;
+
+  min-height: 100vh;
+  background: var(--color-background, #EAF2FE);
+  padding: 24px;
+  color: var(--hp-text);
+}
+
+.health-header {
+  max-width: 980px;
+  margin: 0 auto 28px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--hp-text);
+}
+
+.health-header a {
+  color: var(--hp-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.health-header a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Tarjeta principal ===== */
+.health-card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--hp-surface);
+  border: 1px solid var(--hp-line);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 20px 40px -12px rgba(47, 94, 224, 0.18);
+}
+
+.health-eyebrow {
+  color: var(--hp-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.health-card h1 {
+  margin: 8px 0;
+  color: var(--hp-text);
+  letter-spacing: -0.01em;
+}
+
+.health-card > p:not(.health-eyebrow) {
+  color: var(--hp-text-soft);
+}
+
+/* ===== Formulario ===== */
+.health-card form {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.health-card label {
+  display: grid;
+  gap: 8px;
+  color: var(--hp-text);
+  font-weight: 700;
+}
+
+.health-card textarea,
+.health-card select {
+  padding: 12px 16px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 14px;
+  background: #fff;
+  font: inherit;
+  color: var(--hp-text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.health-card textarea:focus,
+.health-card select:focus {
+  border-color: var(--hp-primary);
+}
+
+.health-card textarea {
+  min-height: 94px;
+  resize: vertical;
+}
+
+/* ===== Botones ===== */
+.health-card button,
+.reset-submit {
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--hp-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: filter 0.12s, transform 0.05s;
+}
+
+.health-card button:hover:not(:disabled),
+.reset-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.health-card button:active:not(:disabled),
+.reset-submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.health-card button:focus-visible,
+.reset-submit:focus-visible {
+  outline: 2px solid var(--hp-primary-dark);
+  outline-offset: 2px;
+}
+
+.health-card button:disabled,
+.reset-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ===== Mensajes ===== */
+.health-error,
+.reset-error {
+  color: var(--hp-danger);
+  font-size: 14px;
+}
+
+.health-success,
+.reset-success {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #DCE8FD;
+  color: var(--hp-primary-dark);
+}
+
+.health-note {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: var(--hp-primary-tint);
+  border-radius: 12px;
+  color: var(--hp-primary-dark);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* ===== Detalle (lista de datos) ===== */
+.health-details {
+  display: grid;
+  gap: 0;
+  margin: 24px 0;
+  border: 1px solid var(--hp-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.health-details > div {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 15px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--hp-line);
+}
+
+.health-details > div:last-child {
+  border-bottom: 0;
+}
+
+.health-details dt {
+  font-weight: 700;
+  color: var(--hp-text-soft);
+}
+
+.health-details dd {
+  margin: 0;
+  color: var(--hp-text);
+  white-space: pre-wrap;
+}
+
+/* ===== Acciones ===== */
+.health-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.health-actions .health-secondary-button {
+  background: #fff;
+  color: var(--hp-primary);
+  border: 1.5px solid var(--hp-primary);
+}
+
+.health-actions .health-secondary-button:hover:not(:disabled) {
+  background: var(--hp-primary);
+  color: #fff;
+  filter: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .health-page {
+    padding: 16px;
+  }
+
+  .health-card {
+    padding: 22px;
+  }
+
+  .health-details > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .health-actions > * {
+    flex: 1 1 100%;
+  }
+}
