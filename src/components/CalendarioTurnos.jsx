@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import api from '../api/axios'
 import '../styles/MisTurnos.css'
 
 function fechaLocal(fecha) {
@@ -9,9 +10,12 @@ function inicioDia(fecha) {
   return new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate())
 }
 
-function CalendarioTurnos({ agendaProfesional = [], turnosOcupados = [], seleccionado, onSeleccionar }) {
+function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupados = [], seleccionado, onSeleccionar }) {
   const [mesVisible, setMesVisible] = useState(() => inicioDia(new Date()))
-  const turnosPorDia = useMemo(() => {
+  const [disponibilidadApi, setDisponibilidadApi] = useState(null)
+  const [cargandoDisponibilidad, setCargandoDisponibilidad] = useState(false)
+  const [errorDisponibilidad, setErrorDisponibilidad] = useState('')
+  const turnosCalculados = useMemo(() => {
     const agrupados = new Map()
     const ocupados = new Set(turnosOcupados
       .filter((turno) => ['SOLICITADO', 'CONFIRMADO'].includes(String(turno.estado).toUpperCase()))
@@ -42,6 +46,46 @@ function CalendarioTurnos({ agendaProfesional = [], turnosOcupados = [], selecci
     return agrupados
   }, [agendaProfesional, turnosOcupados, mesVisible])
 
+  useEffect(() => {
+    if (!idProfesional) {
+      setDisponibilidadApi(null)
+      setErrorDisponibilidad('')
+      return undefined
+    }
+    let cancelado = false
+    const cargarDisponibilidadDelMes = async () => {
+      setCargandoDisponibilidad(true)
+      setErrorDisponibilidad('')
+      setDisponibilidadApi(new Map())
+      const diasEnMes = new Date(mesVisible.getFullYear(), mesVisible.getMonth() + 1, 0).getDate()
+      const fechas = Array.from({ length: diasEnMes }, (_, indice) => fechaLocal(new Date(mesVisible.getFullYear(), mesVisible.getMonth(), indice + 1)))
+      const resultados = await Promise.allSettled(fechas.map((fecha) => api.get(`/profesionales/${idProfesional}/disponibilidad`, { params: { fecha } })))
+      if (cancelado) return
+      const turnosPorDia = new Map()
+      resultados.forEach((resultado, indice) => {
+        if (resultado.status !== 'fulfilled') return
+        const horarios = resultado.value.data.turnosDisponibles || []
+        if (!horarios.length) return
+        turnosPorDia.set(fechas[indice], horarios.map((hora) => ({ fechaHora: new Date(`${fechas[indice]}T${hora}:00-03:00`).toISOString() })))
+      })
+      if (resultados.every((resultado) => resultado.status === 'rejected')) {
+        setErrorDisponibilidad('No pudimos cargar la disponibilidad del profesional.')
+      }
+      setDisponibilidadApi(turnosPorDia)
+      setCargandoDisponibilidad(false)
+    }
+    cargarDisponibilidadDelMes().catch(() => {
+      if (!cancelado) {
+        setErrorDisponibilidad('No pudimos cargar la disponibilidad del profesional.')
+        setDisponibilidadApi(new Map())
+        setCargandoDisponibilidad(false)
+      }
+    })
+    return () => { cancelado = true }
+  }, [idProfesional, mesVisible])
+
+  const turnosPorDia = idProfesional ? (disponibilidadApi || new Map()) : turnosCalculados
+
   const primerDia = new Date(mesVisible.getFullYear(), mesVisible.getMonth(), 1)
   const cantidadDias = new Date(mesVisible.getFullYear(), mesVisible.getMonth() + 1, 0).getDate()
   const desplazamiento = (primerDia.getDay() + 6) % 7
@@ -65,7 +109,7 @@ function CalendarioTurnos({ agendaProfesional = [], turnosOcupados = [], selecci
         return <button type="button" role="gridcell" key={fecha} className={`booking-calendar-day${opciones.length ? ' has-slots' : ''}${activo ? ' is-selected' : ''}`} disabled={!opciones.length} onClick={() => onSeleccionar?.(opciones[0].fechaHora)} aria-label={`${dia}, ${opciones.length} horarios disponibles`} aria-pressed={activo}>{dia}{Boolean(opciones.length) && <i aria-hidden="true" />}</button>
       })}
     </div>
-    <div className="booking-calendar-times"><h3>{fechaSeleccionada ? new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${fechaSeleccionada}T12:00:00`)) : 'Elegí un día disponible'}</h3>{horarios.length ? <div className="booking-time-options">{horarios.map((opcion) => <button type="button" key={opcion.fechaHora} className={seleccionado === opcion.fechaHora ? 'is-selected' : ''} onClick={() => onSeleccionar?.(opcion.fechaHora)}>{new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(new Date(opcion.fechaHora))}</button>)}</div> : <p>No hay horarios para mostrar en esta fecha.</p>}</div>
+    <div className="booking-calendar-times"><h3>{fechaSeleccionada ? new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${fechaSeleccionada}T12:00:00`)) : 'Elegí un día disponible'}</h3>{cargandoDisponibilidad ? <p>Cargando disponibilidad…</p> : errorDisponibilidad ? <p role="alert">{errorDisponibilidad}</p> : horarios.length ? <div className="booking-time-options">{horarios.map((opcion) => <button type="button" key={opcion.fechaHora} className={seleccionado === opcion.fechaHora ? 'is-selected' : ''} onClick={() => onSeleccionar?.(opcion.fechaHora)}>{new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(new Date(opcion.fechaHora))}</button>)}</div> : <p>No hay horarios para mostrar en esta fecha.</p>}</div>
   </section>
 }
 
