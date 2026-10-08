@@ -211,6 +211,35 @@
   cursor: not-allowed;
 }
 
+.my-appointment-actions button:not(:disabled) {
+  background: #fff;
+  color: var(--mc-primary);
+  border-color: var(--mc-primary);
+  cursor: pointer;
+}
+
+.my-appointment-actions button:hover:not(:disabled) {
+  background: var(--mc-primary-tint);
+}
+
+.my-appointments-success {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border: 1px solid #bfe3ce;
+  border-radius: 10px;
+  background: #edf8f1;
+  color: #24633d;
+}
+
+.my-appointment-deadline {
+  margin: 16px 0 0;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #fff6e8;
+  color: #856326;
+  font-size: 13px;
+}
+
 /* ===== Vacio / error / nota ===== */
 .my-appointments-empty,
 .my-appointments-error {
@@ -246,6 +275,32 @@
   line-height: 1.5;
 }
 
+.my-appointments-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.request-appointment-button {
+  padding: 11px 16px;
+  border: 1px solid var(--mc-primary);
+  border-radius: 9px;
+  background: var(--mc-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.request-appointment-button:hover {
+  background: var(--mc-primary-dark);
+}
+
+.my-appointments-empty .request-appointment-button {
+  margin-top: 18px;
+}
+
 /* ============================================
    Calendario de reserva
    ============================================ */
@@ -256,6 +311,123 @@
   border-radius: 16px;
   background: var(--mc-surface);
   box-shadow: 0 6px 18px -8px rgba(47, 94, 224, 0.2);
+}
+
+.booking-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.booking-selectors label {
+  display: grid;
+  gap: 7px;
+  color: var(--mc-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.booking-selectors select {
+  width: 100%;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--mc-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--mc-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.booking-form-error {
+  padding: 11px 13px;
+  border: 1px solid #f2cccc;
+  border-radius: 8px;
+  background: var(--mc-danger-tint);
+  color: var(--mc-danger);
+  font-size: 13px;
+}
+
+.my-appointments-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 22px;
+  background: rgba(20, 37, 53, 0.6);
+}
+
+.rebook-modal {
+  position: relative;
+  width: min(100%, 620px);
+  max-height: calc(100vh - 44px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid var(--mc-line);
+  border-radius: 16px;
+  background: var(--mc-surface);
+  box-shadow: 0 20px 70px rgba(21, 41, 61, 0.2);
+}
+
+.rebook-modal h2 {
+  margin: 4px 0 8px;
+  color: var(--mc-text);
+}
+
+.rebook-modal > p:not(.my-appointments-eyebrow) {
+  color: var(--mc-text-soft);
+  font-size: 14px;
+}
+
+.rebook-modal .booking-calendar {
+  max-width: none;
+  margin-top: 18px;
+}
+
+.rebook-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mc-primary-tint);
+  color: var(--mc-primary);
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.rebook-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.rebook-actions button {
+  padding: 11px 15px;
+  border: 1px solid var(--mc-primary);
+  border-radius: 8px;
+  background: var(--mc-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rebook-actions .rebook-cancel {
+  border-color: var(--mc-line);
+  background: #fff;
+  color: var(--mc-text-soft);
+}
+
+.rebook-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .booking-calendar-heading {
@@ -406,6 +578,15 @@
     gap: 12px;
   }
 
+  .my-appointments-title-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .my-appointments-title-actions button {
+    white-space: nowrap;
+  }
+
   .my-appointments-title h1 {
     font-size: 26px;
   }
@@ -431,6 +612,14 @@
 
   .booking-calendar {
     padding: 14px;
+  }
+
+  .booking-selectors {
+    grid-template-columns: 1fr;
+  }
+
+  .rebook-modal {
+    padding: 24px 18px;
   }
 
   .booking-calendar-grid {
