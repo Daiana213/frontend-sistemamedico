@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import api from '../api/axios'
+import RegistroTurnoProfesional from '../components/RegistroTurnoProfesional'
 import '../styles/AgendaProfesional.css'
 
 const ESTADOS = [
@@ -60,6 +61,7 @@ function AgendaProfesional() {
   const [errorConsulta, setErrorConsulta] = useState('')
   const [cargandoHistoria, setCargandoHistoria] = useState(false)
   const [turnoConsultaRegistrada, setTurnoConsultaRegistrada] = useState(null)
+  const [mensajeRegistro, setMensajeRegistro] = useState('')
 
   const estaEnAtencion = Boolean(idTurno)
   const hora = new Date().getHours()
@@ -221,6 +223,8 @@ function AgendaProfesional() {
           <button className={pestana === 'registrar' ? 'is-active' : ''} onClick={() => irAPestana('registrar')}>Registrar turno</button>
         </nav>
 
+        {mensajeRegistro && pestana === 'agenda' && <p className="agenda-consult-success" role="status">{mensajeRegistro}</p>}
+
         {pestana === 'agenda' && <>
           <section className="agenda-toolbar"><div className="agenda-date-control"><button aria-label="Día anterior" onClick={() => cambiarDia(-1)}>‹</button><label htmlFor="agenda-fecha">Día<input id="agenda-fecha" type="date" value={fecha} onChange={(event) => setFecha(event.target.value)} /></label><button aria-label="Día siguiente" onClick={() => cambiarDia(1)}>›</button><button className="agenda-today" onClick={() => setFecha(hoy)}>Hoy</button></div><label className="agenda-filter">Estado<select value={estado} onChange={(event) => setEstado(event.target.value)}><option value="">Todos los estados</option>{ESTADOS.map((opcion) => <option key={opcion.value} value={opcion.value}>{opcion.label}</option>)}</select></label></section>
           <div className="agenda-list-heading"><div><h2>{fecha === hoy ? 'Turnos de hoy' : fechaLegible(fecha)}</h2><p>{total} {total === 1 ? 'turno' : 'turnos'}{estado ? ` · ${textoEstado(estado).toLowerCase()}` : ''}</p></div></div>
@@ -233,7 +237,13 @@ function AgendaProfesional() {
           <TurnosList turnos={turnos} cargando={cargando} error={error} onSelect={(turno) => { setFecha(fechaLocal(new Date(turno.fechaHora))); navigate(`/agenda/turnos/${turno.idTurno}?fecha=${fechaLocal(new Date(turno.fechaHora))}`, { state: { turno } }) }} />
         </>}
 
-        {pestana === 'registrar' && <section className="agenda-card agenda-registration-pending"><div className="agenda-pending-icon">↗</div><p className="agenda-overline">HU9 · REGISTRO DESDE EL PROFESIONAL</p><h2>Registrar turno para un paciente</h2><p>La opción queda separada como sección propia de la agenda. El endpoint actual de creación requiere el identificador interno del paciente; todavía no hay una operación para buscarlo por DNI ni para consultar los horarios disponibles.</p><p>Cuando backend publique esa búsqueda y disponibilidad, conectamos acá el formulario y la confirmación de turno.</p></section>}
+        {pestana === 'registrar' && <RegistroTurnoProfesional onTurnoRegistrado={(fechaTurno) => {
+          setFecha(fechaTurno)
+          setEstado('')
+          setMensajeRegistro('Turno registrado con éxito. Quedó agregado a tu agenda.')
+          setPestana('agenda')
+          navigate('/agenda')
+        }} />}
       </section>
     </main>
   )
