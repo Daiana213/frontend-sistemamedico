@@ -460,37 +460,198 @@
   font-size: 11px;
 }
 
-/* ===== Registro pendiente ===== */
-.agenda-registration-pending {
-  max-width: 690px;
-  margin: 28px auto;
-  padding: 34px;
-}
-
-.agenda-pending-icon {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  margin-bottom: 19px;
-  border-radius: 12px;
-  background: var(--ag-primary-soft);
-  color: var(--ag-primary);
-  font-size: 23px;
-}
-
-.agenda-registration-pending h2,
 .agenda-patient-card h2 {
   margin: 0 0 12px;
   color: var(--ag-text);
   font-size: 20px;
 }
 
-.agenda-registration-pending > p:not(.agenda-overline),
 .agenda-description {
   color: var(--ag-text-soft);
   font-size: 13px;
   line-height: 1.65;
+}
+
+.agenda-registration-card {
+  max-width: 690px;
+  margin: 28px auto;
+  padding: 34px;
+}
+
+.agenda-registration-card h2 {
+  margin: 0 0 12px;
+  color: var(--ag-text);
+  font-size: 20px;
+}
+
+.agenda-registration-message {
+  margin: 18px 0;
+  padding: 12px 14px;
+}
+
+.agenda-patient-search,
+.agenda-booking-form {
+  display: grid;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.agenda-patient-search label,
+.agenda-booking-form > label {
+  color: var(--ag-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.agenda-patient-search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.agenda-patient-search input,
+.agenda-booking-form > input {
+  box-sizing: border-box;
+  min-width: 0;
+  height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid var(--ag-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ag-text);
+  font: inherit;
+}
+
+.agenda-patient-search input {
+  flex: 1;
+}
+
+.agenda-patient-search input:focus,
+.agenda-booking-form > input:focus {
+  border-color: var(--ag-primary);
+  outline: 2px solid var(--ag-primary-soft);
+}
+
+.agenda-patient-search .agenda-primary-button,
+.agenda-booking-submit {
+  height: 40px;
+  font-size: 12px;
+}
+
+.agenda-primary-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.agenda-found-patient {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  background: var(--ag-surface);
+}
+
+.agenda-found-patient div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.agenda-found-patient span {
+  color: var(--ag-text-soft);
+  font-size: 11px;
+}
+
+.agenda-found-patient strong {
+  overflow-wrap: anywhere;
+  color: var(--ag-text);
+  font-size: 13px;
+}
+
+.agenda-registration-warning {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #f0dca9;
+  border-radius: 10px;
+  background: #fff8e8;
+  color: #795a1a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.agenda-available-times {
+  min-width: 0;
+  margin: 14px 0 4px;
+  padding: 14px;
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+}
+
+.agenda-available-times legend {
+  padding: 0 6px;
+  color: var(--ag-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.agenda-availability-refresh {
+  margin-bottom: 12px;
+  padding: 7px 11px;
+  border: 1px solid var(--ag-line);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--ag-primary);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.agenda-availability-refresh:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.agenda-available-times .agenda-description {
+  margin: 4px 0;
+}
+
+.agenda-time-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agenda-time-options button {
+  min-width: 70px;
+  padding: 9px 13px;
+  border: 1px solid var(--ag-line);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--ag-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.agenda-time-options button:hover,
+.agenda-time-options button.is-selected {
+  border-color: var(--ag-primary);
+  background: var(--ag-primary);
+  color: #fff;
+}
+
+.agenda-time-options button:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 2px;
+}
+
+.agenda-booking-submit {
+  justify-self: end;
+  padding: 0 20px;
 }
 
 /* ===== Detalle de cita ===== */
@@ -772,8 +933,20 @@
     grid-row: 2;
   }
 
-  .agenda-registration-pending {
+  .agenda-registration-card {
     padding: 24px 18px;
+  }
+
+  .agenda-patient-search-row {
+    flex-direction: column;
+  }
+
+  .agenda-found-patient {
+    grid-template-columns: 1fr;
+  }
+
+  .agenda-booking-submit {
+    justify-self: stretch;
   }
 
   .agenda-consult-entry dl div {
