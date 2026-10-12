@@ -87,8 +87,69 @@
   font-size: 13px;
 }
 
+.perfil-otp-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.perfil-otp-input {
+  width: 100%;
+  height: 52px;
+  padding: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  background: #f9fafb;
+  color: #111827;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.perfil-otp-input:focus {
+  outline: none;
+  border-color: #22a55c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(34, 165, 92, 0.18);
+}
+
+.perfil-otp-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.perfil-form button.perfil-btn-secundario {
+  margin-top: 0;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.perfil-form button.perfil-btn-secundario:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.perfil-form button.perfil-btn-link {
+  margin-top: 0;
+  padding: 6px;
+  background: transparent;
+  color: #166534;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 @media (max-width: 480px) {
   .perfil-modal {
     padding: 24px;
+  }
+
+  .perfil-otp-input {
+    height: 46px;
+    font-size: 18px;
   }
 }

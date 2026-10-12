@@ -1,7 +1,13 @@
 import axios from 'axios'
 
+const BASE_URL = (
+  import.meta.env.VITE_API_URL || 'https://backend-sistemamedico.vercel.app/'
+)
+  .trim()
+  .replace(/\/$/, '')
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || ' https://backend-sistemamedico-e2px.onrender.com',
+  baseURL: BASE_URL,
 })
 
 // Adjunta el access token a cada request
@@ -63,7 +69,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL || 'https://backend-sistemamedico-m346.onrender.com'}/auth/refresh`,
+          `${BASE_URL}/auth/refresh`,
           { refreshToken },
         )
         const newToken = data.accessToken
