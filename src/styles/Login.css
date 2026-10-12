@@ -245,3 +245,16 @@
 }
 
 .login-link-button{align-self:flex-start;padding:0;border:0;background:none;color:#287a70;font:inherit;font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer}.login-recovery-result{display:grid;gap:16px;color:#5b6f7e;line-height:1.55}.login-recovery-link{display:block;text-align:center;text-decoration:none}.login-button:disabled{opacity:.65;cursor:wait}
+
+.login-alerta-exito {
+  background: #ECFDF5;
+  border: 1.5px solid #A7F3D0;
+  color: #065F46;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 22px;
+  text-align: center;
+  line-height: 1.45;
+}

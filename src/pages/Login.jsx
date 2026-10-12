@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import api from '../api/axios'
 import '../styles/Login.css'
 
@@ -14,6 +14,7 @@ function Login() {
   const [recuperacionEnviada, setRecuperacionEnviada] = useState(false)
   const [enlaceRecuperacion, setEnlaceRecuperacion] = useState('')
   const navigate = useNavigate()
+  const location = useLocation()
 
   const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo, primerLogin) => {
     localStorage.setItem('accessToken', accessToken)
@@ -107,6 +108,12 @@ function Login() {
               <h2 className="login-title">Bienvenido</h2>
               <p className="login-subtitle">Ingresá con tu DNI y contraseña para continuar.</p>
 
+              {location.state?.registroExitoso && (
+                <div className="login-alerta-exito">
+                  ¡Tu cuenta fue creada con éxito! Ya podés ingresar con tu DNI y contraseña.
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="login-form">
                 <label>
                   <span className="login-label">DNI</span>
@@ -119,8 +126,6 @@ function Login() {
                   />
                 </label>
 
-                <button type="button" className="login-link-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>
-
                 <label>
                   <span className="login-label">Contraseña</span>
                   <input
@@ -131,6 +136,8 @@ function Login() {
                     required
                   />
                 </label>
+
+                <button type="button" className="login-link-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>
 
                 {error && <p className="login-error">{error}</p>}
 
