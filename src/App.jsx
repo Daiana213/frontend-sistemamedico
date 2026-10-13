@@ -13,6 +13,7 @@ import AntecedentesPaciente from './pages/AntecedentesPaciente'
 import MisTurnos from './pages/MisTurnos'
 import ConfiguracionAgenda from './pages/ConfiguracionAgenda'
 import GestionTurnos from './pages/GestionTurnos'
+import GestionProfesionales from './pages/GestionProfesionales'
 
 function App() {
   return (
@@ -72,6 +73,15 @@ function App() {
         element={
           <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <GestionTurnos />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/admin/profesionales"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
+            <GestionProfesionales />
           </RutaProtegida>
         }
       />
