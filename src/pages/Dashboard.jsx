@@ -23,9 +23,16 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
       <header className="dashboard-banner">
-        <div className="dashboard-banner-text">
-          <h1 className="dashboard-banner-title">Bienvenido</h1>
-          <p className="dashboard-banner-subtitle">Rol activo: {rolActivo}</p>
+        <div className="dashboard-banner-content">
+          <img
+            src="/logo-blanco.png"
+            alt="Sanatorio Antonia"
+            className="dashboard-banner-logo"
+          />
+          <div className="dashboard-banner-text">
+            <h1 className="dashboard-banner-title">Bienvenido</h1>
+            <p className="dashboard-banner-subtitle">Rol activo: {rolActivo}</p>
+          </div>
         </div>
 
         <button

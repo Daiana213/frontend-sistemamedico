@@ -24,7 +24,15 @@
   margin: 0 auto 28px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: var(--hp-text);
+}
+
+.health-header-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .health-header a {

@@ -36,6 +36,21 @@
   color: #fff;
 }
 
+.dashboard-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.dashboard-banner-logo {
+  height: 58px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
 .dashboard-banner-title {
   margin: 0 0 10px;
   font-size: 38px;

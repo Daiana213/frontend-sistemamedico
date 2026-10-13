@@ -128,7 +128,7 @@ export default function ConfiguracionAgenda() {
     <main className="agenda-config-page">
       <header className="agenda-config-header">
         <Link to="/dashboard" className="agenda-config-back">← Volver al panel</Link>
-        <span>Sanatorio Antonia</span>
+        <img src="/logo-completo.png" alt="Sanatorio Antonia" className="agenda-config-logo" />
       </header>
       <section className="agenda-config-content">
         <div className="agenda-config-heading">

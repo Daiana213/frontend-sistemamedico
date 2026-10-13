@@ -231,6 +231,7 @@ function RegistroPaciente() {
         <div className="registro-visual-content">
           {paso === 'VERIFICACION' ? (
             <>
+              <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="registro-visual-logo" />
               <div className="verificacion-badge-visual">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -242,6 +243,7 @@ function RegistroPaciente() {
             </>
           ) : (
             <>
+              <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="registro-visual-logo" />
               <h3>Unite a nosotros</h3>
               <p>Creá tu cuenta y empezá a gestionar tu salud en un solo lugar.</p>
             </>
@@ -249,6 +251,15 @@ function RegistroPaciente() {
         </div>
       </div>
       <div className="registro-page">
+        <div className="registro-brand">
+          <Link to="/">
+            <img
+              src="/logo-completo.png"
+              alt="Sanatorio Antonia - Sistema de Gestión Médica"
+              className="registro-brand-logo"
+            />
+          </Link>
+        </div>
         {paso === 'VERIFICACION' ? (
           <div className="registro-form verificacion-form">
             {verificadoExitoso ? (

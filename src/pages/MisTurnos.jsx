@@ -205,7 +205,7 @@ export default function MisTurnos() {
   }
 
   return <main className="my-appointments-page">
-    <header className="my-appointments-header"><Link to="/dashboard">← Volver al panel</Link><span>Sanatorio Antonia</span></header>
+    <header className="my-appointments-header"><Link to="/dashboard">← Volver al panel</Link><img src="/logo-completo.png" alt="Sanatorio Antonia" className="my-appointments-logo" /></header>
     <section className="my-appointments-content">
       <div className="my-appointments-title"><div><p className="my-appointments-eyebrow">PANEL DEL PACIENTE</p><h1>Mis turnos</h1><p>Consultá el estado y gestioná tus turnos médicos.</p></div><div className="my-appointments-title-actions"><button type="button" className="my-appointments-refresh" onClick={cargarTurnos} disabled={cargando}>Actualizar</button><button type="button" className="request-appointment-button" onClick={abrirSolicitud}>Solicitar turno</button></div></div>
       {mensaje && <p className="my-appointments-success" role="status">{mensaje}</p>}

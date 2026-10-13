@@ -261,7 +261,7 @@ function GestionTurnos() {
   })
 
   return <main className="admin-appointments-page">
-    <header className="admin-appointments-header"><Link to="/dashboard">← Volver al panel</Link><span>Sanatorio Antonia</span></header>
+    <header className="admin-appointments-header"><Link to="/dashboard">← Volver al panel</Link><img src="/logo-completo.png" alt="Sanatorio Antonia" className="admin-appointments-logo" /></header>
     <section className="admin-appointments-content">
       <div className="admin-appointments-title">
         <div><p className="admin-appointments-eyebrow">PANEL ADMINISTRATIVO</p><h1>Gestión de turnos</h1><p>Registrá turnos presenciales y administrá reprogramaciones y cancelaciones.</p></div>

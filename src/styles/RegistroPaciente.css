@@ -49,18 +49,41 @@
   margin: 0;
 }
 
+.registro-visual-logo {
+  height: 52px;
+  width: auto;
+  margin-bottom: 24px;
+  display: block;
+}
+
 /* ===== Columna del formulario (derecha) ===== */
 .registro-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 56px 24px;
+  padding: 48px;
   box-sizing: border-box;
   overflow-y: auto;
 }
 
-.registro-page > * {
+.registro-brand {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-bottom: 24px;
+  width: auto;
+}
+
+.registro-brand-logo {
+  height: 44px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.registro-page > *:not(.registro-brand) {
   width: 100%;
   max-width: 480px;
 }

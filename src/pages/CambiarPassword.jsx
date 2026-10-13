@@ -88,12 +88,16 @@ function CambiarPassword() {
   <div className="cambiarpass-split">
     <div className="cambiarpass-visual">
       <div className="cambiarpass-visual-content">
+        <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="cambiarpass-visual-logo" />
         <h3>Tu seguridad primero</h3>
         <p>Antes de continuar, definí una contraseña personal y segura para tu cuenta.</p>
       </div>
     </div>
 
     <div className="cambiarpass-page">
+      <div className="cambiarpass-brand">
+        <img src="/logo-completo.png" alt="Sanatorio Antonia" className="cambiarpass-brand-logo" />
+      </div>
       <div className="cambiarpass-header">
         <h2 className="cambiarpass-title">Cambio obligatorio de contraseña</h2>
         <p className="cambiarpass-description">

@@ -180,7 +180,7 @@ function AgendaProfesional() {
   if (estaEnAtencion) {
     return (
       <main className="agenda-page">
-        <header className="agenda-topbar"><Link className="agenda-brand" to="/agenda"><span className="agenda-brand-mark">+</span> Sanatorio Antonia</Link><button className="agenda-logout" onClick={cerrarSesion}>Cerrar sesión</button></header>
+        <header className="agenda-topbar"><Link className="agenda-brand" to="/agenda"><img src="/logo-completo.png" alt="Sanatorio Antonia" className="agenda-brand-logo" /></Link><button className="agenda-logout" onClick={cerrarSesion}>Cerrar sesión</button></header>
         <section className="agenda-content">
           <button className="agenda-back" onClick={() => { setPestana('agenda'); navigate('/agenda') }}>← Volver a la agenda</button>
           {cargando && !turnoSeleccionado ? <div className="agenda-state">Cargando turno…</div> : error ? <div className="agenda-state agenda-state--error">{error}</div> : !turnoSeleccionado ? <div className="agenda-state">No encontramos ese turno para la fecha seleccionada.</div> : <>
@@ -213,9 +213,9 @@ function AgendaProfesional() {
 
   return (
     <main className="agenda-page">
-      <header className="agenda-topbar"><Link className="agenda-brand" to="/agenda"><span className="agenda-brand-mark">+</span> Sanatorio Antonia</Link><div className="agenda-topbar-actions"><div className="agenda-user-label">{profesional?.matricula ? `Matrícula ${profesional.matricula}` : 'Portal profesional'}</div><button className="agenda-logout" onClick={cerrarSesion}>Cerrar sesión</button></div></header>
+      <header className="agenda-topbar"><Link className="agenda-brand" to="/agenda"><img src="/logo-completo.png" alt="Sanatorio Antonia" className="agenda-brand-logo" /></Link><div className="agenda-topbar-actions"><div className="agenda-user-label">{profesional?.matricula ? `Matrícula ${profesional.matricula}` : 'Portal profesional'}</div><button className="agenda-logout" onClick={cerrarSesion}>Cerrar sesión</button></div></header>
       <section className="agenda-content">
-        <div className="agenda-page-heading"><div><p className="agenda-overline">PORTAL PROFESIONAL</p><h1>{saludo}, {nombreProfesional}</h1><p>{fechaLegible(hoy)}</p></div><div className="agenda-heading-mark" aria-hidden="true">✚</div></div>
+        <div className="agenda-page-heading"><div><p className="agenda-overline">PORTAL PROFESIONAL</p><h1>{saludo}, {nombreProfesional}</h1><p>{fechaLegible(hoy)}</p></div><div className="agenda-heading-mark" aria-hidden="true"><img src="/logo-simbolo.png" alt="" className="agenda-heading-logo" /></div></div>
 
         <nav className="agenda-tabs" aria-label="Secciones de agenda">
           <button className={pestana === 'agenda' ? 'is-active' : ''} onClick={() => irAPestana('agenda')}>Agenda diaria</button>

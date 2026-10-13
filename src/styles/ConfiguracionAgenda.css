@@ -23,6 +23,13 @@
   font-weight: 700;
 }
 
+.agenda-config-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .agenda-config-back {
   color: #3157c8;
   text-decoration: none;

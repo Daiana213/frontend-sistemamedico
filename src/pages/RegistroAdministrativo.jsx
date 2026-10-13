@@ -77,12 +77,18 @@ function RegistroAdministrativo() {
   <div className="regadmin-split">
     <div className="regadmin-visual">
       <div className="regadmin-visual-content">
+        <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="regadmin-visual-logo" />
         <h3>Equipo administrativo</h3>
         <p>Gestioná altas de personal y accesos del sanatorio de forma centralizada.</p>
       </div>
     </div>
 
     <div className="regadmin-page">
+      <div className="regadmin-brand">
+        <Link to="/dashboard">
+          <img src="/logo-completo.png" alt="Sanatorio Antonia" className="regadmin-brand-logo" />
+        </Link>
+      </div>
       <h2 className="regadmin-title">Registro de administrativo</h2>
 
       <form onSubmit={handleSubmit} className="regadmin-form">

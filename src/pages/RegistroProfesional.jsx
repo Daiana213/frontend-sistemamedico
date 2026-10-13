@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import api from "../api/axios"
 import "../styles/RegistroProfesional.css"
@@ -103,6 +103,7 @@ function RegistroProfesional() {
       {/* Panel decorativo izquierdo */}
       <div className="regpro-visual">
         <div className="regpro-visual-content">
+          <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="regpro-visual-logo" />
           <h3>Cuerpo médico</h3>
           <p>Registra profesionales de la salud y asignales sus especialidades de forma centralizada.</p>
         </div>
@@ -110,6 +111,11 @@ function RegistroProfesional() {
 
       {/* Columna del formulario */}
       <div className="regpro-page">
+        <div className="regpro-brand">
+          <Link to="/dashboard">
+            <img src="/logo-completo.png" alt="Sanatorio Antonia" className="regpro-brand-logo" />
+          </Link>
+        </div>
         <h2 className="regpro-title">Registro de profesional</h2>
 
         <form onSubmit={handleSubmit} className="regpro-form">

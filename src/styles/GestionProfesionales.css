@@ -12,6 +12,7 @@
 .hu14-header,
 .hu14-content { width: 100%; max-width: 1080px; margin: 0 auto; }
 .hu14-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 34px; color: #526079; font-size: 14px; font-weight: 700; }
+.hu14-header-logo { height: 36px; width: auto; object-fit: contain; display: block; }
 .hu14-header a { color: var(--hu14-primary); text-decoration: none; }
 .hu14-header a:hover { text-decoration: underline; }
 .hu14-heading { margin-bottom: 22px; }

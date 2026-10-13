@@ -228,7 +228,7 @@ export default function GestionProfesionales() {
   }
 
   return <main className="hu14-page">
-    <header className="hu14-header"><Link to="/dashboard">← Volver al panel</Link><span>Sanatorio Antonia</span></header>
+    <header className="hu14-header"><Link to="/dashboard">← Volver al panel</Link><img src="/logo-completo.png" alt="Sanatorio Antonia" className="hu14-header-logo" /></header>
     <section className="hu14-content">
       <div className="hu14-heading"><p className="hu14-eyebrow">ADMINISTRACIÓN</p><h1>Profesionales y especialidades</h1><p>Mantené actualizados los datos del equipo médico y el catálogo de atención.</p></div>
       <nav className="hu14-tabs" aria-label="Secciones de gestión"><button type="button" className={pestana === 'profesionales' ? 'is-active' : ''} onClick={() => cambiarPestana('profesionales')}>Profesionales</button><button type="button" className={pestana === 'especialidades' ? 'is-active' : ''} onClick={() => cambiarPestana('especialidades')}>Especialidades</button></nav>

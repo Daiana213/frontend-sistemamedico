@@ -94,9 +94,12 @@ function AprobacionMenores() {
   return (
 
     <div className="menores-page">
-      <Link to="/dashboard" className="menores-back-link">
-        ← Volver al dashboard
-      </Link>
+      <div className="menores-top-bar">
+        <Link to="/dashboard" className="menores-back-link">
+          ← Volver al dashboard
+        </Link>
+        <img src="/logo-completo.png" alt="Sanatorio Antonia" className="menores-header-logo" />
+      </div>
 
       <h2 className="menores-title">Menores pendientes de aprobación</h2>
 

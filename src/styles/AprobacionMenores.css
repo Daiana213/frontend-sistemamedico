@@ -21,6 +21,20 @@
   background: var(--color-background, #EAF2FE);
 }
 
+.menores-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.menores-header-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .menores-back-link {
   width: fit-content;
   font-size: 13px;

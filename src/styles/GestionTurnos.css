@@ -20,9 +20,16 @@
 .admin-appointments-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 28px;
   color: var(--color-text, #111827);
   font-size: 14px;
+}
+.admin-appointments-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 .admin-appointments-header a { color: var(--at-primary); font-weight: 700; text-decoration: none; }
 .admin-appointments-header a:hover { text-decoration: underline; }

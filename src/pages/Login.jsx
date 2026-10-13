@@ -71,8 +71,11 @@ function Login() {
     <div className="login-split">
       <div className="login-form-side">
         <div className="login-brand">
-          <div className="mark">+</div>
-          <span className="name">Sanatorio Antonia</span>
+          <img
+            src="/logo-completo.png"
+            alt="Sanatorio Antonia - Sistema de Gestión Médica"
+            className="login-brand-logo"
+          />
         </div>
 
         <div className="login-content">
@@ -86,9 +89,21 @@ function Login() {
                   <label><span className="login-label">Correo electrónico</span><input className="login-input" type="email" value={emailRecuperacion} onChange={(e) => setEmailRecuperacion(e.target.value)} required /></label>
                   {error && <p className="login-error">{error}</p>}
                   <button type="submit" className="login-button">Solicitar enlace</button>
-                  <button type="button" className="login-link-button" onClick={() => { setRecuperar(false); setError('') }}>Volver al inicio de sesión</button>
+                  <button type="button" className="login-back-button" onClick={() => { setRecuperar(false); setError('') }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="login-back-icon" aria-hidden="true">
+                      <line x1="19" y1="12" x2="5" y2="12" />
+                      <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    <span>Volver al inicio de sesión</span>
+                  </button>
                 </form>
-              </> : <div className="login-recovery-result"><p>Si los datos corresponden a una cuenta activa, recibirás un enlace para restablecer la contraseña.</p>{enlaceRecuperacion && <Link className="login-button login-recovery-link" to={enlaceRecuperacion}>Abrir enlace de restablecimiento</Link>}<button type="button" className="login-link-button" onClick={() => { setRecuperar(false); setRecuperacionEnviada(false); setEnlaceRecuperacion('') }}>Volver al inicio de sesión</button></div>}
+              </> : <div className="login-recovery-result"><p>Si los datos corresponden a una cuenta activa, recibirás un enlace para restablecer la contraseña.</p>{enlaceRecuperacion && <Link className="login-button login-recovery-link" to={enlaceRecuperacion}>Abrir enlace de restablecimiento</Link>}<button type="button" className="login-back-button" onClick={() => { setRecuperar(false); setRecuperacionEnviada(false); setEnlaceRecuperacion('') }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="login-back-icon" aria-hidden="true">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Volver al inicio de sesión</span>
+              </button></div>}
             </>
           ) : roles ? (
             <>
@@ -137,7 +152,7 @@ function Login() {
                   />
                 </label>
 
-                <button type="button" className="login-link-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>
+                <button type="button" className="login-forgot-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>
 
                 {error && <p className="login-error">{error}</p>}
 
@@ -156,6 +171,7 @@ function Login() {
 
       <div className="login-visual">
         <div className="login-visual-content">
+          <img src="/logo-simbolo-blanco.png" alt="Sanatorio Antonia" className="login-visual-logo" />
           <h3>Tu turno, tu ficha y tu historial en un solo lugar.</h3>
           <p>Gestioná tus consultas médicas de forma simple, segura y sin esperas.</p>
         </div>

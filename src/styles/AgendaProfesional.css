@@ -33,11 +33,15 @@
 .agenda-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
   color: var(--ag-primary);
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 800;
+}
+
+.agenda-brand-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .agenda-brand-mark {
@@ -124,6 +128,13 @@
   background: var(--ag-primary-soft);
   color: var(--ag-primary);
   font-size: 22px;
+}
+
+.agenda-heading-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
 }
 
 /* ===== Pestañas ===== */
