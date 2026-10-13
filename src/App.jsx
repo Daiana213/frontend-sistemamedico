@@ -11,6 +11,7 @@ import AgendaProfesional from './pages/AgendaProfesional'
 import RestablecerPassword from './pages/RestablecerPassword'
 import AntecedentesPaciente from './pages/AntecedentesPaciente'
 import MisTurnos from './pages/MisTurnos'
+import ConfiguracionAgenda from './pages/ConfiguracionAgenda'
 
 function App() {
   return (
@@ -52,6 +53,15 @@ function App() {
         element={
           <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <RegistroProfesional />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/admin/agendas"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
+            <ConfiguracionAgenda />
           </RutaProtegida>
         }
       />
