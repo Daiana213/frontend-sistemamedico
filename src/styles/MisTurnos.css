@@ -1,0 +1,628 @@
+/* ============================================
+   Mis citas + calendario de reserva
+   Paleta: azules y rojos del login / dashboard
+   ============================================ */
+
+.my-appointments-page,
+.booking-calendar {
+  --mc-primary: var(--color-primary, #2F5EE0);
+  --mc-primary-dark: #1E3FAE;
+  --mc-danger: var(--color-danger, #DC2626);
+  --mc-text: var(--color-text, #111827);
+  --mc-text-soft: var(--color-text-secondary, #6B7280);
+  --mc-surface: var(--color-surface, #FFFFFF);
+  --mc-line: #E1E8F5;
+  --mc-primary-tint: #EAF1FF;
+  --mc-danger-tint: #FEECEC;
+}
+
+/* ===== Pagina ===== */
+.my-appointments-page {
+  min-height: 100vh;
+  background: var(--color-background, #EAF2FE);
+  padding: 22px;
+  color: var(--mc-text);
+}
+
+.my-appointments-header {
+  max-width: 1080px;
+  margin: 0 auto 28px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--mc-text);
+}
+
+.my-appointments-header a {
+  color: var(--mc-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.my-appointments-header a:hover {
+  text-decoration: underline;
+}
+
+.my-appointments-content {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ===== Titulo ===== */
+.my-appointments-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.my-appointments-title h1 {
+  margin: 0;
+  color: var(--mc-text);
+  font-size: 30px;
+  letter-spacing: -0.01em;
+}
+
+.my-appointments-title p:last-child {
+  color: var(--mc-text-soft);
+}
+
+.my-appointments-eyebrow {
+  margin: 0 0 6px;
+  color: var(--mc-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.my-appointments-refresh {
+  padding: 10px 18px;
+  border: 1.5px solid var(--mc-primary);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--mc-primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.my-appointments-refresh:hover:not(:disabled) {
+  background: var(--mc-primary);
+  color: #fff;
+}
+
+.my-appointments-refresh:focus-visible {
+  outline: 2px solid var(--mc-primary);
+  outline-offset: 2px;
+}
+
+.my-appointments-refresh:disabled {
+  opacity: 0.6;
+}
+
+/* ===== Lista y tarjetas ===== */
+.my-appointments-list {
+  display: grid;
+  gap: 14px;
+}
+
+.my-appointment-card {
+  padding: 20px 22px;
+  border: 1px solid var(--mc-line);
+  border-radius: 16px;
+  background: var(--mc-surface);
+  box-shadow: 0 6px 18px -8px rgba(47, 94, 224, 0.2);
+}
+
+.my-appointment-card-main {
+  display: grid;
+  grid-template-columns: 190px 1fr auto;
+  align-items: center;
+  gap: 22px;
+}
+
+.my-appointment-date {
+  display: grid;
+  gap: 6px;
+  color: var(--mc-primary);
+}
+
+.my-appointment-date strong {
+  text-transform: capitalize;
+}
+
+.my-appointment-date span {
+  color: var(--mc-text-soft);
+  font-size: 14px;
+}
+
+.my-appointment-info h2 {
+  margin: 0 0 6px;
+  color: var(--mc-text);
+  font-size: 17px;
+}
+
+.my-appointment-info p {
+  margin: 0;
+  color: var(--mc-text-soft);
+  font-size: 14px;
+}
+
+.my-appointment-cancel-reason {
+  margin-top: 8px !important;
+  color: var(--mc-danger) !important;
+}
+
+/* ===== Estados ===== */
+.my-appointment-status {
+  padding: 7px 12px;
+  border-radius: 30px;
+  background: #F1F3F7;
+  color: var(--mc-text-soft);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.my-appointment-status--solicitado {
+  background: #FFF4DF;
+  color: #936816;
+}
+
+.my-appointment-status--confirmado {
+  background: #DCE8FD;
+  color: var(--mc-primary-dark);
+}
+
+.my-appointment-status--reprogramado {
+  background: #E6EAF8;
+  color: #3B4A8C;
+}
+
+.my-appointment-status--cancelado {
+  background: var(--mc-danger-tint);
+  color: var(--mc-danger);
+}
+
+.my-appointment-status--completado {
+  background: #EEF0F4;
+  color: #4B5563;
+}
+
+/* ===== Acciones ===== */
+.my-appointment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 17px;
+  padding-top: 15px;
+  border-top: 1px solid var(--mc-line);
+}
+
+.my-appointment-actions button {
+  padding: 9px 16px;
+  border: 1px solid var(--mc-line);
+  border-radius: 9999px;
+  background: #F6F8FC;
+  color: var(--mc-text-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
+.my-appointment-actions button:not(:disabled) {
+  background: #fff;
+  color: var(--mc-primary);
+  border-color: var(--mc-primary);
+  cursor: pointer;
+}
+
+.my-appointment-actions button:hover:not(:disabled) {
+  background: var(--mc-primary-tint);
+}
+
+.my-appointments-success {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border: 1px solid #bfe3ce;
+  border-radius: 10px;
+  background: #edf8f1;
+  color: #24633d;
+}
+
+.my-appointment-deadline {
+  margin: 16px 0 0;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #fff6e8;
+  color: #856326;
+  font-size: 13px;
+}
+
+/* ===== Vacio / error / nota ===== */
+.my-appointments-empty,
+.my-appointments-error {
+  padding: 38px 20px;
+  border: 1px solid var(--mc-line);
+  border-radius: 16px;
+  background: var(--mc-surface);
+  text-align: center;
+  color: var(--mc-text-soft);
+}
+
+.my-appointments-empty strong {
+  color: var(--mc-text);
+}
+
+.my-appointments-empty p {
+  margin-bottom: 0;
+}
+
+.my-appointments-error {
+  color: var(--mc-danger);
+  background: #FFF6F6;
+  border-color: #F7D4D4;
+}
+
+.my-appointments-note {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--mc-primary-tint);
+  color: var(--mc-primary-dark);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.my-appointments-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.request-appointment-button {
+  padding: 11px 16px;
+  border: 1px solid var(--mc-primary);
+  border-radius: 9px;
+  background: var(--mc-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.request-appointment-button:hover {
+  background: var(--mc-primary-dark);
+}
+
+.my-appointments-empty .request-appointment-button {
+  margin-top: 18px;
+}
+
+/* ============================================
+   Calendario de reserva
+   ============================================ */
+.booking-calendar {
+  max-width: 520px;
+  padding: 20px;
+  border: 1px solid var(--mc-line);
+  border-radius: 16px;
+  background: var(--mc-surface);
+  box-shadow: 0 6px 18px -8px rgba(47, 94, 224, 0.2);
+}
+
+.booking-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.booking-selectors label {
+  display: grid;
+  gap: 7px;
+  color: var(--mc-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.booking-selectors select {
+  width: 100%;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--mc-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--mc-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.booking-form-error {
+  padding: 11px 13px;
+  border: 1px solid #f2cccc;
+  border-radius: 8px;
+  background: var(--mc-danger-tint);
+  color: var(--mc-danger);
+  font-size: 13px;
+}
+
+.my-appointments-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 22px;
+  background: rgba(20, 37, 53, 0.6);
+}
+
+.rebook-modal {
+  position: relative;
+  width: min(100%, 620px);
+  max-height: calc(100vh - 44px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid var(--mc-line);
+  border-radius: 16px;
+  background: var(--mc-surface);
+  box-shadow: 0 20px 70px rgba(21, 41, 61, 0.2);
+}
+
+.rebook-modal h2 {
+  margin: 4px 0 8px;
+  color: var(--mc-text);
+}
+
+.rebook-modal > p:not(.my-appointments-eyebrow) {
+  color: var(--mc-text-soft);
+  font-size: 14px;
+}
+
+.rebook-modal .booking-calendar {
+  max-width: none;
+  margin-top: 18px;
+}
+
+.rebook-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mc-primary-tint);
+  color: var(--mc-primary);
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.rebook-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.rebook-actions button {
+  padding: 11px 15px;
+  border: 1px solid var(--mc-primary);
+  border-radius: 8px;
+  background: var(--mc-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rebook-actions .rebook-cancel {
+  border-color: var(--mc-line);
+  background: #fff;
+  color: var(--mc-text-soft);
+}
+
+.rebook-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.booking-calendar-heading {
+  display: grid;
+  grid-template-columns: 38px 1fr 38px;
+  align-items: center;
+  text-align: center;
+}
+
+.booking-calendar-heading h2 {
+  margin: 0;
+  text-transform: capitalize;
+  color: var(--mc-text);
+  font-size: 17px;
+}
+
+.booking-calendar-heading button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--mc-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--mc-primary);
+  font-size: 22px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.booking-calendar-heading button:hover {
+  background: var(--mc-primary);
+  color: #fff;
+}
+
+.booking-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.booking-calendar-weekday {
+  padding: 8px 0;
+  text-align: center;
+  color: var(--mc-text-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.booking-calendar-empty {
+  height: 42px;
+}
+
+.booking-calendar-day {
+  position: relative;
+  height: 42px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #A8B0BD;
+  font: inherit;
+}
+
+.booking-calendar-day.has-slots {
+  background: var(--mc-primary-tint);
+  color: var(--mc-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.booking-calendar-day.has-slots:hover,
+.booking-calendar-day.is-selected {
+  background: var(--mc-primary);
+  color: #fff;
+}
+
+.booking-calendar-day.has-slots:focus-visible {
+  outline: 2px solid var(--mc-primary-dark);
+  outline-offset: 2px;
+}
+
+.booking-calendar-day i {
+  position: absolute;
+  bottom: 5px;
+  left: calc(50% - 2px);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ===== Horarios ===== */
+.booking-calendar-times {
+  margin-top: 20px;
+  padding-top: 17px;
+  border-top: 1px solid var(--mc-line);
+}
+
+.booking-calendar-times h3 {
+  margin: 0 0 12px;
+  color: var(--mc-text);
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.booking-calendar-times p {
+  color: var(--mc-text-soft);
+  font-size: 13px;
+}
+
+.booking-time-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.booking-time-options button {
+  padding: 9px 15px;
+  border: 1.5px solid #C9D8F8;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--mc-primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.booking-time-options button.is-selected,
+.booking-time-options button:hover {
+  background: var(--mc-primary);
+  border-color: var(--mc-primary);
+  color: #fff;
+}
+
+.booking-time-options button:focus-visible {
+  outline: 2px solid var(--mc-primary-dark);
+  outline-offset: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .my-appointments-page {
+    padding: 16px;
+  }
+
+  .my-appointments-title {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .my-appointments-title-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .my-appointments-title-actions button {
+    white-space: nowrap;
+  }
+
+  .my-appointments-title h1 {
+    font-size: 26px;
+  }
+
+  .my-appointment-card-main {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+
+  .my-appointment-info {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .my-appointment-status {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .my-appointment-actions {
+    justify-content: flex-start;
+  }
+
+  .booking-calendar {
+    padding: 14px;
+  }
+
+  .booking-selectors {
+    grid-template-columns: 1fr;
+  }
+
+  .rebook-modal {
+    padding: 24px 18px;
+  }
+
+  .booking-calendar-grid {
+    gap: 3px;
+  }
+}

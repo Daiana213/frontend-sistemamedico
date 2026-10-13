@@ -1,0 +1,282 @@
+﻿/* ============================================
+   RegistroProfesional.jsx
+   Split screen con panel verde, igual a RegistroAdministrativo
+   ============================================ */
+
+.regpro-split {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  background: var(--color-background, #EAFBF1);
+}
+
+/* ===== Panel decorativo (izquierda) — fijo ===== */
+.regpro-visual {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 56px;
+  box-sizing: border-box;
+  background: var(--color-secondary, #22A55C);
+  background-image:
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.15) 0, transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.10) 0, transparent 40%);
+}
+
+.regpro-visual-content {
+  color: #fff;
+  max-width: 380px;
+}
+
+.regpro-visual-content h3 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.regpro-visual-content p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== Columna del formulario (derecha) ===== */
+.regpro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.regpro-page > * {
+  width: 100%;
+  max-width: 480px;
+}
+
+.regpro-title {
+  margin: 0 0 24px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.regpro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: var(--shadow-md, 0 20px 40px -12px rgba(34, 165, 92, 0.15));
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.regpro-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.regpro-label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+}
+
+.regpro-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 16px;
+  font-size: 14px;
+  color: var(--color-text, #111827);
+  background: var(--color-surface, #fff);
+  border: 1.5px solid #D1D5DB;
+  border-radius: 9999px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.regpro-input:focus {
+  border-color: var(--color-secondary, #22A55C);
+}
+
+.regpro-input::placeholder {
+  color: #9CA3AF;
+  font-weight: 400;
+}
+
+/* Especialidades fieldset */
+.regpro-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.regpro-fieldset legend {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+  margin-bottom: 4px;
+}
+
+.regpro-especialidades {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.regpro-especialidades label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text, #111827);
+  cursor: pointer;
+}
+
+.regpro-especialidades input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--color-secondary, #22A55C);
+  flex-shrink: 0;
+}
+
+/* Datos opcionales */
+.regpro-details summary {
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-secondary, #22A55C);
+  list-style: none;
+  padding: 2px 0;
+}
+
+.regpro-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.regpro-details[open] summary::before {
+  content: "▾ ";
+}
+
+.regpro-details:not([open]) summary::before {
+  content: "▸ ";
+}
+
+.regpro-details-body {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Hint de contrasena */
+.regpro-password-hint {
+  font-size: 11.5px;
+  color: #6B7280;
+  margin: -10px 0 0;
+  padding-left: 4px;
+  line-height: 1.5;
+}
+
+.regpro-error {
+  font-size: 13px;
+  color: #DC2626;
+  margin: 0;
+}
+
+.regpro-success {
+  font-size: 13px;
+  color: #15803D;
+  background: #ECFDF5;
+  border: 1.5px solid #BBF7D0;
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 14px;
+  margin: 0;
+}
+
+.regpro-button {
+  margin-top: 4px;
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-secondary, #22A55C);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: filter 0.12s, transform 0.05s;
+}
+
+.regpro-button:hover {
+  filter: brightness(1.08);
+}
+
+.regpro-button:active {
+  transform: translateY(1px);
+}
+
+.regpro-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.regpro-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-secondary, #22A55C);
+  text-decoration: none;
+}
+
+.regpro-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .regpro-split {
+    grid-template-columns: 1fr;
+  }
+
+  .regpro-visual {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .regpro-form {
+    padding: 28px;
+  }
+
+  .regpro-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
