@@ -13,6 +13,8 @@ import AntecedentesPaciente from './pages/AntecedentesPaciente'
 import MisTurnos from './pages/MisTurnos'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
     <Routes>
       <Route path="/" element={<Login />} />
