@@ -56,6 +56,9 @@ function Dashboard() {
               <Link to="/registro-profesional" className="dashboard-chip dashboard-chip--red">
                 Registrar profesional
               </Link>
+              <Link to="/admin/agendas" className="dashboard-chip dashboard-chip--purple">
+                Configurar agendas profesionales
+              </Link>
             </>
           )}
         </div>

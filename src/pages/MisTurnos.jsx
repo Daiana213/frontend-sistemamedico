@@ -14,6 +14,36 @@ const ESTADOS = {
 }
 const ACTIVOS = new Set(['SOLICITADO', 'CONFIRMADO'])
 const PLAZO_CAMBIOS_MS = 24 * 60 * 60 * 1000
+const CLAVE_REPROGRAMACIONES = 'misTurnosReprogramados'
+
+function leerRelacionesReprogramacion() {
+  try {
+    const relaciones = JSON.parse(localStorage.getItem(CLAVE_REPROGRAMACIONES) || '{}')
+    return relaciones && typeof relaciones === 'object' ? relaciones : {}
+  } catch {
+    return {}
+  }
+}
+
+function actualizarRelacionesReprogramacion(idAnterior, idNuevo) {
+  const relaciones = leerRelacionesReprogramacion()
+  Object.keys(relaciones).forEach((id) => {
+    if (String(relaciones[id]) === String(idAnterior)) relaciones[id] = idNuevo
+  })
+  relaciones[idAnterior] = idNuevo
+  localStorage.setItem(CLAVE_REPROGRAMACIONES, JSON.stringify(relaciones))
+}
+
+function unificarTurnosReprogramados(lista) {
+  const relaciones = leerRelacionesReprogramacion()
+  const idsAnteriores = new Set(Object.keys(relaciones).map(String))
+  const idsReprogramados = new Set(Object.values(relaciones).map(String))
+  return lista
+    .filter((turno) => !idsAnteriores.has(String(turno.idTurno)))
+    .map((turno) => idsReprogramados.has(String(turno.idTurno))
+      ? { ...turno, estadoVisual: 'REPROGRAMADO' }
+      : turno)
+}
 
 function formatoFecha(fechaHora) {
   return new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(fechaHora))
@@ -38,13 +68,14 @@ export default function MisTurnos() {
   const [idProfesionalNuevo, setIdProfesionalNuevo] = useState('')
   const [cargandoCatalogo, setCargandoCatalogo] = useState(false)
   const [procesando, setProcesando] = useState(false)
+  const [turnoACancelar, setTurnoACancelar] = useState(null)
 
   const cargarTurnos = useCallback(async () => {
     setCargando(true)
     setError('')
     try {
       const { data } = await api.get('/turnos')
-      setTurnos(Array.isArray(data) ? data : data.turnos || [])
+      setTurnos(unificarTurnosReprogramados(Array.isArray(data) ? data : data.turnos || []))
     } catch (err) {
       setError(err.response?.data?.error || 'No se pudieron cargar tus turnos. Intentá nuevamente.')
     } finally {
@@ -133,14 +164,18 @@ export default function MisTurnos() {
   }
 
   const cancelarTurno = async (turno) => {
-    const confirmar = window.confirm(`¿Querés cancelar el turno del ${formatoFecha(turno.fechaHora)} a las ${formatoHora(turno.fechaHora)}?`)
-    if (!confirmar) return
+    setTurnoACancelar(turno)
+  }
+
+  const confirmarCancelacion = async () => {
+    if (!turnoACancelar) return
     setError('')
     setMensaje('')
     setProcesando(true)
     try {
-      const { data } = await api.post(`/turnos/${turno.idTurno}/cancelar`)
+      const { data } = await api.post(`/turnos/${turnoACancelar.idTurno}/cancelar`)
       setMensaje(data.mensaje || 'Tu turno fue cancelado correctamente.')
+      setTurnoACancelar(null)
       await cargarTurnos()
     } catch (err) {
       manejarError(err)
@@ -156,6 +191,8 @@ export default function MisTurnos() {
     setProcesando(true)
     try {
       const { data } = await api.post(`/turnos/${turnoAReprogramar.idTurno}/reprogramar`, { fechaHora: nuevoHorario })
+      const idNuevo = data.turno?.idTurno || data.nuevoTurno?.idTurno
+      if (idNuevo) actualizarRelacionesReprogramacion(turnoAReprogramar.idTurno, idNuevo)
       setMensaje(data.mensaje || 'Tu turno fue reprogramado correctamente.')
       setTurnoAReprogramar(null)
       setNuevoHorario('')
@@ -175,6 +212,7 @@ export default function MisTurnos() {
       {error && <div className="my-appointments-error" role="alert">{error}</div>}
       {cargando ? <div className="my-appointments-empty">Cargando tus turnos…</div> : !turnos.length ? <div className="my-appointments-empty"><strong>Todavía no tenés turnos</strong><p>Cuando solicites uno, vas a poder consultarlo desde acá.</p><button type="button" className="request-appointment-button" onClick={abrirSolicitud}>Solicitar mi primer turno</button></div> : <div className="my-appointments-list">{turnos.map((turno) => {
         const estado = String(turno.estado || '').toUpperCase()
+        const estadoVisual = turno.estadoVisual || estado
         const horasRestantes = new Date(turno.fechaHora).getTime() - Date.now()
         const activo = ACTIVOS.has(estado)
         const puedeGestionar = activo && horasRestantes >= PLAZO_CAMBIOS_MS
@@ -184,13 +222,14 @@ export default function MisTurnos() {
           <div className="my-appointment-card-main">
             <div className="my-appointment-date"><strong>{formatoFecha(turno.fechaHora)}</strong><span>{formatoHora(turno.fechaHora)}</span></div>
             <div className="my-appointment-info"><h2>{profesional ? `Dr./Dra. ${profesional.nombre} ${profesional.apellido}` : `Turno #${turno.idTurno}`}</h2><p>Consulta médica</p>{turno.motivoCancelacion && <p className="my-appointment-cancel-reason">Motivo: {turno.motivoCancelacion}</p>}</div>
-            <span className={`my-appointment-status my-appointment-status--${estado.toLowerCase()}`}>{ESTADOS[estado] || estado}</span>
+            <span className={`my-appointment-status my-appointment-status--${estadoVisual.toLowerCase()}`}>{ESTADOS[estadoVisual] || estadoVisual}</span>
           </div>
           {puedeGestionar && <div className="my-appointment-actions"><button type="button" onClick={() => cancelarTurno(turno)} disabled={procesando}>Cancelar</button><button type="button" onClick={() => { setError(''); setNuevoHorario(''); setTurnoAReprogramar(turno) }} disabled={procesando}>Reprogramar</button></div>}
           {plazoVencido && <p className="my-appointment-deadline">El plazo para cancelar o reprogramar este turno venció. Se requieren al menos 24 horas de anticipación.</p>}
         </article>
       })}</div>}
     </section>
+    {turnoACancelar && <div className="my-appointments-backdrop" role="presentation"><section className="rebook-modal cancel-appointment-modal" role="dialog" aria-modal="true" aria-labelledby="cancel-heading"><p className="my-appointments-eyebrow">CANCELAR TURNO</p><h2 id="cancel-heading">¿Querés cancelar este turno?</h2><p>El turno del {formatoFecha(turnoACancelar.fechaHora)} a las {formatoHora(turnoACancelar.fechaHora)} se cancelará.</p><div className="rebook-actions"><button type="button" className="rebook-cancel" onClick={() => setTurnoACancelar(null)} disabled={procesando}>Volver</button><button type="button" className="cancel-confirm-button" onClick={confirmarCancelacion} disabled={procesando}>{procesando ? 'Cancelando…' : 'Sí, cancelar turno'}</button></div></section></div>}
     {solicitudAbierta && <div className="my-appointments-backdrop" role="presentation"><section className="rebook-modal" role="dialog" aria-modal="true" aria-labelledby="request-heading"><button type="button" className="rebook-close" aria-label="Cerrar" onClick={() => setSolicitudAbierta(false)}>×</button><p className="my-appointments-eyebrow">NUEVO TURNO</p><h2 id="request-heading">Solicitar un turno</h2><p>Elegí una especialidad, un profesional y un horario disponible.</p>{error && <p className="booking-form-error" role="alert">{error}</p>}<div className="booking-selectors"><label>Especialidad<select value={idEspecialidad} onChange={(event) => setIdEspecialidad(event.target.value)} disabled={cargandoCatalogo}><option value="">{cargandoCatalogo ? 'Cargando…' : 'Seleccionar especialidad'}</option>{especialidades.map((especialidad) => <option key={especialidad.idEspecialidad} value={especialidad.idEspecialidad}>{especialidad.nombre}</option>)}</select></label><label>Profesional<select value={idProfesionalNuevo} onChange={(event) => { setIdProfesionalNuevo(event.target.value); setNuevoHorario('') }} disabled={!idEspecialidad || cargandoCatalogo}><option value="">{cargandoCatalogo && idEspecialidad ? 'Cargando…' : profesionales.length ? 'Seleccionar profesional' : idEspecialidad ? 'No hay profesionales disponibles' : 'Seleccioná una especialidad primero'}</option>{profesionales.map((profesional) => <option key={profesional.idProfesional} value={profesional.idProfesional}>{profesional.nombreCompleto}{profesional.matricula ? ` · Matrícula ${profesional.matricula}` : ''}</option>)}</select></label></div>{idProfesionalNuevo && <CalendarioTurnos idProfesional={Number(idProfesionalNuevo)} seleccionado={nuevoHorario} onSeleccionar={setNuevoHorario} />}<div className="rebook-actions"><button type="button" className="rebook-cancel" onClick={() => setSolicitudAbierta(false)} disabled={procesando}>Volver</button><button type="button" onClick={confirmarSolicitud} disabled={!idProfesionalNuevo || !nuevoHorario || procesando}>{procesando ? 'Solicitando…' : 'Confirmar turno'}</button></div></section></div>}
     {turnoAReprogramar && <div className="my-appointments-backdrop" role="presentation"><section className="rebook-modal" role="dialog" aria-modal="true" aria-labelledby="rebook-heading"><button type="button" className="rebook-close" aria-label="Cerrar" onClick={() => setTurnoAReprogramar(null)}>×</button><p className="my-appointments-eyebrow">REPROGRAMAR TURNO</p><h2 id="rebook-heading">Elegí una nueva fecha y hora</h2><p>Turno actual: {formatoFecha(turnoAReprogramar.fechaHora)} a las {formatoHora(turnoAReprogramar.fechaHora)}</p>{error && <p className="booking-form-error" role="alert">{error}</p>}<CalendarioTurnos idProfesional={turnoAReprogramar.idProfesional} seleccionado={nuevoHorario} onSeleccionar={setNuevoHorario} /><div className="rebook-actions"><button type="button" className="rebook-cancel" onClick={() => setTurnoAReprogramar(null)} disabled={procesando}>Volver</button><button type="button" onClick={confirmarReprogramacion} disabled={!nuevoHorario || procesando}>{procesando ? 'Guardando…' : 'Confirmar reprogramación'}</button></div></section></div>}
     <CompletarPerfil abierto={perfilIncompleto} alCompletar={() => { setPerfilIncompleto(false); cargarTurnos() }} />

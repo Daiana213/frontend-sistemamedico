@@ -94,11 +94,18 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
   const fechaSeleccionada = seleccionado ? fechaLocal(new Date(seleccionado)) : ''
   const horarios = turnosPorDia.get(fechaSeleccionada) || []
 
-  const moverMes = (cantidad) => setMesVisible(new Date(mesVisible.getFullYear(), mesVisible.getMonth() + cantidad, 1))
+  const hoy = inicioDia(new Date())
+  const mesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
+  const puedeRetroceder = new Date(mesVisible.getFullYear(), mesVisible.getMonth() - 1, 1) >= mesActual
+  const moverMes = (cantidad) => {
+    const nuevoMes = new Date(mesVisible.getFullYear(), mesVisible.getMonth() + cantidad, 1)
+    if (nuevoMes < mesActual) return
+    setMesVisible(nuevoMes)
+  }
   const mesLabel = new Intl.DateTimeFormat('es-AR', { month: 'long', year: 'numeric' }).format(mesVisible)
 
   return <section className="booking-calendar" aria-label="Calendario de turnos disponibles">
-    <div className="booking-calendar-heading"><button type="button" aria-label="Mes anterior" onClick={() => moverMes(-1)}>‹</button><h2>{mesLabel}</h2><button type="button" aria-label="Mes siguiente" onClick={() => moverMes(1)}>›</button></div>
+    <div className="booking-calendar-heading"><button type="button" aria-label="Mes anterior" onClick={() => moverMes(-1)} disabled={!puedeRetroceder}>‹</button><h2>{mesLabel}</h2><button type="button" aria-label="Mes siguiente" onClick={() => moverMes(1)}>›</button></div>
     <div className="booking-calendar-grid" role="grid">
       {['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'].map((dia) => <span className="booking-calendar-weekday" key={dia}>{dia}</span>)}
       {celdas.map((dia, indice) => {
@@ -106,7 +113,8 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
         const fecha = fechaLocal(new Date(mesVisible.getFullYear(), mesVisible.getMonth(), dia))
         const opciones = turnosPorDia.get(fecha) || []
         const activo = fechaSeleccionada === fecha
-        return <button type="button" role="gridcell" key={fecha} className={`booking-calendar-day${opciones.length ? ' has-slots' : ''}${activo ? ' is-selected' : ''}`} disabled={!opciones.length} onClick={() => onSeleccionar?.(opciones[0].fechaHora)} aria-label={`${dia}, ${opciones.length} horarios disponibles`} aria-pressed={activo}>{dia}{Boolean(opciones.length) && <i aria-hidden="true" />}</button>
+        const esFechaPasada = inicioDia(new Date(mesVisible.getFullYear(), mesVisible.getMonth(), dia)) < hoy
+        return <button type="button" role="gridcell" key={fecha} className={`booking-calendar-day${opciones.length ? ' has-slots' : ''}${activo ? ' is-selected' : ''}`} disabled={esFechaPasada || !opciones.length} onClick={() => onSeleccionar?.(opciones[0].fechaHora)} aria-label={`${dia}, ${opciones.length} horarios disponibles`} aria-pressed={activo}>{dia}{Boolean(opciones.length) && <i aria-hidden="true" />}</button>
       })}
     </div>
     <div className="booking-calendar-times"><h3>{fechaSeleccionada ? new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${fechaSeleccionada}T12:00:00`)) : 'Elegí un día disponible'}</h3>{cargandoDisponibilidad ? <p>Cargando disponibilidad…</p> : errorDisponibilidad ? <p role="alert">{errorDisponibilidad}</p> : horarios.length ? <div className="booking-time-options">{horarios.map((opcion) => <button type="button" key={opcion.fechaHora} className={seleccionado === opcion.fechaHora ? 'is-selected' : ''} onClick={() => onSeleccionar?.(opcion.fechaHora)}>{new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(new Date(opcion.fechaHora))}</button>)}</div> : <p>No hay horarios para mostrar en esta fecha.</p>}</div>

@@ -425,6 +425,19 @@
   color: var(--mc-text-soft);
 }
 
+.rebook-actions .cancel-confirm-button {
+  border-color: var(--mc-danger);
+  background: var(--mc-danger);
+}
+
+.rebook-actions .cancel-confirm-button:hover:not(:disabled) {
+  background: #B91C1C;
+}
+
+.cancel-appointment-modal {
+  width: min(100%, 460px);
+}
+
 .rebook-actions button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
@@ -456,9 +469,14 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.booking-calendar-heading button:hover {
+.booking-calendar-heading button:hover:not(:disabled) {
   background: var(--mc-primary);
   color: #fff;
+}
+
+.booking-calendar-heading button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
 }
 
 .booking-calendar-grid {
@@ -488,6 +506,10 @@
   background: transparent;
   color: #A8B0BD;
   font: inherit;
+}
+
+.booking-calendar-day:disabled {
+  cursor: not-allowed;
 }
 
 .booking-calendar-day.has-slots {
