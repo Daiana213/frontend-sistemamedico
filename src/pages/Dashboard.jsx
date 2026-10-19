@@ -81,6 +81,7 @@ function Dashboard() {
         <div className="dashboard-chips">
           <Link to="/mis-turnos" className="dashboard-chip dashboard-chip--blue">Mis turnos</Link>
           <Link to="/mis-antecedentes" className="dashboard-chip dashboard-chip--green">Mis antecedentes médicos</Link>
+          <Link to="/mis-menores" className="dashboard-chip dashboard-chip--purple">Menores a cargo</Link>
         </div>
       )}
 
