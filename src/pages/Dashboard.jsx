@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 import CompletarPerfil from '../components/CompletarPerfil'
 import { tienePermiso } from '../utils/sesion'
+import { CalendarPlus, Calendar, HeartPulse, Users, FileText } from 'lucide-react'
 import '../styles/Dashboard.css'
 
 function Dashboard() {
@@ -78,11 +79,76 @@ function Dashboard() {
       )}
 
       {rolActivo === 'PACIENTE' && (
-        <div className="dashboard-chips">
-          <Link to="/mis-turnos" className="dashboard-chip dashboard-chip--blue">Mis turnos</Link>
-          <Link to="/mis-antecedentes" className="dashboard-chip dashboard-chip--green">Mis antecedentes médicos</Link>
-          <Link to="/mis-menores" className="dashboard-chip dashboard-chip--purple">Menores a cargo</Link>
-        </div>
+        <>
+          <section className="dashboard-patient-cta" aria-label="Solicitar turno médico">
+            <div className="dashboard-patient-cta-content">
+              <div className="dashboard-patient-cta-text">
+                <h2>¿Necesitás una consulta médica?</h2>
+                <p>Elegí una especialidad, un profesional y reservá tu horario en simples pasos.</p>
+              </div>
+              <Link
+                to="/mis-turnos?solicitar=true"
+                state={{ abrirSolicitud: true }}
+                className="dashboard-patient-cta-button"
+              >
+                <CalendarPlus size={22} />
+                <span>Sacar turno</span>
+              </Link>
+            </div>
+          </section>
+
+          <div className="dashboard-chips">
+            <Link
+              to="/mis-turnos?solicitar=true"
+              state={{ abrirSolicitud: true }}
+              className="dashboard-chip dashboard-chip--primary-action"
+            >
+              <div className="dashboard-chip-text">
+                <span className="dashboard-chip-title">Sacar turno</span>
+                <span className="dashboard-chip-sub">Reservar una nueva consulta</span>
+              </div>
+              <div className="dashboard-chip-icon">
+                <CalendarPlus size={24} />
+              </div>
+            </Link>
+            <Link to="/mis-turnos" className="dashboard-chip dashboard-chip--blue">
+              <div className="dashboard-chip-text">
+                <span className="dashboard-chip-title">Mis turnos</span>
+                <span className="dashboard-chip-sub">Consultar y gestionar mis citas</span>
+              </div>
+              <div className="dashboard-chip-icon">
+                <Calendar size={24} />
+              </div>
+            </Link>
+            <Link to="/mis-antecedentes" className="dashboard-chip dashboard-chip--green">
+              <div className="dashboard-chip-text">
+                <span className="dashboard-chip-title">Mis antecedentes médicos</span>
+                <span className="dashboard-chip-sub">Alergias, patologías y grupo</span>
+              </div>
+              <div className="dashboard-chip-icon">
+                <HeartPulse size={24} />
+              </div>
+            </Link>
+            <Link to="/mis-menores" className="dashboard-chip dashboard-chip--purple">
+              <div className="dashboard-chip-text">
+                <span className="dashboard-chip-title">Menores a cargo</span>
+                <span className="dashboard-chip-sub">Gestionar grupo familiar</span>
+              </div>
+              <div className="dashboard-chip-icon">
+                <Users size={24} />
+              </div>
+            </Link>
+            <Link to="/mis-estudios" className="dashboard-chip dashboard-chip--orange">
+              <div className="dashboard-chip-text">
+                <span className="dashboard-chip-title">Mis estudios médicos</span>
+                <span className="dashboard-chip-sub">Informes PDF e imágenes PACS</span>
+              </div>
+              <div className="dashboard-chip-icon">
+                <FileText size={24} />
+              </div>
+            </Link>
+          </div>
+        </>
       )}
 
       {rolActivo === 'PROFESIONAL' && (

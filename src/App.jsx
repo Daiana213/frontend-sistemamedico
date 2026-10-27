@@ -15,6 +15,7 @@ import ConfiguracionAgenda from './pages/ConfiguracionAgenda'
 import GestionTurnos from './pages/GestionTurnos'
 import GestionProfesionales from './pages/GestionProfesionales'
 import MisMenores from './pages/MisMenores'
+import MisEstudios from './pages/MisEstudios'
 
 function App() {
   return (
@@ -112,6 +113,11 @@ function App() {
       />
 
       <Route
+        path="/mis-estudios"
+        element={<RutaProtegida rolesPermitidos={['PACIENTE']}><MisEstudios /></RutaProtegida>}
+      />
+
+      <Route
         path="/agenda/turnos/:idTurno"
         element={
           <RutaProtegida rolesPermitidos={['PROFESIONAL']}>
@@ -120,7 +126,6 @@ function App() {
         }
       />
     </Routes>
-
   )
 }
 

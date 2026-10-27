@@ -230,3 +230,88 @@
     min-height: 80px;
   }
 }
+
+/* ===== Banner de Acción Principal para Pacientes (Sacar Turno) ===== */
+.dashboard-patient-cta {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0F6FF 100%);
+  border: 2px solid #BFDBFE;
+  border-radius: 20px;
+  padding: 24px 36px;
+  box-shadow: 0 10px 25px -5px rgba(31, 79, 224, 0.12);
+}
+
+.dashboard-patient-cta-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.dashboard-patient-cta-text h2 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1E3A8A;
+  letter-spacing: -0.01em;
+}
+
+.dashboard-patient-cta-text p {
+  margin: 0;
+  font-size: 15px;
+  color: #3B82F6;
+  font-weight: 500;
+}
+
+.dashboard-patient-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border-radius: 9999px;
+  background: #1F4FE0;
+  color: #FFFFFF !important;
+  font-size: 17px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(31, 79, 224, 0.35);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.dashboard-patient-cta-button:hover {
+  background: #163BB5;
+  box-shadow: 0 12px 24px rgba(31, 79, 224, 0.45);
+  transform: translateY(-2px);
+}
+
+/* Chip destacado primario de Sacar Turno */
+.dashboard-chip--primary-action {
+  background: linear-gradient(135deg, #1F4FE0 0%, #163BB5 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 22px rgba(31, 79, 224, 0.3);
+}
+
+.dashboard-chip--primary-action .dashboard-chip-title {
+  color: #FFFFFF;
+  font-weight: 800;
+}
+
+.dashboard-chip--primary-action .dashboard-chip-sub {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.dashboard-chip--primary-action .dashboard-chip-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.dashboard-chip--primary-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(31, 79, 224, 0.45);
+  filter: brightness(1.05);
+}

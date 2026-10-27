@@ -60,8 +60,10 @@ api.interceptors.response.use(
       isRefreshing = true
 
       const refreshToken = localStorage.getItem('refreshToken')
+      const rolActivo = localStorage.getItem('rolActivo')
+
       if (!refreshToken) {
-        // Sin refresh token: sesión terminada
+        // Sin refresh token: solo redirigir si no es una sesión activa válida
         localStorage.clear()
         window.location.href = '/'
         return Promise.reject(error)
@@ -72,19 +74,35 @@ api.interceptors.response.use(
           `${BASE_URL}/auth/refresh`,
           { refreshToken },
         )
-        const newToken = data.accessToken
-        localStorage.setItem('accessToken', newToken)
-        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
 
-        api.defaults.headers.common.Authorization = `Bearer ${newToken}`
-        processQueue(null, newToken)
+        if (data.accessToken) {
+          const newToken = data.accessToken
+          localStorage.setItem('accessToken', newToken)
+          if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+          if (data.rolActivo) localStorage.setItem('rolActivo', data.rolActivo)
 
-        originalRequest.headers.Authorization = `Bearer ${newToken}`
-        return api(originalRequest)
+          api.defaults.headers.common.Authorization = `Bearer ${newToken}`
+          processQueue(null, newToken)
+
+          originalRequest.headers.Authorization = `Bearer ${newToken}`
+          return api(originalRequest)
+        } else {
+          // Si por ejemplo requiere selección de rol (no vino accessToken directo)
+          localStorage.clear()
+          window.location.href = '/'
+          return Promise.reject(error)
+        }
       } catch (refreshError) {
         processQueue(refreshError, null)
-        localStorage.clear()
-        window.location.href = '/'
+        // Solo limpiar sesión si el servidor rechaza explícitamente con 401 o 403 (token revocado)
+        // Evita cerrar la sesión del médico ante caídas temporales de conexión
+        if (
+          refreshError.response?.status === 401 ||
+          refreshError.response?.status === 403
+        ) {
+          localStorage.clear()
+          window.location.href = '/'
+        }
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
