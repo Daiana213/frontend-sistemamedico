@@ -1,0 +1,883 @@
+:root {
+  --me-primary: #1F4FE0;
+  --me-primary-dark: #163BB5;
+  --me-primary-tint: #EAF1FF;
+  --me-primary-soft: #DCE8FD;
+  --me-surface: #FFFFFF;
+  --me-background: #EAF2FE;
+  --me-line: #E1E8F5;
+  --me-text: #111827;
+  --me-text-soft: #6B7280;
+  --me-danger: #DC2626;
+  --me-danger-soft: #FEE2E2;
+  --me-success: #15803D;
+  --me-success-soft: #E8F8EE;
+  --me-warning: #C2410C;
+  --me-warning-soft: #FFF1E3;
+}
+
+/* ============================================
+   MisEstudios.css
+   Estilos para la pantalla de gestión de estudios médicos del paciente
+   Sanatorio Antonia - Sistema Médico
+   ============================================ */
+
+.misestudios-page {
+  --me-primary: #1F4FE0;
+  --me-primary-dark: #163BB5;
+  --me-primary-tint: #EAF1FF;
+  --me-primary-soft: #DCE8FD;
+  --me-surface: #FFFFFF;
+  --me-background: #EAF2FE;
+  --me-line: #E1E8F5;
+  --me-text: #111827;
+  --me-text-soft: #6B7280;
+  --me-danger: #DC2626;
+  --me-danger-soft: #FEE2E2;
+  --me-success: #15803D;
+  --me-success-soft: #E8F8EE;
+  --me-warning: #C2410C;
+  --me-warning-soft: #FFF1E3;
+
+  min-height: 100vh;
+  background: var(--me-background);
+  padding: 24px clamp(16px, 3vw, 40px);
+  color: var(--me-text);
+  box-sizing: border-box;
+}
+
+/* ===== Header ===== */
+.misestudios-header {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.misestudios-header a {
+  color: var(--me-primary);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s;
+}
+
+.misestudios-header a:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+.misestudios-header-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===== Contenedor Principal ===== */
+.misestudios-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== Encabezado de la página ===== */
+.misestudios-banner {
+  background: var(--me-surface);
+  border: 1px solid var(--me-line);
+  border-radius: 20px;
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: 0 10px 30px -10px rgba(31, 79, 224, 0.12);
+}
+
+.misestudios-eyebrow {
+  color: var(--me-primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.misestudios-title {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--me-text);
+  letter-spacing: -0.01em;
+}
+
+.misestudios-subtitle {
+  margin: 0;
+  color: var(--me-text-soft);
+  font-size: 14.5px;
+  line-height: 1.5;
+  max-width: 650px;
+}
+
+/* ===== Botones Principales ===== */
+.misestudios-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  background: var(--me-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(31, 79, 224, 0.35);
+  transition: all 0.15s ease-in-out;
+  white-space: nowrap;
+}
+
+.misestudios-btn-primary:hover:not(:disabled) {
+  background: var(--me-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(31, 79, 224, 0.45);
+}
+
+.misestudios-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== Mensajes de estado ===== */
+.misestudios-alert {
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.misestudios-alert--success {
+  background: var(--me-success-soft);
+  border: 1px solid #cbe5d5;
+  color: var(--me-success);
+}
+
+.misestudios-alert--error {
+  background: var(--me-danger-soft);
+  border: 1px solid #fecaca;
+  color: var(--me-danger);
+}
+
+.misestudios-alert-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  font-weight: bold;
+}
+
+/* ===== Estado Vacío ===== */
+.misestudios-empty {
+  background: var(--me-surface);
+  border: 1px dashed var(--me-line);
+  border-radius: 20px;
+  padding: 56px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.misestudios-empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--me-primary-tint);
+  color: var(--me-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.misestudios-empty h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--me-text);
+}
+
+.misestudios-empty p {
+  margin: 0;
+  color: var(--me-text-soft);
+  font-size: 14.5px;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+/* ===== Lista / Grilla de Estudios ===== */
+.misestudios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 20px;
+}
+
+.misestudios-card {
+  background: var(--me-surface);
+  border: 1px solid var(--me-line);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  box-shadow: 0 4px 18px -4px rgba(31, 79, 224, 0.08);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.misestudios-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -6px rgba(31, 79, 224, 0.16);
+  border-color: #cbdcfc;
+}
+
+.misestudios-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.misestudios-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.misestudios-card-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--me-text);
+  line-height: 1.3;
+}
+
+.misestudios-card-date {
+  font-size: 12px;
+  color: var(--me-text-soft);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Badges */
+.misestudios-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.misestudios-badge--dicom {
+  background: var(--me-primary-tint);
+  color: var(--me-primary);
+  border: 1px solid #c7d9fc;
+}
+
+.misestudios-badge--code {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+/* Identificador / Código */
+.misestudios-code-box {
+  background: #f8fafc;
+  border: 1px solid var(--me-line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.misestudios-code-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--me-text-soft);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.misestudios-code-val {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--me-primary-dark);
+  word-break: break-all;
+  margin: 2px 0 0;
+}
+
+.misestudios-btn-copy {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--me-text-soft);
+  cursor: pointer;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+
+.misestudios-btn-copy:hover {
+  background: #fff;
+  color: var(--me-primary);
+  border-color: var(--me-primary);
+}
+
+.misestudios-btn-copy.copied {
+  background: var(--me-success-soft);
+  color: var(--me-success);
+  border-color: #86efac;
+}
+
+/* Observaciones */
+.misestudios-obs-box {
+  font-size: 13px;
+  color: var(--me-text);
+  background: #ffffff;
+  border-left: 3px solid var(--me-primary);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  background: #f9fbff;
+}
+
+.misestudios-obs-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--me-text-soft);
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+.misestudios-obs-text {
+  margin: 0;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* Caja de integración PACS */
+.misestudios-pacs-box {
+  background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.misestudios-pacs-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.misestudios-pacs-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.misestudios-btn-viewer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: var(--me-primary);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+
+.misestudios-btn-viewer:hover {
+  background: var(--me-primary-dark);
+}
+
+.misestudios-btn-pacs-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #93c5fd;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.misestudios-btn-pacs-check:hover {
+  background: #eff6ff;
+  border-color: #60a5fa;
+}
+
+/* Footer / Acciones de tarjeta */
+.misestudios-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--me-line);
+}
+
+.misestudios-btn-edit {
+  padding: 6px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--me-line);
+  background: #fff;
+  color: var(--me-text);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.misestudios-btn-edit:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--me-primary);
+}
+
+.misestudios-btn-delete {
+  padding: 6px 14px;
+  border-radius: 18px;
+  border: 1px solid #fecaca;
+  background: #fff;
+  color: var(--me-danger);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.misestudios-btn-delete:hover {
+  background: var(--me-danger-soft);
+  border-color: #f87171;
+}
+
+/* ===== Modales ===== */
+.misestudios-modal-backdrop {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 20px;
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.misestudios-modal {
+  position: relative;
+  width: min(100%, 540px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 28px;
+  border-radius: 20px;
+  background-color: #FFFFFF !important;
+  color: #111827;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.misestudios-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+
+.misestudios-modal-close:hover {
+  background: #e5e7eb;
+  color: var(--me-text);
+}
+
+.misestudios-modal h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--me-text);
+}
+
+.misestudios-modal-desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--me-text-soft);
+  line-height: 1.5;
+}
+
+/* Formulario dentro del modal */
+.misestudios-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.misestudios-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.misestudios-form-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--me-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.misestudios-char-counter {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--me-text-soft);
+}
+
+.misestudios-input,
+.misestudios-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--me-text);
+  outline: none;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.misestudios-input:focus,
+.misestudios-textarea:focus {
+  border-color: var(--me-primary);
+  box-shadow: 0 0 0 3px rgba(31, 79, 224, 0.12);
+}
+
+.misestudios-input.has-error,
+.misestudios-textarea.has-error {
+  border-color: var(--me-danger);
+}
+
+.misestudios-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.misestudios-field-hint {
+  font-size: 12px;
+  color: var(--me-text-soft);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.misestudios-field-error {
+  font-size: 12px;
+  color: var(--me-danger);
+  font-weight: 600;
+  margin: 0;
+}
+
+.misestudios-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.misestudios-btn-secondary {
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: 1px solid var(--me-line);
+  background: #fff;
+  color: var(--me-text-soft);
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.misestudios-btn-secondary:hover {
+  background: #f8fafc;
+  color: var(--me-text);
+}
+
+.misestudios-btn-danger {
+  padding: 10px 22px;
+  border-radius: 24px;
+  border: none;
+  background: var(--me-danger);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.misestudios-btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.misestudios-btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Detalles de inspección PACS */
+.misestudios-pacs-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--me-line);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.misestudios-pacs-detail-item dt {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--me-text-soft);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.misestudios-pacs-detail-item dd {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--me-text);
+  margin: 0;
+}
+
+.misestudios-pacs-status-banner {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misestudios-pacs-status--available {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.misestudios-pacs-status--unavailable {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .misestudios-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .misestudios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .misestudios-pacs-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Bot�n Principal de Ver Informe PDF ===== */
+.misestudios-btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 12px;
+  background: #1F4FE0;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(31, 79, 224, 0.25);
+  transition: all 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.misestudios-btn-pdf:hover {
+  background: #163bb5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(31, 79, 224, 0.35);
+}
+
+.misestudios-btn-pdf:active {
+  transform: translateY(0);
+}
+
+/* ===== Modal Amplio de Visualizaci�n de PDF ===== */
+.misestudios-modal--pdf {
+  width: min(100%, 960px);
+  height: 90vh;
+  max-height: 900px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: #FFFFFF !important;
+  color: #111827;
+  border: 1px solid #CBD5E1;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.55);
+}
+
+.misestudios-pdf-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--me-line);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.misestudios-pdf-modal-title {
+  margin: 0;
+  font-size: 17.5px;
+  font-weight: 800;
+  color: var(--me-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misestudios-pdf-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misestudios-btn-pdf-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid var(--me-line);
+  background: #fff;
+  color: var(--me-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.misestudios-btn-pdf-action:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--me-primary);
+}
+
+.misestudios-pdf-container {
+  flex: 1;
+  min-height: 450px;
+  background: #525659;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.misestudios-pdf-iframe {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  border: none;
+  display: block;
+}
+
+/* Banner explicativo de PACS fuera de l�nea */
+.misestudios-pacs-offline-banner {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.misestudios-pacs-offline-banner strong {
+  color: #78350f;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

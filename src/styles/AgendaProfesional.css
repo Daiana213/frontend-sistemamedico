@@ -965,3 +965,408 @@
     gap: 2px;
   }
 }
+
+/* ===== Secci�n de Estudios M�dicos en Ficha Profesional ===== */
+.agenda-studies-section {
+  margin-top: 24px;
+}
+
+.agenda-studies-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.agenda-study-card {
+  padding: 16px 18px;
+  border: 1px solid var(--ag-line);
+  border-radius: 14px;
+  background: var(--ag-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+
+.agenda-study-card:hover {
+  border-color: #cbdcfc;
+}
+
+.agenda-study-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.agenda-study-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ag-text);
+}
+
+.agenda-study-date {
+  font-size: 12px;
+  color: var(--ag-text-soft);
+  margin: 2px 0 0;
+}
+
+.agenda-study-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.agenda-study-badge--dicom {
+  background: var(--ag-primary-tint);
+  color: var(--ag-primary);
+  border: 1px solid #c7d9fc;
+}
+
+.agenda-study-badge--code {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+.agenda-study-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: var(--ag-primary-dark);
+  background: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--ag-line);
+  word-break: break-all;
+  display: inline-block;
+}
+
+.agenda-study-obs {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ag-text);
+  background: #f9fbff;
+  border-left: 3px solid var(--ag-primary);
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.4;
+}
+
+.agenda-study-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.agenda-btn-viewer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--ag-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+
+.agenda-btn-viewer:hover {
+  background: var(--ag-primary-dark);
+}
+
+.agenda-btn-pacs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #93c5fa;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.agenda-btn-pacs:hover {
+  background: #eff6ff;
+  border-color: #60a5fa;
+}
+
+
+/* ===== Modales de Estudios Médicos y Visor PDF (Sanatorio Antonia) ===== */
+.misestudios-modal-backdrop {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.misestudios-modal {
+  position: relative;
+  width: min(100%, 560px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 28px;
+  border-radius: 20px;
+  background-color: #FFFFFF !important;
+  color: #111827;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.misestudios-modal h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.misestudios-modal-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #64748B;
+  line-height: 1.5;
+}
+
+.misestudios-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #F1F5F9;
+  color: #475569;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.misestudios-modal-close:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.misestudios-modal--pdf {
+  width: min(100%, 960px);
+  height: 90vh;
+  max-height: 900px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: #FFFFFF !important;
+  color: #111827;
+  border: 1px solid #CBD5E1;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.55);
+}
+
+.misestudios-pdf-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E2E8F0;
+  flex-wrap: wrap;
+  gap: 10px;
+  background-color: #FFFFFF;
+}
+
+.misestudios-pdf-modal-title {
+  margin: 0;
+  font-size: 17.5px;
+  font-weight: 800;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misestudios-pdf-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misestudios-btn-pdf-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #1E293B;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.misestudios-btn-pdf-action:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+  color: #1D4ED8;
+}
+
+.misestudios-pdf-container {
+  flex: 1;
+  min-height: 450px;
+  background: #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.misestudios-pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  flex: 1;
+}
+
+.misestudios-pacs-offline-banner {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  padding: 16px;
+  color: #92400E;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.misestudios-pacs-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.misestudios-pacs-status--available {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #166534;
+}
+
+.misestudios-pacs-status--unavailable {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E40AF;
+}
+
+.misestudios-pacs-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 14px 0 0;
+  background: #F8FAFC;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+}
+
+.misestudios-pacs-detail-item dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: #64748B;
+  margin-bottom: 4px;
+}
+
+.misestudios-pacs-detail-item dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.misestudios-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.misestudios-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: none;
+  background: #1F4FE0;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.misestudios-btn-primary:hover {
+  background: #163BB5;
+}
+
+.misestudios-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.misestudios-btn-secondary:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.misestudios-alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.misestudios-alert--error {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}

@@ -36,13 +36,18 @@
 }
 
 .health-header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--hp-primary);
   font-weight: 700;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .health-header a:hover {
-  text-decoration: underline;
+  color: var(--hp-primary-dark);
+  text-decoration: none;
 }
 
 /* ===== Tarjeta principal ===== */
@@ -109,7 +114,7 @@
   resize: vertical;
 }
 
-/* ===== Botones ===== */
+/* ===== Botones generales ===== */
 .health-card button,
 .reset-submit {
   padding: 13px 20px;
@@ -147,6 +152,123 @@
   cursor: not-allowed;
 }
 
+/* ===== Botones de la vista ===== */
+.health-actions--view {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.health-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 9999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.health-button--primary {
+  background: var(--hp-primary);
+  color: #ffffff !important;
+  border: none;
+}
+
+.health-button--primary:hover {
+  background: var(--hp-primary-dark);
+  color: #ffffff;
+}
+
+.health-button--studies {
+  background: #ffffff;
+  color: var(--hp-primary) !important;
+  border: 1.5px solid var(--hp-primary);
+}
+
+.health-button--studies:hover {
+  background: var(--hp-primary-tint);
+  border-color: var(--hp-primary-dark);
+  color: var(--hp-primary-dark) !important;
+}
+
+/* ===== Tarjeta Destacada de Estudios Médicos ===== */
+.health-studies-card {
+  margin-top: 26px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #F0F6FF 0%, #E8F1FE 100%);
+  border: 1.5px solid #BFDBFE;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+}
+
+.health-studies-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.health-studies-info {
+  flex: 1;
+  min-width: 240px;
+}
+
+.health-studies-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #1E3A8A;
+}
+
+.health-studies-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #2563EB;
+  line-height: 1.45;
+}
+
+.health-studies-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 24px;
+  background: #1F4FE0;
+  color: #FFFFFF !important;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(31, 79, 224, 0.25);
+  transition: all 0.15s ease;
+}
+
+.health-studies-button:hover {
+  background: #163BB5;
+  box-shadow: 0 6px 18px rgba(31, 79, 224, 0.35);
+  transform: translateY(-1px);
+}
+
 /* ===== Mensajes ===== */
 .health-error,
 .reset-error {
@@ -176,7 +298,7 @@
 .health-details {
   display: grid;
   gap: 0;
-  margin: 24px 0;
+  margin: 24px 0 10px;
   border: 1px solid var(--hp-line);
   border-radius: 14px;
   overflow: hidden;
@@ -205,7 +327,7 @@
   white-space: pre-wrap;
 }
 
-/* ===== Acciones ===== */
+/* ===== Acciones formulario ===== */
 .health-actions {
   display: flex;
   gap: 10px;
@@ -239,7 +361,23 @@
     gap: 4px;
   }
 
-  .health-actions > * {
-    flex: 1 1 100%;
+  .health-actions--view {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .health-button {
+    width: 100%;
+  }
+
+  .health-studies-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+  }
+
+  .health-studies-button {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
+import { Check } from 'lucide-react'
 import '../styles/MisMenores.css'
 
 // Opciones oficiales de documentación admitidas por el sistema
@@ -438,7 +439,7 @@ export default function MisMenores() {
                   </div>
                   {archivoSeleccionado && (
                     <div className="mismenores-file-preview">
-                      ✓ {archivoSeleccionado.name} ({(archivoSeleccionado.size / 1024).toFixed(0)} KB)
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><Check size={16} className="text-green-600" /> {archivoSeleccionado.name}</span> ({(archivoSeleccionado.size / 1024).toFixed(0)} KB)
                     </div>
                   )}
                 </div>

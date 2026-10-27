@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Plus } from 'lucide-react'
 import api from '../api/axios'
 import { nombreValido } from '../utils/sesion'
 import '../styles/GestionProfesionales.css'
@@ -247,7 +248,7 @@ export default function GestionProfesionales() {
           <div className="hu14-actions"><button type="button" onClick={() => abrirEdicionProfesional(item.idProfesional)}>Editar</button>{item.estado === 'ACTIVO' && <button type="button" className="hu14-danger-outline" onClick={() => { setObjetivoBaja(item); setBloqueoBaja(null); setError('') }}>Dar de baja</button>}</div>
         </article>)}
       </div> : <div className="hu14-empty"><strong>No hay profesionales que coincidan</strong><p>Probá otra búsqueda o registrá un profesional.</p></div> : especialidadesVisibles.length ? <div className="hu14-list">
-        {especialidadesVisibles.map((item) => <article className="hu14-card" key={item.idEspecialidad}><div className="hu14-card-main hu14-specialty-main"><div className="hu14-avatar hu14-avatar--specialty">✚</div><div className="hu14-card-info"><h2>{item.nombre}</h2><p>{item.descripcion || 'Sin descripción'}</p></div><span className={`hu14-status hu14-status--${String(item.estado).toLowerCase()}`}>{item.estado === 'ACTIVO' ? 'Activa' : 'Inactiva'}</span></div><div className="hu14-actions"><button type="button" onClick={() => abrirEdicionEspecialidad(item)}>Editar</button>{item.estado === 'ACTIVO' && <button type="button" className="hu14-danger-outline" onClick={() => { setObjetivoBaja(item); setBloqueoBaja(null); setError('') }}>Dar de baja</button>}</div></article>)}
+        {especialidadesVisibles.map((item) => <article className="hu14-card" key={item.idEspecialidad}><div className="hu14-card-main hu14-specialty-main"><div className="hu14-avatar hu14-avatar--specialty"><Plus size={18} /></div><div className="hu14-card-info"><h2>{item.nombre}</h2><p>{item.descripcion || 'Sin descripción'}</p></div><span className={`hu14-status hu14-status--${String(item.estado).toLowerCase()}`}>{item.estado === 'ACTIVO' ? 'Activa' : 'Inactiva'}</span></div><div className="hu14-actions"><button type="button" onClick={() => abrirEdicionEspecialidad(item)}>Editar</button>{item.estado === 'ACTIVO' && <button type="button" className="hu14-danger-outline" onClick={() => { setObjetivoBaja(item); setBloqueoBaja(null); setError('') }}>Dar de baja</button>}</div></article>)}
       </div> : <div className="hu14-empty"><strong>No hay especialidades que coincidan</strong><p>Probá otra búsqueda o agregá una especialidad.</p></div>}
     </section>
 
