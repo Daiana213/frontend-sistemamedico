@@ -16,6 +16,9 @@ import {
   X,
   Info,
   CalendarX,
+  Plus,
+  Sparkles,
+  Edit3,
 } from 'lucide-react'
 
 const ESTADOS = [
@@ -108,6 +111,29 @@ function AgendaProfesional() {
   const [pdfCargando, setPdfCargando] = useState(false)
   const [pdfError, setPdfError] = useState('')
   const [estudioPdf, setEstudioPdf] = useState(null)
+
+  // Carga de estudios médicos por el especialista durante la atención
+  const [modalCargarEstudioAbierto, setModalCargarEstudioAbierto] = useState(false)
+  const [estudioForm, setEstudioForm] = useState({
+    nombre: '',
+    codigo: '',
+    observacion: '',
+  })
+  const [guardandoEstudio, setGuardandoEstudio] = useState(false)
+  const [errorEstudio, setErrorEstudio] = useState('')
+  const [mensajeEstudio, setMensajeEstudio] = useState('')
+
+  // Edición de estudio médico por el especialista
+  const [modalEditarEstudioAbierto, setModalEditarEstudioAbierto] = useState(false)
+  const [estudioAEditar, setEstudioAEditar] = useState(null)
+  const [formEditarEstudio, setFormEditarEstudio] = useState({
+    nombre: '',
+    codigo: '',
+    observacion: '',
+  })
+  const [guardandoEdicionEstudio, setGuardandoEdicionEstudio] = useState(false)
+  const [errorEdicionEstudio, setErrorEdicionEstudio] = useState('')
+  const [mensajeEdicionEstudio, setMensajeEdicionEstudio] = useState('')
 
   const estaEnAtencion = Boolean(idTurno)
   const hora = new Date().getHours()
@@ -320,6 +346,102 @@ function AgendaProfesional() {
     }
   }
 
+  const presetsEstudios = [
+    'Radiografía de Tórax Frente y Perfil',
+    'Resonancia Magnética (RMN)',
+    'Tomografía Computada (TC)',
+    'Ecografía Abdominal Completa',
+    'Electrocardiograma (ECG)',
+    'Laboratorio Bioquímico Completo',
+    'Ecocardiograma Doppler Color',
+  ]
+
+  const generarCodigoAutomatico = () => {
+    const fechaActual = new Date()
+    const anio = fechaActual.getFullYear()
+    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0')
+    const dia = String(fechaActual.getDate()).padStart(2, '0')
+    const rand = Math.random().toString(36).substring(2, 6).toUpperCase()
+    setEstudioForm((prev) => ({ ...prev, codigo: `EST-${anio}${mes}${dia}-${rand}` }))
+  }
+
+  const handleGuardarEstudio = async (e) => {
+    e.preventDefault()
+    if (!estudioForm.nombre.trim()) {
+      setErrorEstudio('El nombre del estudio es obligatorio.')
+      return
+    }
+    setGuardandoEstudio(true)
+    setErrorEstudio('')
+    setMensajeEstudio('')
+    try {
+      const idPaciente = turnoSeleccionado?.paciente?.idPaciente
+      if (!idPaciente) {
+        throw new Error('No se pudo identificar al paciente del turno.')
+      }
+      await api.post(`/estudios/paciente/${idPaciente}`, {
+        nombre: estudioForm.nombre.trim(),
+        codigo: estudioForm.codigo.trim() || undefined,
+        observacion: estudioForm.observacion.trim() || undefined,
+      })
+      setMensajeEstudio('Estudio médico cargado y vinculado exitosamente.')
+      setEstudioForm({ nombre: '', codigo: '', observacion: '' })
+      await cargarHistoriaClinica(idPaciente)
+      setTimeout(() => {
+        setModalCargarEstudioAbierto(false)
+        setMensajeEstudio('')
+      }, 1000)
+    } catch (err) {
+      setErrorEstudio(err.response?.data?.error || 'No se pudo cargar el estudio médico.')
+    } finally {
+      setGuardandoEstudio(false)
+    }
+  }
+
+  const abrirEditarEstudio = (estudio) => {
+    setEstudioAEditar(estudio)
+    setFormEditarEstudio({
+      nombre: estudio.nombre || '',
+      codigo: estudio.codigo || '',
+      observacion: estudio.observacion || '',
+    })
+    setErrorEdicionEstudio('')
+    setMensajeEdicionEstudio('')
+    setModalEditarEstudioAbierto(true)
+  }
+
+  const handleGuardarEdicionEstudio = async (e) => {
+    e.preventDefault()
+    if (!formEditarEstudio.nombre.trim()) {
+      setErrorEdicionEstudio('El nombre del estudio es obligatorio.')
+      return
+    }
+    setGuardandoEdicionEstudio(true)
+    setErrorEdicionEstudio('')
+    setMensajeEdicionEstudio('')
+    try {
+      await api.put(`/estudios/${estudioAEditar.idEstudio}`, {
+        nombre: formEditarEstudio.nombre.trim(),
+        codigo: formEditarEstudio.codigo.trim() || undefined,
+        observacion: formEditarEstudio.observacion.trim() || undefined,
+      })
+      setMensajeEdicionEstudio('Estudio médico actualizado con éxito.')
+      const idPaciente = turnoSeleccionado?.paciente?.idPaciente
+      if (idPaciente) {
+        await cargarHistoriaClinica(idPaciente)
+      }
+      setTimeout(() => {
+        setModalEditarEstudioAbierto(false)
+        setMensajeEdicionEstudio('')
+        setEstudioAEditar(null)
+      }, 1000)
+    } catch (err) {
+      setErrorEdicionEstudio(err.response?.data?.error || 'No se pudo actualizar el estudio médico.')
+    } finally {
+      setGuardandoEdicionEstudio(false)
+    }
+  }
+
   const cambiarDia = (cantidad) => {
     const nuevoDia = new Date(`${fecha}T12:00:00`)
     nuevoDia.setDate(nuevoDia.getDate() + cantidad)
@@ -471,10 +593,26 @@ function AgendaProfesional() {
 
                   {/* Sección de Estudios Médicos (HU21 / PDF / PACS) */}
                   <div className="agenda-studies-section">
-                    <h2>Estudios médicos del paciente</h2>
-                    <p className="agenda-description">
-                      Estudios, informes y diagnósticos por imágenes cargados por el paciente (solo lectura).
-                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '10px' }}>
+                      <div>
+                        <h2 style={{ margin: 0 }}>Estudios médicos del paciente</h2>
+                        <p className="agenda-description" style={{ margin: '4px 0 0' }}>
+                          Estudios clínicos, análisis e imágenes DICOM vinculados a la historia clínica.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className="agenda-btn-primary-action"
+                        onClick={() => {
+                          setEstudioForm({ nombre: '', codigo: '', observacion: '' })
+                          setErrorEstudio('')
+                          setMensajeEstudio('')
+                          setModalCargarEstudioAbierto(true)
+                        }}
+                      >
+                        <Plus size={16} /> Cargar estudio médico
+                      </button>
+                    </div>
 
                     {cargandoHistoria ? (
                       <p className="agenda-description">Cargando estudios…</p>
@@ -558,6 +696,16 @@ function AgendaProfesional() {
                                     </button>
                                   </>
                                 )}
+
+                                <button
+                                  type="button"
+                                  className="agenda-btn-viewer"
+                                  style={{ background: '#475569' }}
+                                  onClick={() => abrirEditarEstudio(estudio)}
+                                  title="Editar estudio médico"
+                                >
+                                  <Edit3 size={14} /> Editar
+                                </button>
                               </div>
                             </article>
                           )
@@ -893,6 +1041,254 @@ function AgendaProfesional() {
                   </div>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: Cargar nuevo estudio médico desde especialista */}
+        {modalCargarEstudioAbierto && (
+          <div
+            className="misestudios-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-cargar-estudio-titulo"
+          >
+            <div className="misestudios-modal-card" style={{ maxWidth: '580px', width: '92%' }}>
+              <div className="misestudios-modal-header">
+                <div>
+                  <h3 id="modal-cargar-estudio-titulo" className="misestudios-modal-title">
+                    Cargar estudio médico
+                  </h3>
+                  <p className="misestudios-modal-subtitle">
+                    Paciente:{' '}
+                    {turnoSeleccionado?.paciente?.usuario?.nombre || turnoSeleccionado?.paciente?.nombre}{' '}
+                    {turnoSeleccionado?.paciente?.usuario?.apellido || turnoSeleccionado?.paciente?.apellido} · DNI:{' '}
+                    {turnoSeleccionado?.paciente?.usuario?.dni || turnoSeleccionado?.paciente?.dni}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="misestudios-modal-close"
+                  onClick={() => setModalCargarEstudioAbierto(false)}
+                  aria-label="Cerrar modal"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {mensajeEstudio && (
+                <div className="agenda-status-banner agenda-status-banner--success" style={{ margin: '14px 0' }}>
+                  <Check size={18} /> {mensajeEstudio}
+                </div>
+              )}
+
+              {errorEstudio && (
+                <div className="agenda-status-banner agenda-status-banner--error" style={{ margin: '14px 0' }}>
+                  <AlertTriangle size={18} /> {errorEstudio}
+                </div>
+              )}
+
+              <form onSubmit={handleGuardarEstudio} className="agenda-study-form">
+                <div className="agenda-field-group">
+                  <label htmlFor="nombre-estudio">
+                    Nombre o Tipo de Estudio <span style={{ color: '#DC2626' }}>*</span>
+                  </label>
+                  <input
+                    id="nombre-estudio"
+                    type="text"
+                    value={estudioForm.nombre}
+                    onChange={(e) => setEstudioForm({ ...estudioForm, nombre: e.target.value })}
+                    placeholder="Ej. Radiografía de Tórax Frente y Perfil"
+                    required
+                    disabled={guardandoEstudio}
+                  />
+                  <div className="agenda-preset-chips">
+                    <span className="agenda-preset-label">Frecuentes:</span>
+                    {presetsEstudios.map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        className="agenda-preset-chip"
+                        onClick={() => setEstudioForm({ ...estudioForm, nombre: p })}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="agenda-field-group">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label htmlFor="codigo-estudio">
+                      Código / StudyInstanceUID <span style={{ fontSize: '12px', color: '#6B7280' }}>(Opcional)</span>
+                    </label>
+                    <button
+                      type="button"
+                      className="agenda-btn-link"
+                      onClick={generarCodigoAutomatico}
+                      title="Genera un identificador único para estudios clínicos o análisis"
+                    >
+                      <Sparkles size={13} /> Generar automático
+                    </button>
+                  </div>
+                  <input
+                    id="codigo-estudio"
+                    type="text"
+                    value={estudioForm.codigo}
+                    onChange={(e) => setEstudioForm({ ...estudioForm, codigo: e.target.value })}
+                    placeholder="Ej. 1.2.840.113619... o EST-20261027-A9F1"
+                    disabled={guardandoEstudio}
+                  />
+                  <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '3px', display: 'block' }}>
+                    Si proviene de radiología o resonancia, ingresá el StudyInstanceUID para conectarlo con el visor PACS.
+                  </small>
+                </div>
+
+                <div className="agenda-field-group">
+                  <label htmlFor="observacion-estudio">
+                    Observaciones clínicas / Informe / Hallazgos
+                  </label>
+                  <textarea
+                    id="observacion-estudio"
+                    rows={4}
+                    value={estudioForm.observacion}
+                    onChange={(e) => setEstudioForm({ ...estudioForm, observacion: e.target.value })}
+                    placeholder="Detalles del procedimiento, resultados, conclusiones o valores destacados..."
+                    disabled={guardandoEstudio}
+                  />
+                </div>
+
+                <div className="misestudios-modal-actions" style={{ marginTop: '18px' }}>
+                  <button
+                    type="button"
+                    className="misestudios-btn-secondary"
+                    onClick={() => setModalCargarEstudioAbierto(false)}
+                    disabled={guardandoEstudio}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="misestudios-btn-primary"
+                    disabled={guardandoEstudio}
+                  >
+                    {guardandoEstudio ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" /> Guardando…
+                      </>
+                    ) : (
+                      <>
+                        <Plus size={16} /> Guardar estudio
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: Editar estudio médico desde especialista */}
+        {modalEditarEstudioAbierto && estudioAEditar && (
+          <div
+            className="misestudios-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-editar-estudio-titulo"
+          >
+            <div className="misestudios-modal-card" style={{ maxWidth: '580px', width: '92%' }}>
+              <div className="misestudios-modal-header">
+                <div>
+                  <h3 id="modal-editar-estudio-titulo" className="misestudios-modal-title">
+                    Editar estudio médico
+                  </h3>
+                  <p className="misestudios-modal-subtitle">
+                    Modificar datos y observaciones clínicas del estudio.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="misestudios-modal-close"
+                  onClick={() => setModalEditarEstudioAbierto(false)}
+                  aria-label="Cerrar modal"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {mensajeEdicionEstudio && (
+                <div className="agenda-status-banner agenda-status-banner--success" style={{ margin: '14px 0' }}>
+                  <Check size={18} /> {mensajeEdicionEstudio}
+                </div>
+              )}
+
+              {errorEdicionEstudio && (
+                <div className="agenda-status-banner agenda-status-banner--error" style={{ margin: '14px 0' }}>
+                  <AlertTriangle size={18} /> {errorEdicionEstudio}
+                </div>
+              )}
+
+              <form onSubmit={handleGuardarEdicionEstudio} className="agenda-study-form">
+                <div className="agenda-field-group">
+                  <label htmlFor="edit-esp-nombre">
+                    Nombre del Estudio <span style={{ color: '#DC2626' }}>*</span>
+                  </label>
+                  <input
+                    id="edit-esp-nombre"
+                    type="text"
+                    value={formEditarEstudio.nombre}
+                    onChange={(e) => setFormEditarEstudio({ ...formEditarEstudio, nombre: e.target.value })}
+                    required
+                    disabled={guardandoEdicionEstudio}
+                  />
+                </div>
+
+                <div className="agenda-field-group">
+                  <label htmlFor="edit-esp-codigo">Código / StudyInstanceUID</label>
+                  <input
+                    id="edit-esp-codigo"
+                    type="text"
+                    value={formEditarEstudio.codigo}
+                    onChange={(e) => setFormEditarEstudio({ ...formEditarEstudio, codigo: e.target.value })}
+                    disabled={guardandoEdicionEstudio}
+                  />
+                </div>
+
+                <div className="agenda-field-group">
+                  <label htmlFor="edit-esp-obs">Observaciones clínicas / Hallazgos</label>
+                  <textarea
+                    id="edit-esp-obs"
+                    rows={4}
+                    value={formEditarEstudio.observacion}
+                    onChange={(e) => setFormEditarEstudio({ ...formEditarEstudio, observacion: e.target.value })}
+                    disabled={guardandoEdicionEstudio}
+                  />
+                </div>
+
+                <div className="misestudios-modal-actions" style={{ marginTop: '18px' }}>
+                  <button
+                    type="button"
+                    className="misestudios-btn-secondary"
+                    onClick={() => setModalEditarEstudioAbierto(false)}
+                    disabled={guardandoEdicionEstudio}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="misestudios-btn-primary"
+                    disabled={guardandoEdicionEstudio}
+                  >
+                    {guardandoEdicionEstudio ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" /> Guardando…
+                      </>
+                    ) : (
+                      'Guardar cambios'
+                    )}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
