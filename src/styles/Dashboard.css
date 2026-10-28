@@ -315,3 +315,11 @@
   box-shadow: 0 14px 28px rgba(31, 79, 224, 0.45);
   filter: brightness(1.05);
 }
+
+.dashboard-chip--teal {
+  background: linear-gradient(135deg, #fff 55%, #E6FFFA);
+}
+.dashboard-chip--teal .dashboard-chip-icon {
+  background: #CCFBF1;
+  color: #0D9488;
+}

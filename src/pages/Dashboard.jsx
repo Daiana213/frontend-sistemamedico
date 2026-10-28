@@ -56,6 +56,9 @@ function Dashboard() {
           <Link to="/menores-pendientes" className="dashboard-chip dashboard-chip--blue">
             Ver menores pendientes de aprobación
           </Link>
+          <Link to="/admin/estudios" className="dashboard-chip dashboard-chip--teal">
+            Gestión de estudios médicos
+          </Link>
           {puedeGestionarUsuarios && (
             <>
               <Link to="/registro-administrativo" className="dashboard-chip dashboard-chip--green">

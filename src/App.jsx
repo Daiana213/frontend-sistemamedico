@@ -14,6 +14,7 @@ import MisTurnos from './pages/MisTurnos'
 import ConfiguracionAgenda from './pages/ConfiguracionAgenda'
 import GestionTurnos from './pages/GestionTurnos'
 import GestionProfesionales from './pages/GestionProfesionales'
+import GestionEstudios from './pages/GestionEstudios'
 import MisMenores from './pages/MisMenores'
 import MisEstudios from './pages/MisEstudios'
 
@@ -84,6 +85,15 @@ function App() {
         element={
           <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <GestionProfesionales />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/admin/estudios"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']}>
+            <GestionEstudios />
           </RutaProtegida>
         }
       />
