@@ -7,6 +7,9 @@ const perfilInicial = {
   sexo: '',
   idObraSocial: '',
   idPlan: '',
+  numeroAfiliado: '',
+  subfijoAdherente: '',
+  vencimientoCredencial: '',
 }
 
 function CompletarPerfil({ abierto, alCompletar }) {
@@ -53,6 +56,11 @@ function CompletarPerfil({ abierto, alCompletar }) {
           sexo: paciente.sexo || '',
           idObraSocial: paciente.plan?.idObraSocial?.toString() || '',
           idPlan: paciente.idPlan?.toString() || '',
+          numeroAfiliado: paciente.numeroAfiliado || '',
+          subfijoAdherente: paciente.subfijoAdherente || '',
+          vencimientoCredencial: paciente.vencimientoCredencial
+            ? new Date(paciente.vencimientoCredencial).toISOString().slice(0, 10)
+            : '',
         })
         setObrasSociales(datosObrasSociales)
       } catch (err) {
@@ -90,6 +98,9 @@ function CompletarPerfil({ abierto, alCompletar }) {
       email: perfil.email.trim(),
       idObraSocial: Number(perfil.idObraSocial),
       idPlan: Number(perfil.idPlan),
+      numeroAfiliado: perfil.numeroAfiliado.trim(),
+      subfijoAdherente: perfil.subfijoAdherente.trim() || null,
+      vencimientoCredencial: perfil.vencimientoCredencial || null,
     })
     if (!data.perfilCompleto) {
       setError('Completá todos los datos requeridos para continuar.')
@@ -276,6 +287,41 @@ function CompletarPerfil({ abierto, alCompletar }) {
                     </option>
                   ))}
                 </select>
+              </label>
+
+              <label>
+                Número de afiliado
+                <input
+                  name="numeroAfiliado"
+                  type="text"
+                  maxLength={50}
+                  placeholder="Número que figura en tu credencial"
+                  value={perfil.numeroAfiliado}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+
+              <label>
+                Subfijo de adherente (opcional)
+                <input
+                  name="subfijoAdherente"
+                  type="text"
+                  maxLength={10}
+                  placeholder="Ej. /00 (titular), /01"
+                  value={perfil.subfijoAdherente}
+                  onChange={handleChange}
+                />
+              </label>
+
+              <label>
+                Vencimiento de credencial (opcional)
+                <input
+                  name="vencimientoCredencial"
+                  type="date"
+                  value={perfil.vencimientoCredencial}
+                  onChange={handleChange}
+                />
               </label>
 
               {error && <p className="perfil-error">{error}</p>}

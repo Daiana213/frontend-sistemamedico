@@ -16,14 +16,7 @@ import {
   Info,
   FolderOpen,
   Activity,
-  Plus,
 } from 'lucide-react'
-
-const FORM_INICIAL = {
-  nombre: '',
-  codigo: '',
-  observacion: '',
-}
 
 function esStudyInstanceUid(codigo) {
   if (!codigo) return false
@@ -50,19 +43,6 @@ export default function MisEstudios() {
   const [estudios, setEstudios] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
-  const [mensajeExito, setMensajeExito] = useState('')
-
-  // Estado para modal de formulario (Alta / Edición)
-  const [modalFormAbierto, setModalFormAbierto] = useState(false)
-  const [estudioEditando, setEstudioEditando] = useState(null)
-  const [form, setForm] = useState(FORM_INICIAL)
-  const [formErrores, setFormErrores] = useState({})
-  const [guardando, setGuardando] = useState(false)
-
-  // Estado para modal de confirmación de eliminación
-  const [modalEliminarAbierto, setModalEliminarAbierto] = useState(false)
-  const [estudioAEliminar, setEstudioAEliminar] = useState(null)
-  const [eliminando, setEliminando] = useState(false)
 
   // Estado para modal de inspección PACS
   const [modalPacsAbierto, setModalPacsAbierto] = useState(false)
@@ -147,110 +127,6 @@ export default function MisEstudios() {
     }
   }
 
-  // Abrir modal de creación
-  const handleAbrirCrear = () => {
-    setEstudioEditando(null)
-    setForm(FORM_INICIAL)
-    setFormErrores({})
-    setModalFormAbierto(true)
-  }
-
-  // Abrir modal de edición
-  const handleAbrirEditar = (estudio) => {
-    setEstudioEditando(estudio)
-    setForm({
-      nombre: estudio.nombre || '',
-      codigo: estudio.codigo || '',
-      observacion: estudio.observacion || '',
-    })
-    setFormErrores({})
-    setModalFormAbierto(true)
-  }
-
-  // Validación de formulario
-  const validarFormulario = () => {
-    const errores = {}
-    const nombreLimpio = form.nombre.trim()
-    const codigoLimpio = form.codigo.trim()
-
-    if (!nombreLimpio) {
-      errores.nombre = 'El nombre del estudio es obligatorio.'
-    } else if (nombreLimpio.length < 2) {
-      errores.nombre = 'El nombre debe contener al menos 2 caracteres.'
-    } else if (nombreLimpio.length > 150) {
-      errores.nombre = 'El nombre no puede superar los 150 caracteres.'
-    }
-
-    if (!codigoLimpio) {
-      errores.codigo = 'El código o StudyInstanceUID del estudio es obligatorio.'
-    } else if (codigoLimpio.length > 150) {
-      errores.codigo = 'El código no puede superar los 150 caracteres.'
-    }
-
-    if (form.observacion && form.observacion.length > 1000) {
-      errores.observacion = 'Las observaciones no pueden superar los 1000 caracteres.'
-    }
-
-    setFormErrores(errores)
-    return Object.keys(errores).length === 0
-  }
-
-  // Guardar (Alta o Edición)
-  const handleGuardar = async (e) => {
-    e.preventDefault()
-    if (!validarFormulario()) return
-
-    setGuardando(true)
-    setError('')
-    try {
-      const payload = {
-        nombre: form.nombre.trim(),
-        codigo: form.codigo.trim(),
-        observacion: form.observacion.trim() || null,
-      }
-
-      if (estudioEditando) {
-        await api.put(`/estudios/${estudioEditando.idEstudio}`, payload)
-        setMensajeExito('Estudio médico actualizado correctamente.')
-      } else {
-        await api.post('/estudios', payload)
-        setMensajeExito('Estudio médico registrado correctamente.')
-      }
-
-      setModalFormAbierto(false)
-      cargarEstudios()
-    } catch (err) {
-      const mensajeServidor = err.response?.data?.error || 'Ocurrió un error al guardar el estudio.'
-      setFormErrores((prev) => ({ ...prev, general: mensajeServidor }))
-    } finally {
-      setGuardando(false)
-    }
-  }
-
-  // Abrir confirmación de eliminación
-  const handleAbrirEliminar = (estudio) => {
-    setEstudioAEliminar(estudio)
-    setModalEliminarAbierto(true)
-  }
-
-  // Confirmar eliminación
-  const handleConfirmarEliminar = async () => {
-    if (!estudioAEliminar) return
-    setEliminando(true)
-    setError('')
-    try {
-      await api.delete(`/estudios/${estudioAEliminar.idEstudio}`)
-      setMensajeExito(`El estudio "${estudioAEliminar.nombre}" fue eliminado correctamente.`)
-      setModalEliminarAbierto(false)
-      setEstudioAEliminar(null)
-      cargarEstudios()
-    } catch (err) {
-      setError(err.response?.data?.error || 'No se pudo eliminar el estudio médico.')
-    } finally {
-      setEliminando(false)
-    }
-  }
-
   // Inspeccionar PACS
   const handleInspeccionarPacs = async (estudio) => {
     setPacsEstado({
@@ -306,29 +182,15 @@ export default function MisEstudios() {
         {/* Banner superior */}
         <section className="misestudios-banner">
           <div>
-            <p className="misestudios-eyebrow">MI HISTORIA CLÍNICA</p>
+            <p className="misestudios-eyebrow">MI HISTORIA CLÍNICA · SOLO LECTURA</p>
             <h1 className="misestudios-title">Mis Estudios Médicos</h1>
             <p className="misestudios-subtitle">
-              Gestioná tus estudios, informes y códigos de diagnóstico por imágenes. Podés previsualizar
-              y descargar el informe médico en PDF de cada estudio en cualquier momento.
+              Consultá tus estudios e informes médicos. Podés abrir las imágenes en el visor PACS y
+              descargar el informe oficial en PDF.
             </p>
           </div>
 
         </section>
-
-        {/* Alerta de éxito */}
-        {mensajeExito && (
-          <div className="misestudios-alert misestudios-alert--success" role="status">
-            <span>{mensajeExito}</span>
-            <button
-              className="misestudios-alert-close"
-              onClick={() => setMensajeExito('')}
-              aria-label="Cerrar notificación"
-            >
-              ×
-            </button>
-          </div>
-        )}
 
         {/* Alerta de error general */}
         {error && (
@@ -461,135 +323,6 @@ export default function MisEstudios() {
         )}
       </div>
 
-      {/* Modal de Alta / Edición de Estudio */}
-      {modalFormAbierto && (
-        <div
-          className="misestudios-modal-backdrop"
-          onClick={() => !guardando && setModalFormAbierto(false)}
-        >
-          <div
-            className="misestudios-modal"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-          >
-            <button
-              className="misestudios-modal-close"
-              onClick={() => setModalFormAbierto(false)}
-              disabled={guardando}
-              aria-label="Cerrar modal"
-            >
-              ×
-            </button>
-
-            <h2>{estudioEditando ? 'Editar estudio médico' : 'Registrar nuevo estudio'}</h2>
-            <p className="misestudios-modal-desc">
-              Completá los datos del estudio. Podrás consultar el informe oficial en PDF inmediatamente
-              después de guardarlo.
-            </p>
-
-            {formErrores.general && (
-              <p className="misestudios-field-error" role="alert">
-                {formErrores.general}
-              </p>
-            )}
-
-            <form onSubmit={handleGuardar} className="misestudios-form">
-              <div className="misestudios-form-group">
-                <label className="misestudios-form-label" htmlFor="estudio-nombre">
-                  Nombre del estudio *
-                </label>
-                <input
-                  id="estudio-nombre"
-                  type="text"
-                  required
-                  placeholder="Ej. Resonancia Magnética de Columna Lumbar"
-                  value={form.nombre}
-                  onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-                  className={`misestudios-input ${formErrores.nombre ? 'has-error' : ''}`}
-                  maxLength={150}
-                  disabled={guardando}
-                />
-                {formErrores.nombre ? (
-                  <p className="misestudios-field-error">{formErrores.nombre}</p>
-                ) : (
-                  <p className="misestudios-field-hint">Entre 2 y 150 caracteres.</p>
-                )}
-              </div>
-
-              <div className="misestudios-form-group">
-                <label className="misestudios-form-label" htmlFor="estudio-codigo">
-                  Código o StudyInstanceUID DICOM *
-                </label>
-                <input
-                  id="estudio-codigo"
-                  type="text"
-                  required
-                  placeholder="Ej. 1.2.840.113619.2.55.3.60468842 o COD-12345"
-                  value={form.codigo}
-                  onChange={(e) => setForm({ ...form, codigo: e.target.value })}
-                  className={`misestudios-input ${formErrores.codigo ? 'has-error' : ''}`}
-                  maxLength={150}
-                  disabled={guardando}
-                />
-                {formErrores.codigo ? (
-                  <p className="misestudios-field-error">{formErrores.codigo}</p>
-                ) : (
-                  <p className="misestudios-field-hint">
-                    Código de laboratorio, orden médica o StudyInstanceUID DICOM.
-                  </p>
-                )}
-              </div>
-
-              <div className="misestudios-form-group">
-                <label className="misestudios-form-label" htmlFor="estudio-observacion">
-                  <span>Observaciones / Indicaciones (opcional)</span>
-                  <span className="misestudios-char-counter">
-                    {form.observacion.length} / 1000
-                  </span>
-                </label>
-                <textarea
-                  id="estudio-observacion"
-                  placeholder="Indicá detalles relevantes, indicaciones del médico o motivo del estudio…"
-                  value={form.observacion}
-                  onChange={(e) => setForm({ ...form, observacion: e.target.value })}
-                  className={`misestudios-textarea ${
-                    formErrores.observacion ? 'has-error' : ''
-                  }`}
-                  maxLength={1000}
-                  disabled={guardando}
-                />
-                {formErrores.observacion && (
-                  <p className="misestudios-field-error">{formErrores.observacion}</p>
-                )}
-              </div>
-
-              <div className="misestudios-modal-actions">
-                <button
-                  type="button"
-                  className="misestudios-btn-secondary"
-                  onClick={() => setModalFormAbierto(false)}
-                  disabled={guardando}
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="misestudios-btn-primary"
-                  disabled={guardando}
-                >
-                  {guardando
-                    ? 'Guardando…'
-                    : estudioEditando
-                    ? 'Guardar cambios'
-                    : 'Registrar estudio'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* Modal de Visualización de Informe Médico en PDF */}
       {modalPdfAbierto && estudioPdf && (
         <div className="misestudios-modal-backdrop" onClick={cerrarModalPdf}>
@@ -662,55 +395,6 @@ export default function MisEstudios() {
                   className="misestudios-pdf-iframe"
                 />
               ) : null}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de Confirmación de Eliminación */}
-      {modalEliminarAbierto && estudioAEliminar && (
-        <div
-          className="misestudios-modal-backdrop"
-          onClick={() => !eliminando && setModalEliminarAbierto(false)}
-        >
-          <div
-            className="misestudios-modal"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-          >
-            <button
-              className="misestudios-modal-close"
-              onClick={() => setModalEliminarAbierto(false)}
-              disabled={eliminando}
-              aria-label="Cerrar modal"
-            >
-              ×
-            </button>
-
-            <h2>¿Eliminar estudio médico?</h2>
-            <p className="misestudios-modal-desc">
-              Estás por eliminar el estudio <strong>"{estudioAEliminar.nombre}"</strong>. Esta acción
-              dará de baja el estudio y dejará de estar visible en tu historia clínica.
-            </p>
-
-            <div className="misestudios-modal-actions">
-              <button
-                type="button"
-                className="misestudios-btn-secondary"
-                onClick={() => setModalEliminarAbierto(false)}
-                disabled={eliminando}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className="misestudios-btn-danger"
-                onClick={handleConfirmarEliminar}
-                disabled={eliminando}
-              >
-                {eliminando ? 'Eliminando…' : 'Sí, eliminar estudio'}
-              </button>
             </div>
           </div>
         </div>
