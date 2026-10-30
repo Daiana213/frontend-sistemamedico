@@ -10,6 +10,8 @@
 
 .perfil-modal {
   width: min(100%, 460px);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   padding: 32px;
   border-radius: 20px;
   box-sizing: border-box;
