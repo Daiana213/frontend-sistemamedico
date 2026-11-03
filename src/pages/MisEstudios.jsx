@@ -229,7 +229,7 @@ export default function MisEstudios() {
                 esStudyInstanceUid(estudio.codigo)
               const visorUrl =
                 estudio.integracionPacs?.urlVisualizadorOhif ||
-                estudio.integracionPacs?.urlOrthancStoneViewer
+                (esDicom ? `http://localhost:3005/viewer?StudyInstanceUIDs=${encodeURIComponent(estudio.codigo.trim())}` : null)
 
               return (
                 <article key={estudio.idEstudio} className="misestudios-card">

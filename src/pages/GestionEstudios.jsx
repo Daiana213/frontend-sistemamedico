@@ -527,7 +527,9 @@ function GestionEstudios() {
                       esStudyInstanceUid(estudio.codigo)
                     const visorUrl =
                       estudio.integracionPacs?.urlVisualizadorOhif ||
-                      estudio.integracionPacs?.urlOrthancStoneViewer
+                      (esDicom
+                        ? `http://localhost:3005/viewer?StudyInstanceUIDs=${encodeURIComponent(estudio.codigo.trim())}`
+                        : null)
 
                     return (
                       <tr key={estudio.idEstudio} className={estudio.estado === 'INACTIVO' ? 'row-inactiva' : ''}>
