@@ -41,6 +41,8 @@ function GestionTurnos() {
   const [modal, setModal] = useState('')
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null)
   const [motivoCancelacion, setMotivoCancelacion] = useState('')
+  const [numeroAutorizacion, setNumeroAutorizacion] = useState('')
+  const [tokenDigital, setTokenDigital] = useState('')
   const [filtros, setFiltros] = useState({ paciente: '', profesional: '', fecha: '' })
 
   const [dni, setDni] = useState('')
@@ -205,6 +207,33 @@ function GestionTurnos() {
     }
   }
 
+  const abrirRecepcion = (turno) => {
+    setTurnoSeleccionado(turno)
+    setNumeroAutorizacion(turno.numeroAutorizacion || '')
+    setTokenDigital(turno.tokenDigital || '')
+    setError('')
+    setMensaje('')
+    setModal('recepcion')
+  }
+
+  const registrarRecepcion = async (event) => {
+    event.preventDefault()
+    if (!turnoSeleccionado) return
+    setError('')
+    setProcesando(true)
+    try {
+      const { data } = await api.patch(`/turnos/${turnoSeleccionado.idTurno}/recepcion`, {
+        numeroAutorizacion: numeroAutorizacion.trim() || undefined,
+        tokenDigital: tokenDigital.trim() || undefined,
+      })
+      await completarOperacion(data)
+    } catch (err) {
+      setError(err.response?.data?.error || err.response?.data?.message || 'No se pudo registrar la llegada. Intentá nuevamente.')
+    } finally {
+      setProcesando(false)
+    }
+  }
+
   const abrirReprogramacion = (turno) => {
     setTurnoSeleccionado(turno)
     setHorario('')
@@ -284,13 +313,15 @@ function GestionTurnos() {
           const activo = ESTADOS_ACTIVOS.has(estado)
           const pacienteTurno = turno.paciente?.usuario
           const profesional = turno.profesional?.usuario
+          const cobertura = turno.paciente?.plan
+          const yaRecepcionado = Boolean(turno.presente)
           return <article className="admin-appointment-card" key={turno.idTurno}>
             <div className="admin-appointment-card-main">
               <div className="admin-appointment-date"><strong>{fechaLegible(turno.fechaHora)}</strong><span>{horaLegible(turno.fechaHora)}</span></div>
-              <div className="admin-appointment-info"><h3>{pacienteTurno ? `${pacienteTurno.nombre} ${pacienteTurno.apellido}` : `Paciente #${turno.idPaciente}`}</h3><p>DNI {pacienteTurno?.dni || 'No disponible'}{profesional ? ` · Dr./Dra. ${profesional.nombre} ${profesional.apellido}` : ''}</p>{turno.motivoCancelacion && <p className="admin-appointment-reason">Motivo: {turno.motivoCancelacion}</p>}</div>
+              <div className="admin-appointment-info"><h3>{pacienteTurno ? `${pacienteTurno.nombre} ${pacienteTurno.apellido}` : `Paciente #${turno.idPaciente}`}</h3><p>DNI {pacienteTurno?.dni || 'No disponible'}{profesional ? ` · Dr./Dra. ${profesional.nombre} ${profesional.apellido}` : ''}</p>{cobertura && <p className="admin-appointment-coverage">Cobertura: {cobertura.obraSocial?.nombre || 'Obra social'} · {cobertura.nombre}{turno.paciente?.numeroAfiliado ? ` · Afiliado ${turno.paciente.numeroAfiliado}` : ''}</p>}{turno.numeroAutorizacion && <p className="admin-appointment-coverage">Autorización: {turno.numeroAutorizacion}</p>}{turno.tokenDigital && <p className="admin-appointment-coverage">Token: {turno.tokenDigital}</p>}{yaRecepcionado && <p className="admin-appointment-arrival">En sala de espera{turno.fechaLlegada ? ` desde las ${horaLegible(turno.fechaLlegada)}` : ''}</p>}{turno.motivoCancelacion && <p className="admin-appointment-reason">Motivo: {turno.motivoCancelacion}</p>}</div>
               <span className={`admin-appointment-status admin-appointment-status--${estado.toLowerCase()}`}>{ESTADOS[estado] || estado}</span>
             </div>
-            {activo && <div className="admin-appointment-actions"><button type="button" onClick={() => abrirReprogramacion(turno)}>Reprogramar turno</button><button type="button" className="admin-appointment-delete" onClick={() => abrirCancelacion(turno)}>Eliminar turno</button></div>}
+            {activo && <div className="admin-appointment-actions">{!yaRecepcionado && <button type="button" className="admin-appointment-receive" onClick={() => abrirRecepcion(turno)}>Recepcionar</button>}<button type="button" onClick={() => abrirReprogramacion(turno)}>Reprogramar turno</button><button type="button" className="admin-appointment-delete" onClick={() => abrirCancelacion(turno)}>Eliminar turno</button></div>}
           </article>
           })}</div>
         </section>)}
@@ -321,6 +352,17 @@ function GestionTurnos() {
         {error && <p className="admin-appointments-form-error" role="alert">{error}</p>}
         <label className="admin-appointments-reason-label">Motivo (opcional)<textarea value={motivoCancelacion} onChange={(event) => setMotivoCancelacion(event.target.value)} maxLength={500} rows={3} placeholder="Ingresá el motivo de cancelación" /></label>
         <div className="admin-appointments-modal-actions"><button type="button" className="admin-appointments-secondary" onClick={cerrarModal} disabled={procesando}>Volver</button><button type="submit" className="admin-appointments-danger" disabled={procesando}>{procesando ? 'Cancelando…' : 'Sí, eliminar turno'}</button></div>
+      </form>}
+
+      {modal === 'recepcion' && turnoSeleccionado && <form onSubmit={registrarRecepcion}>
+        <p className="admin-appointments-eyebrow">RECEPCIÓN</p><h2 id="admin-modal-heading">Registrar llegada del paciente</h2>
+        <p>{turnoSeleccionado.paciente?.usuario?.nombre} {turnoSeleccionado.paciente?.usuario?.apellido} · DNI {turnoSeleccionado.paciente?.usuario?.dni || 'No disponible'}</p>
+        <p>{fechaLegible(turnoSeleccionado.fechaHora)} a las {horaLegible(turnoSeleccionado.fechaHora)} · Dr./Dra. {turnoSeleccionado.profesional?.usuario?.nombre} {turnoSeleccionado.profesional?.usuario?.apellido}</p>
+        <div className="admin-appointments-reception-coverage"><strong>Datos de cobertura</strong><span>{turnoSeleccionado.paciente?.plan?.obraSocial?.nombre || 'Sin obra social informada'}{turnoSeleccionado.paciente?.plan?.nombre ? ` · ${turnoSeleccionado.paciente.plan.nombre}` : ''}</span>{turnoSeleccionado.paciente?.numeroAfiliado && <span>Número de afiliado: {turnoSeleccionado.paciente.numeroAfiliado}{turnoSeleccionado.paciente.subfijoAdherente ? ` · Adherente ${turnoSeleccionado.paciente.subfijoAdherente}` : ''}</span>}{turnoSeleccionado.paciente?.vencimientoCredencial && <span>Vencimiento de credencial: {new Intl.DateTimeFormat('es-AR').format(new Date(turnoSeleccionado.paciente.vencimientoCredencial))}</span>}</div>
+        {error && <p className="admin-appointments-form-error" role="alert">{error}</p>}
+        <label className="admin-appointments-reason-label">Número de autorización (opcional)<input className="admin-appointments-reception-input" value={numeroAutorizacion} onChange={(event) => setNumeroAutorizacion(event.target.value)} maxLength={50} /></label>
+        <label className="admin-appointments-reason-label">Token digital (opcional)<input className="admin-appointments-reception-input" value={tokenDigital} onChange={(event) => setTokenDigital(event.target.value)} maxLength={20} /></label>
+        <div className="admin-appointments-modal-actions"><button type="button" className="admin-appointments-secondary" onClick={cerrarModal} disabled={procesando}>Volver</button><button type="submit" disabled={procesando}>{procesando ? 'Registrando…' : 'Confirmar llegada'}</button></div>
       </form>}
     </section></div>}
   </main>

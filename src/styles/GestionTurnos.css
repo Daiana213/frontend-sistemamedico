@@ -132,6 +132,8 @@
 .admin-appointment-info h3 { margin: 0 0 6px; font-size: 16px; }
 .admin-appointment-info p { margin: 0; color: var(--at-muted); font-size: 13px; }
 .admin-appointment-info .admin-appointment-reason { margin-top: 7px; color: var(--at-danger); }
+.admin-appointment-info .admin-appointment-coverage { margin-top: 6px; color: #526079; }
+.admin-appointment-info .admin-appointment-arrival { margin-top: 7px; color: #24633d; font-weight: 700; }
 .admin-appointment-status { padding: 7px 12px; border-radius: 30px; background: #F1F3F7; color: var(--at-muted); font-size: 12px; font-weight: 800; white-space: nowrap; }
 .admin-appointment-status--solicitado { background: #FFF4DF; color: #936816; }
 .admin-appointment-status--confirmado { background: #DCE8FD; color: var(--at-primary-dark); }
@@ -151,6 +153,8 @@
   cursor: pointer;
 }
 .admin-appointment-actions button:hover { background: var(--at-tint); }
+.admin-appointment-actions .admin-appointment-receive { border-color: #8CCBA2; background: #EDF8F1; color: #24633D; }
+.admin-appointment-actions .admin-appointment-receive:hover { background: #DDF2E4; }
 .admin-appointment-actions .admin-appointment-delete { border-color: #f0caca; color: var(--at-danger); }
 .admin-appointment-actions .admin-appointment-delete:hover { background: #fff0f0; }
 .admin-appointments-empty { padding: 36px 20px; border: 1px solid var(--at-line); border-radius: 16px; background: #fff; color: var(--at-muted); text-align: center; }
@@ -203,6 +207,10 @@
 .admin-appointments-modal-actions .admin-appointments-danger:hover:not(:disabled) { background: #B91C1C; }
 .admin-appointments-reason-label { margin-top: 20px; }
 .admin-appointments-reason-label textarea { resize: vertical; }
+.admin-appointments-reception-coverage { display: grid; gap: 5px; margin: 16px 0; padding: 13px 15px; border: 1px solid #BFE3CE; border-radius: 10px; background: #EDF8F1; color: #42614C; font-size: 13px; }
+.admin-appointments-reception-coverage strong { color: #24633D; }
+.admin-appointments-reception-input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--at-line); border-radius: 8px; background: #fff; color: var(--color-text, #111827); font: inherit; font-weight: 400; box-sizing: border-box; }
+.admin-appointments-reception-input:focus { outline: 2px solid #C9D8F8; border-color: var(--at-primary); }
 
 @media (max-width: 680px) {
   .admin-appointments-page { padding: 16px; }
