@@ -1171,6 +1171,32 @@
   color: #0F172A;
 }
 
+.agenda-study-dialog .agenda-study-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding-right: 34px;
+}
+
+.agenda-study-dialog .agenda-study-modal-title {
+  margin: 0;
+  color: #0F172A;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.agenda-study-dialog .agenda-study-modal-subtitle {
+  margin: 7px 0 0;
+  color: #64748B;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.agenda-study-dialog .agenda-study-form {
+  width: 100%;
+}
+
 .misestudios-modal--pdf {
   width: min(100%, 960px);
   height: 90vh;

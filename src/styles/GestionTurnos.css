@@ -209,6 +209,10 @@
 .admin-appointments-reason-label textarea { resize: vertical; }
 .admin-appointments-reception-coverage { display: grid; gap: 5px; margin: 16px 0; padding: 13px 15px; border: 1px solid #BFE3CE; border-radius: 10px; background: #EDF8F1; color: #42614C; font-size: 13px; }
 .admin-appointments-reception-coverage strong { color: #24633D; }
+.admin-appointments-reception-coverage .admin-appointments-eligibility { padding-top: 5px; border-top: 1px solid #D6EBDD; font-weight: 700; }
+.admin-appointments-reception-coverage .admin-appointments-eligibility--error { color: #B42318; }
+.admin-appointments-particular-confirm { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; padding: 11px 13px; border: 1px solid #F1D28A; border-radius: 8px; background: #FFF8E8; color: #785C17; font-size: 13px; line-height: 1.45; }
+.admin-appointments-particular-confirm input { margin-top: 2px; accent-color: var(--at-primary); }
 .admin-appointments-reception-input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--at-line); border-radius: 8px; background: #fff; color: var(--color-text, #111827); font: inherit; font-weight: 400; box-sizing: border-box; }
 .admin-appointments-reception-input:focus { outline: 2px solid #C9D8F8; border-color: var(--at-primary); }
 

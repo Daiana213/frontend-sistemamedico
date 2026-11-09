@@ -44,6 +44,30 @@
   font-weight: 700;
 }
 
+.perfil-form label.perfil-coverage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.perfil-coverage-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #22a55c;
+}
+
+.perfil-coverage-note {
+  margin: -8px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .perfil-form input,
 .perfil-form select {
   width: 100%;
