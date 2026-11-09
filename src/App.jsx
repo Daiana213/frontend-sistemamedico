@@ -18,6 +18,7 @@ import GestionEstudios from './pages/GestionEstudios'
 import MisMenores from './pages/MisMenores'
 import MisEstudios from './pages/MisEstudios'
 import GestionObrasSociales from './pages/GestionObrasSociales'
+import Reportes from './pages/Reportes'
 
 function App() {
   return (
@@ -104,6 +105,15 @@ function App() {
         element={
           <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
             <GestionObrasSociales />
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/admin/reportes"
+        element={
+          <RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}>
+            <Reportes />
           </RutaProtegida>
         }
       />
