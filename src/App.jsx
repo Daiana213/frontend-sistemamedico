@@ -19,11 +19,13 @@ import MisMenores from './pages/MisMenores'
 import MisEstudios from './pages/MisEstudios'
 import GestionObrasSociales from './pages/GestionObrasSociales'
 import Reportes from './pages/Reportes'
+import LandingPage from './pages/LandingPage'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/registro-paciente" element={<RegistroPaciente />} />
       <Route path="/cambiar-password" element={<CambiarPassword />} />
       <Route path="/reset-password" element={<RestablecerPassword />} />
