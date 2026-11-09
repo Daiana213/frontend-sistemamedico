@@ -35,7 +35,7 @@ export default function RestablecerPassword() {
         {exito ? (
           <>
             <p className="reset-success">La contraseña se actualizó correctamente.</p>
-            <Link className="reset-back-button reset-back-button--success" to="/">
+            <Link className="reset-back-button reset-back-button--success" to="/login">
               <svg
                 width="16"
                 height="16"
@@ -82,7 +82,7 @@ export default function RestablecerPassword() {
               <button className="reset-submit" disabled={cargando}>
                 {cargando ? 'Guardando…' : 'Guardar contraseña'}
               </button>
-              <Link className="reset-back-button" to="/">
+              <Link className="reset-back-button" to="/login">
                 <svg
                   width="16"
                   height="16"

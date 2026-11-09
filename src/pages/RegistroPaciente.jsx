@@ -197,7 +197,7 @@ function RegistroPaciente() {
 
       setVerificadoExitoso(true)
       setTimeout(() => {
-        navigate('/', { state: { registroExitoso: true } })
+        navigate('/login', { state: { registroExitoso: true } })
       }, 1500)
     } catch (err) {
       const mensaje =
@@ -501,7 +501,7 @@ function RegistroPaciente() {
 
             <p className="registro-footer">
               ¿Ya tenés cuenta?{' '}
-              <Link to="/">
+              <Link to="/login">
                 Iniciar sesión
               </Link>
             </p>
