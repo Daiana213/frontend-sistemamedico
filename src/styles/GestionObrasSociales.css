@@ -159,6 +159,8 @@
 .admin-insurance-form-grid input:focus,
 .admin-insurance-form-grid select:focus,
 .admin-insurance-form-grid textarea:focus { outline: 2px solid rgba(47, 94, 224, .2); border-color: var(--insurance-primary); }
+.admin-insurance-form-grid input.admin-insurance-field--invalid { border-color: #b42318; background: #fff8f7; }
+.admin-insurance-field-error { color: #b42318; font-size: 12px; font-weight: 600; line-height: 1.4; }
 .admin-insurance-full { grid-column: 1 / -1; }
 .admin-insurance-form-grid .admin-insurance-check { display: flex; align-items: center; gap: 9px; min-height: 38px; }
 .admin-insurance-check input { width: 16px; height: 16px; }

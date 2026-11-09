@@ -333,6 +333,19 @@ export default function MisMenores() {
                     </div>
                   )}
 
+                  {menor.historialDocumentos?.length > 1 && <details className="mismenores-version-history">
+                    <summary>Historial de documentación ({menor.historialDocumentos.length} versiones)</summary>
+                    <ol>
+                      {menor.historialDocumentos.map((documento) => (
+                        <li key={documento.idDocumento}>
+                          <strong>{formatearTipoDocumento(documento.tipoDocumento)}</strong>
+                          <span>{documento.nombreArchivo} · {formatearFecha(documento.fechaCarga)} · {documento.estadoValidacion === 'APROBADO' ? 'Aprobada' : documento.estadoValidacion === 'RECHAZADO' ? 'Observada' : 'Pendiente'}</span>
+                          {documento.observaciones && <small>Observación: {documento.observaciones}</small>}
+                        </li>
+                      ))}
+                    </ol>
+                  </details>}
+
                   <div className="mismenores-card-actions">
                     {menor.documento && (
                       <button

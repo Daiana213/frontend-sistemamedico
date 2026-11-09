@@ -176,6 +176,10 @@ function GestionEstudios() {
       setErrorNuevo('El nombre del estudio es obligatorio.')
       return
     }
+    if (!nuevoEstudioForm.codigo.trim()) {
+      setErrorNuevo('Ingresá el StudyInstanceUID o generá un código interno para el estudio.')
+      return
+    }
 
     setGuardandoNuevo(true)
     setErrorNuevo('')
@@ -802,7 +806,7 @@ function GestionEstudios() {
               <div className="gestion-estudios-field-group">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <label htmlFor="admin-estudio-codigo">
-                    Código de Estudio o StudyInstanceUID <span style={{ color: '#6B7280', fontSize: '12px' }}>(Opcional)</span>
+                    Código de Estudio o StudyInstanceUID <span style={{ color: '#DC2626' }}>*</span>
                   </label>
                   <button
                     type="button"
@@ -818,9 +822,10 @@ function GestionEstudios() {
                   placeholder="Ej. 1.2.840.113619... o EST-20261027-A8B9"
                   value={nuevoEstudioForm.codigo}
                   onChange={(e) => setNuevoEstudioForm({ ...nuevoEstudioForm, codigo: e.target.value })}
+                  required
                 />
                 <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '3px', display: 'block' }}>
-                  Si el estudio proviene del equipo de rayos/resonancia (DICOM), colocá el StudyInstanceUID para visualización web.
+                  Para abrir imágenes en PACS, colocá el StudyInstanceUID real de Orthanc. Para estudios físicos/externos, podés generar un código interno.
                 </small>
               </div>
 

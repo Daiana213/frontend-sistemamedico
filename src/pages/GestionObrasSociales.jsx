@@ -23,6 +23,16 @@ function mensajeError(error, fallback) {
   return error.response?.data?.message || error.response?.data?.error || fallback
 }
 
+function cuitValidoAFIP(cuit) {
+  if (!/^\d{11}$/.test(cuit)) return false
+  if (!['20', '23', '24', '27', '30', '33', '34'].includes(cuit.slice(0, 2))) return false
+  const multiplicadores = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  const suma = multiplicadores.reduce((total, multiplicador, indice) => total + Number(cuit[indice]) * multiplicador, 0)
+  const resto = suma % 11
+  const digito = resto === 0 ? 0 : resto === 1 ? 9 : 11 - resto
+  return digito === Number(cuit[10])
+}
+
 export default function GestionObrasSociales() {
   const [obrasSociales, setObrasSociales] = useState([])
   const [busqueda, setBusqueda] = useState('')
@@ -38,6 +48,7 @@ export default function GestionObrasSociales() {
   const [planEditando, setPlanEditando] = useState(null)
   const [planForm, setPlanForm] = useState(PLAN_VACIO)
   const [errorModal, setErrorModal] = useState('')
+  const [erroresCamposObra, setErroresCamposObra] = useState({})
   const [confirmacion, setConfirmacion] = useState(null)
 
   const cargarObrasSociales = useCallback(async (mostrarCarga = true) => {
@@ -66,6 +77,7 @@ export default function GestionObrasSociales() {
     setObraEditando(null)
     setObraForm(OBRA_VACIA)
     setErrorModal('')
+    setErroresCamposObra({})
     setModal('obra')
   }
 
@@ -80,13 +92,16 @@ export default function GestionObrasSociales() {
       descripcion: obra.descripcion || '',
     })
     setErrorModal('')
+    setErroresCamposObra({})
     setModal('obra')
   }
 
   const guardarObra = async (event) => {
     event.preventDefault()
-    if (obraForm.cuit && !/^\d{11}$/.test(obraForm.cuit)) {
-      setErrorModal('Ingresá el CUIT con 11 dígitos, sin guiones ni espacios.')
+    setErrorModal('')
+    setErroresCamposObra({})
+    if (obraForm.cuit && !cuitValidoAFIP(obraForm.cuit)) {
+      setErroresCamposObra({ cuit: 'El CUIT ingresado no es válido según el algoritmo oficial de AFIP.' })
       return
     }
     setGuardando(true)
@@ -107,7 +122,24 @@ export default function GestionObrasSociales() {
       setModal('')
       await cargarObrasSociales(false)
     } catch (error) {
-      setErrorModal(mensajeError(error, 'No se pudo guardar la obra social.'))
+      const detalles = error.response?.data?.details || {}
+      const mensaje = mensajeError(error, 'No se pudo guardar la obra social.')
+      const campos = { ...detalles }
+      if (!campos.cuit && /cuit/i.test(mensaje) && /inv[aá]lid/i.test(mensaje)) {
+        campos.cuit = 'El CUIT ingresado no es válido según el algoritmo oficial de AFIP.'
+      }
+      if (!campos.cuit && /cuit/i.test(mensaje) && /existe/i.test(mensaje)) {
+        campos.cuit = 'Ya existe una obra social registrada con ese CUIT.'
+      }
+      if (!campos.nombre && /nombre/i.test(mensaje) && /existe/i.test(mensaje)) {
+        campos.nombre = 'Ya existe una obra social registrada con ese nombre.'
+      }
+      if (Object.keys(campos).length) {
+        setErroresCamposObra(campos)
+        setErrorModal('')
+      } else {
+        setErrorModal(mensaje)
+      }
     } finally {
       setGuardando(false)
     }
@@ -188,6 +220,7 @@ export default function GestionObrasSociales() {
     setModal('')
     setConfirmacion(null)
     setErrorModal('')
+    setErroresCamposObra({})
   }
 
   return <main className="admin-insurance-page">
@@ -221,7 +254,7 @@ export default function GestionObrasSociales() {
     </section>
 
     {modal && <div className="admin-insurance-backdrop" role="presentation"><section className="admin-insurance-modal" role="dialog" aria-modal="true" aria-labelledby="insurance-modal-title"><button type="button" className="admin-insurance-close" onClick={cerrarModal} aria-label="Cerrar" disabled={guardando}>×</button>
-      {modal === 'obra' && <form onSubmit={guardarObra}><p className="admin-insurance-eyebrow">DATOS DE COBERTURA</p><h2 id="insurance-modal-title">{obraEditando ? 'Editar obra social' : 'Nueva obra social o prepaga'}</h2>{errorModal && <p className="admin-insurance-message admin-insurance-message--error" role="alert">{errorModal}</p>}<div className="admin-insurance-form-grid"><label>Nombre *<input required minLength={2} maxLength={100} value={obraForm.nombre} onChange={(event) => setObraForm((actual) => ({ ...actual, nombre: event.target.value }))} /></label><label>Razón social<input maxLength={150} value={obraForm.razonSocial} onChange={(event) => setObraForm((actual) => ({ ...actual, razonSocial: event.target.value }))} /></label><label>CUIT<input inputMode="numeric" maxLength={11} pattern="\d{11}" title="Ingresá 11 dígitos, sin guiones." value={obraForm.cuit} onChange={(event) => setObraForm((actual) => ({ ...actual, cuit: event.target.value.replace(/\D/g, '').slice(0, 11) }))} placeholder="Sin guiones" /></label><label>Código RNOS<input maxLength={20} value={obraForm.codigoRnos} onChange={(event) => setObraForm((actual) => ({ ...actual, codigoRnos: event.target.value }))} /></label><label>Tipo de entidad<select value={obraForm.tipo} onChange={(event) => setObraForm((actual) => ({ ...actual, tipo: event.target.value }))}>{TIPOS_OBRA_SOCIAL.map(([valor, etiqueta]) => <option key={valor} value={valor}>{etiqueta}</option>)}</select></label><label className="admin-insurance-full">Descripción<textarea rows={3} maxLength={255} value={obraForm.descripcion} onChange={(event) => setObraForm((actual) => ({ ...actual, descripcion: event.target.value }))} /></label></div><div className="admin-insurance-modal-actions"><button type="button" className="admin-insurance-secondary" onClick={cerrarModal} disabled={guardando}>Cancelar</button><button type="submit" className="admin-insurance-primary" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar obra social'}</button></div></form>}
+      {modal === 'obra' && <form onSubmit={guardarObra}><p className="admin-insurance-eyebrow">DATOS DE COBERTURA</p><h2 id="insurance-modal-title">{obraEditando ? 'Editar obra social' : 'Nueva obra social o prepaga'}</h2>{errorModal && <p className="admin-insurance-message admin-insurance-message--error" role="alert">{errorModal}</p>}<div className="admin-insurance-form-grid"><label>Nombre *<input required minLength={2} maxLength={100} value={obraForm.nombre} aria-invalid={Boolean(erroresCamposObra.nombre)} aria-describedby={erroresCamposObra.nombre ? 'insurance-name-error' : undefined} className={erroresCamposObra.nombre ? 'admin-insurance-field--invalid' : ''} onChange={(event) => { setObraForm((actual) => ({ ...actual, nombre: event.target.value })); setErroresCamposObra((actual) => ({ ...actual, nombre: '' })) }} />{erroresCamposObra.nombre && <span id="insurance-name-error" className="admin-insurance-field-error" role="alert">{erroresCamposObra.nombre}</span>}</label><label>Razón social<input maxLength={150} value={obraForm.razonSocial} onChange={(event) => setObraForm((actual) => ({ ...actual, razonSocial: event.target.value }))} /></label><label>CUIT<input inputMode="numeric" maxLength={11} pattern="\d{11}" title="Ingresá 11 dígitos, sin guiones." value={obraForm.cuit} aria-invalid={Boolean(erroresCamposObra.cuit)} aria-describedby={erroresCamposObra.cuit ? 'insurance-cuit-error' : undefined} className={erroresCamposObra.cuit ? 'admin-insurance-field--invalid' : ''} onChange={(event) => { setObraForm((actual) => ({ ...actual, cuit: event.target.value.replace(/\D/g, '').slice(0, 11) })); setErroresCamposObra((actual) => ({ ...actual, cuit: '' })) }} placeholder="Sin guiones" />{erroresCamposObra.cuit && <span id="insurance-cuit-error" className="admin-insurance-field-error" role="alert">{erroresCamposObra.cuit}</span>}</label><label>Código RNOS<input maxLength={20} value={obraForm.codigoRnos} onChange={(event) => setObraForm((actual) => ({ ...actual, codigoRnos: event.target.value }))} /></label><label>Tipo de entidad<select value={obraForm.tipo} onChange={(event) => setObraForm((actual) => ({ ...actual, tipo: event.target.value }))}>{TIPOS_OBRA_SOCIAL.map(([valor, etiqueta]) => <option key={valor} value={valor}>{etiqueta}</option>)}</select></label><label className="admin-insurance-full">Descripción<textarea rows={3} maxLength={255} value={obraForm.descripcion} onChange={(event) => setObraForm((actual) => ({ ...actual, descripcion: event.target.value }))} /></label></div><div className="admin-insurance-modal-actions"><button type="button" className="admin-insurance-secondary" onClick={cerrarModal} disabled={guardando}>Cancelar</button><button type="submit" className="admin-insurance-primary" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar obra social'}</button></div></form>}
       {modal === 'plan' && <form onSubmit={guardarPlan}><p className="admin-insurance-eyebrow">{obraEditando?.nombre}</p><h2 id="insurance-modal-title">{planEditando ? 'Editar plan' : 'Nuevo plan'}</h2>{errorModal && <p className="admin-insurance-message admin-insurance-message--error" role="alert">{errorModal}</p>}<div className="admin-insurance-form-grid admin-insurance-form-grid--single"><label>Nombre del plan *<input required minLength={2} maxLength={100} value={planForm.nombre} onChange={(event) => setPlanForm((actual) => ({ ...actual, nombre: event.target.value }))} placeholder="Ej. Plan Integral 210" /></label><label>Descripción<textarea rows={3} maxLength={255} value={planForm.descripcion} onChange={(event) => setPlanForm((actual) => ({ ...actual, descripcion: event.target.value }))} /></label><label className="admin-insurance-check"><input type="checkbox" checked={planForm.requiereCopago} onChange={(event) => setPlanForm((actual) => ({ ...actual, requiereCopago: event.target.checked, montoCopago: event.target.checked ? actual.montoCopago : '' }))} /> Requiere copago</label>{planForm.requiereCopago && <label>Monto del copago (ARS)<input type="number" min="0" step="0.01" value={planForm.montoCopago} onChange={(event) => setPlanForm((actual) => ({ ...actual, montoCopago: event.target.value }))} /></label>}<label className="admin-insurance-check"><input type="checkbox" checked={planForm.requiereAutorizacionPrevia} onChange={(event) => setPlanForm((actual) => ({ ...actual, requiereAutorizacionPrevia: event.target.checked }))} /> Requiere autorización previa</label></div><div className="admin-insurance-modal-actions"><button type="button" className="admin-insurance-secondary" onClick={cerrarModal} disabled={guardando}>Cancelar</button><button type="submit" className="admin-insurance-primary" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar plan'}</button></div></form>}
     </section></div>}
 

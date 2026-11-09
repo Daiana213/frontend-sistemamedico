@@ -43,6 +43,9 @@ function GestionTurnos() {
   const [motivoCancelacion, setMotivoCancelacion] = useState('')
   const [numeroAutorizacion, setNumeroAutorizacion] = useState('')
   const [tokenDigital, setTokenDigital] = useState('')
+  const [validacionCobertura, setValidacionCobertura] = useState(null)
+  const [validandoCobertura, setValidandoCobertura] = useState(false)
+  const [continuarParticular, setContinuarParticular] = useState(false)
   const [filtros, setFiltros] = useState({ paciente: '', profesional: '', fecha: '' })
 
   const [dni, setDni] = useState('')
@@ -213,18 +216,73 @@ function GestionTurnos() {
     setTokenDigital(turno.tokenDigital || '')
     setError('')
     setMensaje('')
+    setValidacionCobertura(null)
+    setContinuarParticular(false)
     setModal('recepcion')
+  }
+
+  const validarCoberturaRecepcion = async () => {
+    if (!turnoSeleccionado) return
+    const pacienteTurno = turnoSeleccionado.paciente
+    const idObraSocial = pacienteTurno?.plan?.obraSocial?.idObraSocial
+    if (!idObraSocial) {
+      setValidacionCobertura({
+        elegible: true,
+        modalidadAtencion: 'PARTICULAR',
+        mensaje: 'El paciente no tiene una cobertura asignada. La atención se registrará como particular.',
+      })
+      setError('')
+      return
+    }
+
+    setValidandoCobertura(true)
+    setError('')
+    setValidacionCobertura(null)
+    setContinuarParticular(false)
+    try {
+      const { data } = await api.post('/obras-sociales/validar-elegibilidad', {
+        idPaciente: turnoSeleccionado.idPaciente,
+        idObraSocial,
+        idPlan: pacienteTurno?.idPlan || pacienteTurno?.plan?.idPlan,
+        idProfesional: turnoSeleccionado.idProfesional,
+        tokenDigital: tokenDigital.trim() || undefined,
+      })
+      setValidacionCobertura(data)
+      if (!data.elegible) setError(data.mensaje || 'La cobertura no está habilitada para esta atención.')
+    } catch (err) {
+      setError(err.response?.data?.error || err.response?.data?.message || 'No se pudo validar la cobertura.')
+    } finally {
+      setValidandoCobertura(false)
+    }
   }
 
   const registrarRecepcion = async (event) => {
     event.preventDefault()
     if (!turnoSeleccionado) return
+    if (!validacionCobertura) {
+      setError('Validá la cobertura antes de confirmar la llegada.')
+      return
+    }
+    if (!validacionCobertura.elegible && !continuarParticular) {
+      setError('La cobertura no está habilitada. Regularizá la cobertura o confirmá que la atención será particular.')
+      return
+    }
+    const esPrepaga = turnoSeleccionado.paciente?.plan?.obraSocial?.tipo === 'MEDICINA_PREPAGA'
+    if (validacionCobertura.elegible && esPrepaga && !validacionCobertura.afiliado?.tokenDigitalValidado) {
+      setError('Ingresá un token digital vigente y volvé a validar la cobertura.')
+      return
+    }
+    if (validacionCobertura.elegible && validacionCobertura.autorizacion?.requiere && !numeroAutorizacion.trim()) {
+      setError('Este plan requiere un número de autorización previa para confirmar la llegada.')
+      return
+    }
     setError('')
     setProcesando(true)
     try {
       const { data } = await api.patch(`/turnos/${turnoSeleccionado.idTurno}/recepcion`, {
         numeroAutorizacion: numeroAutorizacion.trim() || undefined,
         tokenDigital: tokenDigital.trim() || undefined,
+        modalidadAtencion: validacionCobertura.modalidadAtencion === 'PARTICULAR' || continuarParticular || !validacionCobertura.elegible ? 'PARTICULAR' : 'COBERTURA',
       })
       await completarOperacion(data)
     } catch (err) {
@@ -358,11 +416,12 @@ function GestionTurnos() {
         <p className="admin-appointments-eyebrow">RECEPCIÓN</p><h2 id="admin-modal-heading">Registrar llegada del paciente</h2>
         <p>{turnoSeleccionado.paciente?.usuario?.nombre} {turnoSeleccionado.paciente?.usuario?.apellido} · DNI {turnoSeleccionado.paciente?.usuario?.dni || 'No disponible'}</p>
         <p>{fechaLegible(turnoSeleccionado.fechaHora)} a las {horaLegible(turnoSeleccionado.fechaHora)} · Dr./Dra. {turnoSeleccionado.profesional?.usuario?.nombre} {turnoSeleccionado.profesional?.usuario?.apellido}</p>
-        <div className="admin-appointments-reception-coverage"><strong>Datos de cobertura</strong><span>{turnoSeleccionado.paciente?.plan?.obraSocial?.nombre || 'Sin obra social informada'}{turnoSeleccionado.paciente?.plan?.nombre ? ` · ${turnoSeleccionado.paciente.plan.nombre}` : ''}</span>{turnoSeleccionado.paciente?.numeroAfiliado && <span>Número de afiliado: {turnoSeleccionado.paciente.numeroAfiliado}{turnoSeleccionado.paciente.subfijoAdherente ? ` · Adherente ${turnoSeleccionado.paciente.subfijoAdherente}` : ''}</span>}{turnoSeleccionado.paciente?.vencimientoCredencial && <span>Vencimiento de credencial: {new Intl.DateTimeFormat('es-AR').format(new Date(turnoSeleccionado.paciente.vencimientoCredencial))}</span>}</div>
+        <div className="admin-appointments-reception-coverage"><strong>Datos de cobertura</strong><span>{turnoSeleccionado.paciente?.plan?.obraSocial?.nombre || 'Sin obra social informada'}{turnoSeleccionado.paciente?.plan?.nombre ? ` · ${turnoSeleccionado.paciente.plan.nombre}` : ''}</span>{turnoSeleccionado.paciente?.numeroAfiliado && <span>Número de afiliado: {turnoSeleccionado.paciente.numeroAfiliado}{turnoSeleccionado.paciente.subfijoAdherente ? ` · Adherente ${turnoSeleccionado.paciente.subfijoAdherente}` : ''}</span>}{turnoSeleccionado.paciente?.vencimientoCredencial && <span>Vencimiento de credencial: {new Intl.DateTimeFormat('es-AR').format(new Date(turnoSeleccionado.paciente.vencimientoCredencial))}</span>}{validacionCobertura && <><span className={validacionCobertura.elegible ? 'admin-appointments-eligibility admin-appointments-eligibility--ok' : 'admin-appointments-eligibility admin-appointments-eligibility--error'}>{validacionCobertura.elegible ? (validacionCobertura.modalidadAtencion === 'PARTICULAR' ? 'Atención particular' : 'Cobertura habilitada') : 'Cobertura no habilitada'}{validacionCobertura.mensaje ? ` · ${validacionCobertura.mensaje}` : ''}</span>{validacionCobertura.copago?.requiere && <span>Copago: {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(Number(validacionCobertura.copago.monto || 0))}</span>}{validacionCobertura.autorizacion?.requiere && <span>Requiere autorización previa</span>}{Array.isArray(validacionCobertura.requisitosConsulta) && validacionCobertura.requisitosConsulta.length > 0 && <span>Requisitos: {validacionCobertura.requisitosConsulta.join(' · ')}</span>}</>}</div>
         {error && <p className="admin-appointments-form-error" role="alert">{error}</p>}
-        <label className="admin-appointments-reason-label">Número de autorización (opcional)<input className="admin-appointments-reception-input" value={numeroAutorizacion} onChange={(event) => setNumeroAutorizacion(event.target.value)} maxLength={50} /></label>
-        <label className="admin-appointments-reason-label">Token digital (opcional)<input className="admin-appointments-reception-input" value={tokenDigital} onChange={(event) => setTokenDigital(event.target.value)} maxLength={20} /></label>
-        <div className="admin-appointments-modal-actions"><button type="button" className="admin-appointments-secondary" onClick={cerrarModal} disabled={procesando}>Volver</button><button type="submit" disabled={procesando}>{procesando ? 'Registrando…' : 'Confirmar llegada'}</button></div>
+        <label className="admin-appointments-reason-label">Número de autorización{validacionCobertura?.autorizacion?.requiere ? ' * (obligatorio para este plan)' : ' (si corresponde)'}<input className="admin-appointments-reception-input" value={numeroAutorizacion} onChange={(event) => setNumeroAutorizacion(event.target.value)} maxLength={50} required={Boolean(validacionCobertura?.elegible && validacionCobertura?.autorizacion?.requiere)} /></label>
+        <label className="admin-appointments-reason-label">Token digital{turnoSeleccionado.paciente?.plan?.obraSocial?.tipo === 'MEDICINA_PREPAGA' ? ' * (obligatorio para prepagas)' : ' (si corresponde)'}<input className="admin-appointments-reception-input" value={tokenDigital} onChange={(event) => { setTokenDigital(event.target.value); setValidacionCobertura(null); setContinuarParticular(false) }} maxLength={20} /></label>
+        {validacionCobertura && !validacionCobertura.elegible && <label className="admin-appointments-particular-confirm"><input type="checkbox" checked={continuarParticular} onChange={(event) => setContinuarParticular(event.target.checked)} />Continuar como atención particular. La cobertura informada no está habilitada para este turno.</label>}
+        <div className="admin-appointments-modal-actions"><button type="button" className="admin-appointments-secondary" onClick={cerrarModal} disabled={procesando || validandoCobertura}>Volver</button><button type="button" className="admin-appointments-secondary" onClick={validarCoberturaRecepcion} disabled={validandoCobertura || procesando}>{validandoCobertura ? 'Validando…' : 'Validar cobertura'}</button><button type="submit" disabled={procesando || validandoCobertura || !validacionCobertura || (!validacionCobertura.elegible && !continuarParticular) || (validacionCobertura.elegible && turnoSeleccionado.paciente?.plan?.obraSocial?.tipo === 'MEDICINA_PREPAGA' && !validacionCobertura.afiliado?.tokenDigitalValidado) || (validacionCobertura.elegible && validacionCobertura.autorizacion?.requiere && !numeroAutorizacion.trim())}>{procesando ? 'Registrando…' : 'Confirmar llegada'}</button></div>
       </form>}
     </section></div>}
   </main>

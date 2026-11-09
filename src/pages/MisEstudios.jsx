@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   FileText,
   Eye,
-  Search,
   Download,
   ExternalLink,
   Loader2,
@@ -60,8 +59,6 @@ export default function MisEstudios() {
   const [pdfError, setPdfError] = useState('')
   const [estudioPdf, setEstudioPdf] = useState(null)
 
-  // Feedback al copiar código
-  const [copiadoId, setCopiadoId] = useState(null)
 
   const location = useLocation()
   const volverA =
@@ -153,15 +150,6 @@ export default function MisEstudios() {
         estudio,
       })
     }
-  }
-
-  // Copiar código al portapapeles
-  const handleCopiarCodigo = (codigo, idEstudio) => {
-    if (!navigator.clipboard) return
-    navigator.clipboard.writeText(codigo).then(() => {
-      setCopiadoId(idEstudio)
-      setTimeout(() => setCopiadoId(null), 2000)
-    })
   }
 
   return (
@@ -267,16 +255,6 @@ export default function MisEstudios() {
                           {estudio.codigo}
                         </p>
                       </div>
-                      <button
-                        className={`misestudios-btn-copy ${
-                          copiadoId === estudio.idEstudio ? 'copied' : ''
-                        }`}
-                        onClick={() => handleCopiarCodigo(estudio.codigo, estudio.idEstudio)}
-                        type="button"
-                        title="Copiar código al portapapeles"
-                      >
-                        {copiadoId === estudio.idEstudio ? '¡Copiado!' : 'Copiar'}
-                      </button>
                     </div>
 
                     {estudio.observacion && (
@@ -303,13 +281,6 @@ export default function MisEstudios() {
                               <Eye size={15} /> Visor PACS
                             </a>
                           )}
-                          <button
-                            type="button"
-                            className="misestudios-btn-pacs-check"
-                            onClick={() => handleInspeccionarPacs(estudio)}
-                          >
-                            <Search size={15} /> Estado PACS
-                          </button>
                         </div>
                       </div>
                     )}

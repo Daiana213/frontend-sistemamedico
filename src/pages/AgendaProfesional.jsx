@@ -371,6 +371,10 @@ function AgendaProfesional() {
       setErrorEstudio('El nombre del estudio es obligatorio.')
       return
     }
+    if (!estudioForm.codigo.trim()) {
+      setErrorEstudio('Ingresá el StudyInstanceUID o generá un código interno para el estudio.')
+      return
+    }
     setGuardandoEstudio(true)
     setErrorEstudio('')
     setMensajeEstudio('')
@@ -600,7 +604,7 @@ function AgendaProfesional() {
                           Estudios clínicos, análisis e imágenes DICOM vinculados a la historia clínica.
                         </p>
                       </div>
-                      <button
+                      {profesional?.puedeCargarEstudios && <button
                         type="button"
                         className="agenda-btn-primary-action"
                         onClick={() => {
@@ -611,7 +615,7 @@ function AgendaProfesional() {
                         }}
                       >
                         <Plus size={16} /> Cargar estudio médico
-                      </button>
+                      </button>}
                     </div>
 
                     {cargandoHistoria ? (
@@ -1050,18 +1054,18 @@ function AgendaProfesional() {
         {/* MODAL: Cargar nuevo estudio médico desde especialista */}
         {modalCargarEstudioAbierto && (
           <div
-            className="misestudios-modal-overlay"
+            className="misestudios-modal-backdrop"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-cargar-estudio-titulo"
           >
-            <div className="misestudios-modal-card" style={{ maxWidth: '580px', width: '92%' }}>
-              <div className="misestudios-modal-header">
+            <div className="misestudios-modal agenda-study-dialog" style={{ maxWidth: '580px', width: '92%' }}>
+              <div className="agenda-study-modal-header">
                 <div>
-                  <h3 id="modal-cargar-estudio-titulo" className="misestudios-modal-title">
+                  <h2 id="modal-cargar-estudio-titulo" className="agenda-study-modal-title">
                     Cargar estudio médico
-                  </h3>
-                  <p className="misestudios-modal-subtitle">
+                  </h2>
+                  <p className="agenda-study-modal-subtitle">
                     Paciente:{' '}
                     {turnoSeleccionado?.paciente?.usuario?.nombre || turnoSeleccionado?.paciente?.nombre}{' '}
                     {turnoSeleccionado?.paciente?.usuario?.apellido || turnoSeleccionado?.paciente?.apellido} · DNI:{' '}
@@ -1122,7 +1126,7 @@ function AgendaProfesional() {
                 <div className="agenda-field-group">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <label htmlFor="codigo-estudio">
-                      Código / StudyInstanceUID <span style={{ fontSize: '12px', color: '#6B7280' }}>(Opcional)</span>
+                      Código / StudyInstanceUID <span style={{ color: '#DC2626' }}>*</span>
                     </label>
                     <button
                       type="button"
@@ -1139,10 +1143,11 @@ function AgendaProfesional() {
                     value={estudioForm.codigo}
                     onChange={(e) => setEstudioForm({ ...estudioForm, codigo: e.target.value })}
                     placeholder="Ej. 1.2.840.113619... o EST-20261027-A9F1"
+                    required
                     disabled={guardandoEstudio}
                   />
                   <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '3px', display: 'block' }}>
-                    Si proviene de radiología o resonancia, ingresá el StudyInstanceUID para conectarlo con el visor PACS.
+                    Para abrir imágenes en PACS, pegá el StudyInstanceUID real de Orthanc. Para otros estudios podés usar un código interno o generarlo automáticamente.
                   </small>
                 </div>
 
@@ -1193,18 +1198,18 @@ function AgendaProfesional() {
         {/* MODAL: Editar estudio médico desde especialista */}
         {modalEditarEstudioAbierto && estudioAEditar && (
           <div
-            className="misestudios-modal-overlay"
+            className="misestudios-modal-backdrop"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-editar-estudio-titulo"
           >
-            <div className="misestudios-modal-card" style={{ maxWidth: '580px', width: '92%' }}>
-              <div className="misestudios-modal-header">
+            <div className="misestudios-modal agenda-study-dialog" style={{ maxWidth: '580px', width: '92%' }}>
+              <div className="agenda-study-modal-header">
                 <div>
-                  <h3 id="modal-editar-estudio-titulo" className="misestudios-modal-title">
+                  <h2 id="modal-editar-estudio-titulo" className="agenda-study-modal-title">
                     Editar estudio médico
-                  </h3>
-                  <p className="misestudios-modal-subtitle">
+                  </h2>
+                  <p className="agenda-study-modal-subtitle">
                     Modificar datos y observaciones clínicas del estudio.
                   </p>
                 </div>
