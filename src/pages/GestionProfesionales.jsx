@@ -22,6 +22,7 @@ export default function GestionProfesionales() {
   const [pestana, setPestana] = useState('profesionales')
   const [profesionales, setProfesionales] = useState([])
   const [especialidades, setEspecialidades] = useState([])
+  const [obrasSociales, setObrasSociales] = useState([])
   const [cargando, setCargando] = useState(true)
   const [errorPagina, setErrorPagina] = useState('')
   const [mensaje, setMensaje] = useState('')
@@ -33,6 +34,7 @@ export default function GestionProfesionales() {
   const [profesionalId, setProfesionalId] = useState(null)
   const [profesionalForm, setProfesionalForm] = useState(PROFESIONAL_VACIO)
   const [especialidadesSeleccionadas, setEspecialidadesSeleccionadas] = useState([])
+  const [obrasSocialesSeleccionadas, setObrasSocialesSeleccionadas] = useState([])
   const [profesionalActual, setProfesionalActual] = useState(null)
   const [especialidadId, setEspecialidadId] = useState(null)
   const [especialidadForm, setEspecialidadForm] = useState(ESPECIALIDAD_VACIA)
@@ -43,12 +45,14 @@ export default function GestionProfesionales() {
     if (mostrarCarga) setCargando(true)
     setErrorPagina('')
     try {
-      const [respuestaProfesionales, respuestaEspecialidades] = await Promise.all([
+      const [respuestaProfesionales, respuestaEspecialidades, respuestaObrasSociales] = await Promise.all([
         api.get('/profesionales', { params: { incluirInactivos: true } }),
         api.get('/especialidades', { params: { incluirInactivas: true } }),
+        api.get('/obras-sociales'),
       ])
       setProfesionales(Array.isArray(respuestaProfesionales.data) ? respuestaProfesionales.data : [])
       setEspecialidades(Array.isArray(respuestaEspecialidades.data) ? respuestaEspecialidades.data : [])
+      setObrasSociales(Array.isArray(respuestaObrasSociales.data) ? respuestaObrasSociales.data : [])
     } catch (err) {
       setErrorPagina(mensajeError(err, 'No se pudieron cargar los profesionales y especialidades.'))
     } finally {
@@ -76,10 +80,14 @@ export default function GestionProfesionales() {
     setProfesionalId(id)
     setProfesionalForm(PROFESIONAL_VACIO)
     setEspecialidadesSeleccionadas([])
+    setObrasSocialesSeleccionadas([])
     setProfesionalActual(null)
     setError('')
     try {
-      const { data } = await api.get(`/profesionales/${id}`)
+      const [{ data }, { data: obrasSocialesData }] = await Promise.all([
+        api.get(`/profesionales/${id}`),
+        api.get(`/profesionales/${id}/obras-sociales`),
+      ])
       setProfesionalActual(data)
       setProfesionalForm({
         nombre: data.usuario.nombre || '',
@@ -91,6 +99,7 @@ export default function GestionProfesionales() {
         estado: data.estado || 'ACTIVO',
       })
       setEspecialidadesSeleccionadas((data.especialidades || []).map((item) => item.idEspecialidad))
+      setObrasSocialesSeleccionadas((obrasSocialesData || []).map((item) => item.idObraSocial))
     } catch (err) {
       setError(mensajeError(err, 'No se pudieron cargar los datos del profesional.'))
     }
@@ -120,6 +129,7 @@ export default function GestionProfesionales() {
         especialidades: especialidadesSeleccionadas,
         // Las bajas siempre pasan por DELETE para que el backend aplique el bloqueo por turnos y la auditoría.
         estado: requiereBaja ? 'ACTIVO' : estado,
+        obrasSociales: obrasSocialesSeleccionadas,
       }
       const { data } = await api.put(`/profesionales/${profesionalId}`, payload)
       if (requiereBaja) {
@@ -244,7 +254,7 @@ export default function GestionProfesionales() {
 
       {cargando ? <div className="hu14-empty">Cargando…</div> : pestana === 'profesionales' ? profesionalesVisibles.length ? <div className="hu14-list">
         {profesionalesVisibles.map((item) => <article className="hu14-card" key={item.idProfesional}>
-          <div className="hu14-card-main"><div className="hu14-avatar" aria-hidden="true">{item.nombreCompleto?.charAt(0)?.toLocaleUpperCase('es') || 'P'}</div><div className="hu14-card-info"><h2>{item.nombreCompleto}</h2><p>Matrícula {item.matricula}</p><div className="hu14-tags">{(item.especialidades || []).map((nombre) => <span key={nombre}>{nombre}</span>)}</div></div><span className={`hu14-status hu14-status--${String(item.estado).toLowerCase()}`}>{item.estado === 'ACTIVO' ? 'Activo' : 'Inactivo'}</span></div>
+          <div className="hu14-card-main"><div className="hu14-avatar" aria-hidden="true">{item.nombreCompleto?.charAt(0)?.toLocaleUpperCase('es') || 'P'}</div><div className="hu14-card-info"><h2>{item.nombreCompleto}</h2><p>Matrícula {item.matricula}</p><div className="hu14-tags">{(item.especialidades || []).map((nombre) => <span key={nombre}>{nombre}</span>)}</div>{item.obrasSociales?.length > 0 && <div className="hu14-tags hu14-tags--insurance" aria-label="Obras sociales atendidas">{item.obrasSociales.map((nombre) => <span key={nombre}>{nombre}</span>)}</div>}</div><span className={`hu14-status hu14-status--${String(item.estado).toLowerCase()}`}>{item.estado === 'ACTIVO' ? 'Activo' : 'Inactivo'}</span></div>
           <div className="hu14-actions"><button type="button" onClick={() => abrirEdicionProfesional(item.idProfesional)}>Editar</button>{item.estado === 'ACTIVO' && <button type="button" className="hu14-danger-outline" onClick={() => { setObjetivoBaja(item); setBloqueoBaja(null); setError('') }}>Dar de baja</button>}</div>
         </article>)}
       </div> : <div className="hu14-empty"><strong>No hay profesionales que coincidan</strong><p>Probá otra búsqueda o registrá un profesional.</p></div> : especialidadesVisibles.length ? <div className="hu14-list">
@@ -259,6 +269,7 @@ export default function GestionProfesionales() {
         {bloqueoBaja && <div className="hu14-blocked-summary"><strong>Turnos pendientes que impiden la baja</strong><ul>{bloqueoBaja.map((turno) => <li key={turno.idTurno}>{fechaHoraLegible(turno.fechaHora)} · {turno.paciente} · DNI {turno.dniPaciente} · {turno.estado}</li>)}</ul></div>}
         <div className="hu14-form-grid"><label>Nombre<input required value={profesionalForm.nombre} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, nombre: event.target.value }))} /></label><label>Apellido<input required value={profesionalForm.apellido} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, apellido: event.target.value }))} /></label><label>Teléfono<input required inputMode="numeric" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números." value={profesionalForm.telefono} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, telefono: event.target.value.replace(/\D/g, '') }))} /></label><label>Email<input required type="email" value={profesionalForm.email} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, email: event.target.value }))} /></label><label>Teléfono alternativo (opcional)<input inputMode="numeric" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números." value={profesionalForm.telefonoAlternativo} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, telefonoAlternativo: event.target.value.replace(/\D/g, '') }))} /></label><label>Email alternativo (opcional)<input type="email" value={profesionalForm.emailAlternativo} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, emailAlternativo: event.target.value }))} /></label><label>Estado<select value={profesionalForm.estado} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, estado: event.target.value }))}><option value="ACTIVO">Activo</option><option value="INACTIVO">Inactivo (dar de baja)</option></select></label></div>
         <fieldset className="hu14-specialty-options"><legend>Especialidades asignadas</legend>{especialidadesActivas.map((item) => <label key={item.idEspecialidad}><input type="checkbox" checked={especialidadesSeleccionadas.includes(item.idEspecialidad)} onChange={() => setEspecialidadesSeleccionadas((actuales) => actuales.includes(item.idEspecialidad) ? actuales.filter((id) => id !== item.idEspecialidad) : [...actuales, item.idEspecialidad])} />{item.nombre}</label>)}</fieldset>
+        <fieldset className="hu14-specialty-options hu14-insurance-options"><legend>Obras sociales que atiende</legend>{obrasSociales.length ? obrasSociales.map((item) => <label key={item.idObraSocial}><input type="checkbox" checked={obrasSocialesSeleccionadas.includes(item.idObraSocial)} onChange={() => setObrasSocialesSeleccionadas((actuales) => actuales.includes(item.idObraSocial) ? actuales.filter((id) => id !== item.idObraSocial) : [...actuales, item.idObraSocial])} />{item.nombre}</label>) : <span className="hu14-immutable">No hay obras sociales activas para asignar.</span>}</fieldset>
         <div className="hu14-modal-actions"><button type="button" className="hu14-secondary" onClick={cerrarModal} disabled={guardando}>Cancelar</button><button type="submit" className="hu14-primary-button" disabled={guardando || !profesionalActual}>{guardando ? 'Guardando…' : 'Guardar cambios'}</button></div>
       </form>}
 

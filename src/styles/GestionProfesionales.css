@@ -46,6 +46,7 @@
 .hu14-card-info > p { margin: 0; color: var(--hu14-muted); font-size: 13px; line-height: 1.5; }
 .hu14-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
 .hu14-tags span { padding: 4px 8px; border-radius: 999px; background: #F1F5FC; color: #526079; font-size: 11px; font-weight: 700; }
+.hu14-tags--insurance span { background: #E8F8EE; color: #24633D; }
 .hu14-status { padding: 6px 10px; border-radius: 999px; background: #EDF8F1; color: #24633D; font-size: 11px; font-weight: 800; white-space: nowrap; }
 .hu14-status--inactivo { background: #F1F3F7; color: #68758A; }
 .hu14-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; padding-top: 13px; border-top: 1px solid #EEF1F6; }
@@ -77,6 +78,7 @@
 .hu14-specialty-options legend { padding: 0 5px; color: #37445B; font-size: 13px; font-weight: 700; }
 .hu14-specialty-options label { display: inline-flex; align-items: center; gap: 7px; color: #475569; font-size: 13px; }
 .hu14-specialty-options input { accent-color: var(--hu14-primary); }
+.hu14-insurance-options { margin-top: 13px; }
 .hu14-modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; padding-top: 15px; border-top: 1px solid #EEF1F6; }
 .hu14-modal-actions button { min-height: 42px; padding: 9px 15px; border: 1px solid var(--hu14-primary); border-radius: 8px; background: var(--hu14-primary); color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .hu14-modal-actions button:disabled { opacity: .55; cursor: not-allowed; }

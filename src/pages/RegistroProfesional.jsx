@@ -20,17 +20,21 @@ const FORM_INICIAL = {
 function RegistroProfesional() {
   const [form, setForm] = useState(FORM_INICIAL)
   const [especialidades, setEspecialidades] = useState([])
+  const [obrasSociales, setObrasSociales] = useState([])
   const [especialidadesSeleccionadas, setEspecialidadesSeleccionadas] = useState([])
+  const [obrasSocialesSeleccionadas, setObrasSocialesSeleccionadas] = useState([])
   const [error, setError] = useState("")
   const [exito, setExito] = useState("")
   const [loading, setLoading] = useState(false)
   const [cargandoEspecialidades, setCargandoEspecialidades] = useState(true)
 
   useEffect(() => {
-    api
-      .get("/especialidades")
-      .then((res) => setEspecialidades(res.data))
-      .catch(() => setError("No se pudieron cargar las especialidades. Recarga la pagina."))
+    Promise.all([api.get("/especialidades"), api.get("/obras-sociales")])
+      .then(([resEspecialidades, resObrasSociales]) => {
+        setEspecialidades(resEspecialidades.data)
+        setObrasSociales(resObrasSociales.data)
+      })
+      .catch(() => setError("No se pudieron cargar las especialidades y obras sociales. Recargá la página."))
       .finally(() => setCargandoEspecialidades(false))
   }, [])
 
@@ -42,6 +46,12 @@ function RegistroProfesional() {
   const toggleEspecialidad = (id) => {
     setEspecialidadesSeleccionadas((prev) =>
       prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id],
+    )
+  }
+
+  const toggleObraSocial = (id) => {
+    setObrasSocialesSeleccionadas((prev) =>
+      prev.includes(id) ? prev.filter((obraId) => obraId !== id) : [...prev, id],
     )
   }
 
@@ -74,6 +84,7 @@ function RegistroProfesional() {
       email: form.email,
       password: form.password,
       especialidades: especialidadesSeleccionadas,
+      obrasSociales: obrasSocialesSeleccionadas,
       ...(form.telefonoAlternativo && { telefonoAlternativo: form.telefonoAlternativo }),
       ...(form.emailAlternativo && { emailAlternativo: form.emailAlternativo }),
     }
@@ -84,6 +95,7 @@ function RegistroProfesional() {
       setExito(res.data.mensaje || "Profesional registrado correctamente en el sistema.")
       setForm(FORM_INICIAL)
       setEspecialidadesSeleccionadas([])
+      setObrasSocialesSeleccionadas([])
     } catch (err) {
       const mensaje = err.response?.data?.error || err.response?.data?.message
       if (err.response?.status === 409) {
@@ -222,6 +234,28 @@ function RegistroProfesional() {
                       onChange={() => toggleEspecialidad(esp.idEspecialidad)}
                     />
                     {esp.nombre}
+                  </label>
+                ))}
+              </div>
+            )}
+          </fieldset>
+
+          <fieldset className="regpro-fieldset">
+            <legend>Obras sociales que atiende</legend>
+            {cargandoEspecialidades ? (
+              <p style={{ fontSize: 13, color: "#6B7280", margin: 0 }}>Cargando obras sociales...</p>
+            ) : obrasSociales.length === 0 ? (
+              <p style={{ fontSize: 13, color: "#6B7280", margin: 0 }}>No hay obras sociales activas para asignar.</p>
+            ) : (
+              <div className="regpro-especialidades">
+                {obrasSociales.map((obra) => (
+                  <label key={obra.idObraSocial}>
+                    <input
+                      type="checkbox"
+                      checked={obrasSocialesSeleccionadas.includes(obra.idObraSocial)}
+                      onChange={() => toggleObraSocial(obra.idObraSocial)}
+                    />
+                    {obra.nombre}
                   </label>
                 ))}
               </div>
