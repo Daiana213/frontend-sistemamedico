@@ -76,6 +76,9 @@ function Dashboard() {
               <Link to="/admin/profesionales" className="dashboard-chip dashboard-chip--blue">
                 Gestionar profesionales y especialidades
               </Link>
+              <Link to="/admin/obras-sociales" className="dashboard-chip dashboard-chip--green">
+                Gestionar obras sociales y planes
+              </Link>
             </>
           )}
         </div>
