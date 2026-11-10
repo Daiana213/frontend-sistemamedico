@@ -604,7 +604,7 @@ function AgendaProfesional() {
                           Estudios clínicos, análisis e imágenes DICOM vinculados a la historia clínica.
                         </p>
                       </div>
-                      {profesional?.puedeCargarEstudios && <button
+                      <button
                         type="button"
                         className="agenda-btn-primary-action"
                         onClick={() => {
@@ -615,7 +615,7 @@ function AgendaProfesional() {
                         }}
                       >
                         <Plus size={16} /> Cargar estudio médico
-                      </button>}
+                      </button>
                     </div>
 
                     {cargandoHistoria ? (
