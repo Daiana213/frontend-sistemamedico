@@ -837,3 +837,12 @@
     gap: 3px;
   }
 }
+
+.my-appointments-page--booking { min-height:100vh; padding-bottom:48px; }
+.my-appointments-page--booking .my-appointments-header { max-width:1180px; margin-bottom:20px; }
+.my-appointments-page--booking .my-appointments-content { display:none; }
+.my-appointments-page--booking .my-appointments-backdrop { position:static; inset:auto; z-index:auto; display:flex; justify-content:center; align-items:flex-start; min-height:0; padding:0; background:transparent; backdrop-filter:none; }
+.my-appointments-page--booking .rebook-modal { width:min(100%, 900px); max-height:none; overflow:visible; padding:32px; box-sizing:border-box; }
+.my-appointments-page--booking .rebook-modal h2 { font-size:26px; }
+.my-appointments-page--booking .booking-selectors { grid-template-columns:repeat(2, minmax(0,1fr)); }
+@media (max-width: 700px) { .my-appointments-page--booking .rebook-modal { padding:24px 18px; } .my-appointments-page--booking .booking-selectors { grid-template-columns:1fr; } }

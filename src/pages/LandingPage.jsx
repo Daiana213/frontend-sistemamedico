@@ -25,7 +25,7 @@ function LandingPage() {
     if (!token) {
       navigate('/login')
     } else if (rol === 'PACIENTE') {
-      navigate('/mis-turnos?solicitar=true', { state: { abrirSolicitud: true } })
+      navigate('/solicitar-turno')
     } else if (rol === 'PROFESIONAL') {
       navigate('/agenda')
     } else {
@@ -52,7 +52,7 @@ function LandingPage() {
         <div className="landing-hero-art" aria-label="Servicios digitales del Sanatorio Antonia">
           <div className="landing-art-orbit landing-art-orbit--one" /><div className="landing-art-orbit landing-art-orbit--two" />
           <div className="landing-art-symbol"><img src="/logo-simbolo-blanco.png" alt="" /></div>
-          <div className="landing-float-card landing-float-card--appointment"><span className="landing-float-icon"><CalendarPlus size={20} /></span><div><strong>Turnos en línea</strong><small>Elegí el día y horario</small></div><ArrowRight size={16} /></div>
+          <div className="landing-float-card landing-float-card--appointment"><span className="landing-float-icon"><CalendarPlus size={20} /></span><div><strong>Turnos en línea</strong><small>Elegí el día y horario</small></div></div>
           <div className="landing-float-card landing-float-card--care"><span className="landing-float-icon landing-float-icon--green"><HeartPulse size={20} /></span><div><strong>Atención integral</strong><small>Un equipo para acompañarte</small></div></div>
           <div className="landing-art-caption"><span>SA</span><div><strong>Sanatorio Antonia</strong><small>Cuidado y confianza</small></div></div>
         </div>
@@ -62,14 +62,12 @@ function LandingPage() {
 
     <section className="landing-specialties" id="especialidades">
       <div className="landing-section-heading"><div><span className="landing-section-kicker">NUESTRA CARTILLA</span><h2>Especialidades para cuidar de vos</h2></div><p>Encontrá el área de atención que necesitás y continuá con la reserva de tu turno en línea.</p></div>
-      <div className="landing-specialty-grid">{ESPECIALIDADES.map(({ nombre, descripcion, Icono }) => <article className="landing-specialty-card" key={nombre}><span className="landing-specialty-icon"><Icono size={21} strokeWidth={1.8} /></span><h3>{nombre}</h3><p>{descripcion}</p><button type="button" onClick={sacarTurno} aria-label={`Sacar turno para ${nombre}`}><ArrowRight size={18} /></button></article>)}</div>
-      <div className="landing-specialties-cta"><span>¿Ya sabés qué atención necesitás?</span><button type="button" onClick={sacarTurno}>Buscá un turno <ArrowRight size={16} /></button></div>
+      <div className="landing-specialty-grid">{ESPECIALIDADES.map(({ nombre, descripcion, Icono }) => <article className="landing-specialty-card" key={nombre}><span className="landing-specialty-icon"><Icono size={21} strokeWidth={1.8} /></span><h3>{nombre}</h3><p>{descripcion}</p></article>)}</div>
     </section>
 
     <section className="landing-steps" id="como-funciona">
       <div className="landing-section-heading landing-section-heading--center"><span className="landing-section-kicker">UN PROCESO SIMPLE</span><h2>Tu próximo turno, en pocos pasos</h2><p>Gestioná tu atención de forma clara y segura desde el portal.</p></div>
       <div className="landing-step-grid"><article><span className="landing-step-number">01</span><div className="landing-step-icon"><ShieldCheck size={22} /></div><h3>Ingresá a tu cuenta</h3><p>Registrate con tus datos para acceder a tus turnos e información médica.</p></article><article><span className="landing-step-number">02</span><div className="landing-step-icon"><Stethoscope size={22} /></div><h3>Elegí la especialidad</h3><p>Buscá el profesional y el horario que mejor se adapten a vos.</p></article><article><span className="landing-step-number">03</span><div className="landing-step-icon"><CalendarPlus size={22} /></div><h3>Confirmá tu turno</h3><p>Revisá los datos de la consulta y consultá tus turnos desde el portal.</p></article></div>
-      <button type="button" className="landing-button-primary landing-steps-cta" onClick={sacarTurno}>Empezar ahora <ArrowRight size={18} /></button>
     </section>
 
     <section className="landing-final-cta"><div><span className="landing-section-kicker">ESTAMOS PARA ACOMPAÑARTE</span><h2>Tu bienestar empieza con un primer paso.</h2><p>Conocé nuestro portal y gestioná tu atención cuando lo necesites.</p></div><button type="button" className="landing-button-light" onClick={sacarTurno}>Sacar un turno <ArrowRight size={18} /></button></section>

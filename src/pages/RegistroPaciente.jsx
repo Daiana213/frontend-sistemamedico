@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import api from '../api/axios'
 import '../styles/RegistroPaciente.css'
 import { nombreValido } from '../utils/sesion'
@@ -26,6 +27,8 @@ function calcularEdad(fechaNacimiento) {
 
 function RegistroPaciente() {
   const navigate = useNavigate()
+  const [mostrarPassword, setMostrarPassword] = useState(false)
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
   const [form, setForm] = useState({
     nombre: '',
     apellido: '',
@@ -251,6 +254,7 @@ function RegistroPaciente() {
         </div>
       </div>
       <div className="registro-page">
+        <Link to="/" className="auth-back-link"><ArrowLeft size={17} /> Volver al inicio</Link>
         <div className="registro-brand">
           <Link to="/">
             <img
@@ -393,27 +397,27 @@ function RegistroPaciente() {
         <div className="registro-row">
           <label className="registro-label">
             Contraseña
-            <input
+            <div className="password-field-wrap"><input
               name="password"
-              type="password"
+              type={mostrarPassword ? 'text' : 'password'}
               placeholder="Mín. 8 caracteres"
               className="registro-input"
               value={form.password}
               onChange={handleChange}
               required
-            />
+            /><button type="button" className="password-toggle-button" onClick={() => setMostrarPassword((visible) => !visible)} aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{mostrarPassword ? <Eye size={18} /> : <EyeOff size={18} />}</button></div>
           </label>
           <label className="registro-label">
             Confirmar contraseña
-            <input
+            <div className="password-field-wrap"><input
               name="confirmarPassword"
-              type="password"
+              type={mostrarConfirmacion ? 'text' : 'password'}
               placeholder="Repetir contraseña"
               className="registro-input"
               value={form.confirmarPassword}
               onChange={handleChange}
               required
-            />
+            /><button type="button" className="password-toggle-button" onClick={() => setMostrarConfirmacion((visible) => !visible)} aria-label={mostrarConfirmacion ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{mostrarConfirmacion ? <Eye size={18} /> : <EyeOff size={18} />}</button></div>
           </label>
         </div>
         <p className="registro-password-hint">

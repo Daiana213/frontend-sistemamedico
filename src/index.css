@@ -17,3 +17,24 @@ body {
   margin: 0;
   color: var(--sa-ink);
 }
+
+.auth-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 16px;
+  color: #3159be;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-back-link:hover { text-decoration: underline; }
+.password-field-wrap { position: relative; display: flex; width: 100%; align-items: center; }
+.password-field-wrap > input { width: 100%; padding-right: 46px !important; box-sizing: border-box; }
+.password-toggle-button { position: absolute; right: 8px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: #68778e; cursor: pointer; }
+.password-toggle-button:hover { background: #edf2fa; color: #3159be; }
+.password-toggle-button:focus-visible { outline: 2px solid #3159be; outline-offset: 1px; }
+
+.my-appointments-page, .mismenores-page, .misestudios-page { font-family:'Inter', system-ui, sans-serif; }
+.my-appointments-page button, .my-appointments-page input, .my-appointments-page select, .my-appointments-page textarea, .mismenores-page button, .mismenores-page input, .mismenores-page select, .mismenores-page textarea, .misestudios-page button, .misestudios-page input, .misestudios-page select, .misestudios-page textarea { font-family:inherit; }
