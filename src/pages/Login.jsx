@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import api from '../api/axios'
 import '../styles/Login.css'
 
 function Login() {
   const [dni, setDni] = useState('')
   const [password, setPassword] = useState('')
+  const [mostrarPassword, setMostrarPassword] = useState(false)
   const [error, setError] = useState('')
   const [roles, setRoles] = useState(null)
   const [preSessionToken, setPreSessionToken] = useState('')
@@ -16,16 +18,17 @@ function Login() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo, primerLogin) => {
+  const guardarSesionYRedirigir = (accessToken, refreshToken, rolActivo, primerLogin, nombreCompleto) => {
     localStorage.setItem('accessToken', accessToken)
     if (refreshToken) localStorage.setItem('refreshToken', refreshToken)
     localStorage.setItem('rolActivo', rolActivo)
+    if (nombreCompleto) localStorage.setItem('nombreUsuario', nombreCompleto)
     if (primerLogin) {
       localStorage.setItem('primerLogin', 'true')
       navigate('/cambiar-password')
     } else {
       localStorage.removeItem('primerLogin')
-      navigate(rolActivo === 'PROFESIONAL' ? '/agenda' : '/dashboard')
+      navigate('/dashboard')
     }
   }
 
@@ -39,7 +42,7 @@ function Login() {
         setPreSessionToken(data.preSessionToken)
         return
       }
-      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin)
+      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin, data.nombreCompleto)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al iniciar sesión')
     }
@@ -49,7 +52,7 @@ function Login() {
     setError('')
     try {
       const { data } = await api.post('/auth/seleccionar-rol', { preSessionToken, rol })
-      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin)
+      guardarSesionYRedirigir(data.accessToken, data.refreshToken, data.rolActivo, data.primerLogin, data.nombreCompleto)
     } catch (err) {
       setError(err.response?.data?.error || 'Error al seleccionar rol')
     }
@@ -70,6 +73,7 @@ function Login() {
   return (
     <div className="login-split">
       <div className="login-form-side">
+        <Link to="/" className="auth-back-link"><ArrowLeft size={17} /> Volver al inicio</Link>
         <div className="login-brand">
           <img
             src="/logo-completo.png"
@@ -143,13 +147,13 @@ function Login() {
 
                 <label>
                   <span className="login-label">Contraseña</span>
-                  <input
-                    type="password"
+                  <div className="password-field-wrap"><input
+                    type={mostrarPassword ? 'text' : 'password'}
                     className="login-input"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                  />
+                  /><button type="button" className="password-toggle-button" onClick={() => setMostrarPassword((visible) => !visible)} aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{mostrarPassword ? <Eye size={18} /> : <EyeOff size={18} />}</button></div>
                 </label>
 
                 <button type="button" className="login-forgot-button" onClick={() => { setRecuperar(true); setError('') }}>¿Olvidaste tu contraseña?</button>

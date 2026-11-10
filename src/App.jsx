@@ -20,6 +20,7 @@ import MisEstudios from './pages/MisEstudios'
 import GestionObrasSociales from './pages/GestionObrasSociales'
 import Reportes from './pages/Reportes'
 import LandingPage from './pages/LandingPage'
+import GestionAdministrativos from './pages/GestionAdministrativos'
 
 function App() {
   return (
@@ -55,6 +56,11 @@ function App() {
             <RegistroAdministrativo />
           </RutaProtegida>
         }
+      />
+
+      <Route
+        path="/admin/administrativos"
+        element={<RutaProtegida rolesPermitidos={['ADMINISTRATIVO']} permisosRequeridos={['gestion_usuarios']}><GestionAdministrativos /></RutaProtegida>}
       />
 
       <Route
@@ -136,6 +142,11 @@ function App() {
 
       <Route
         path="/mis-turnos"
+        element={<RutaProtegida rolesPermitidos={['PACIENTE']}><MisTurnos /></RutaProtegida>}
+      />
+
+      <Route
+        path="/solicitar-turno"
         element={<RutaProtegida rolesPermitidos={['PACIENTE']}><MisTurnos /></RutaProtegida>}
       />
 

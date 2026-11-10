@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import api from '../api/axios'
 import '../styles/RegistroAdministrativo.css'
 import { nombreValido } from '../utils/sesion'
 
 function RegistroAdministrativo() {
   const navigate = useNavigate()
+  const [mostrarPassword, setMostrarPassword] = useState(false)
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
   const [form, setForm] = useState({
     nombre: '',
     apellido: '',
@@ -89,6 +92,7 @@ function RegistroAdministrativo() {
           <img src="/logo-completo.png" alt="Sanatorio Antonia" className="regadmin-brand-logo" />
         </Link>
       </div>
+      <Link to="/dashboard" className="auth-back-link"><ArrowLeft size={17} /> Volver al panel</Link>
       <h2 className="regadmin-title">Registro de administrativo</h2>
 
       <form onSubmit={handleSubmit} className="regadmin-form">
@@ -141,27 +145,27 @@ function RegistroAdministrativo() {
         <div className="regadmin-row">
           <label className="regadmin-label">
             Contraseña
-            <input
+            <div className="password-field-wrap"><input
               name="password"
-              type="password"
+              type={mostrarPassword ? 'text' : 'password'}
               placeholder="Mín. 8 caracteres"
               className="regadmin-input"
               value={form.password}
               onChange={handleChange}
               required
-            />
+            /><button type="button" className="password-toggle-button" onClick={() => setMostrarPassword((visible) => !visible)} aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{mostrarPassword ? <Eye size={18} /> : <EyeOff size={18} />}</button></div>
           </label>
           <label className="regadmin-label">
             Confirmar contraseña
-            <input
+            <div className="password-field-wrap"><input
               name="confirmarPassword"
-              type="password"
+              type={mostrarConfirmacion ? 'text' : 'password'}
               placeholder="Repetir contraseña"
               className="regadmin-input"
               value={form.confirmarPassword}
               onChange={handleChange}
               required
-            />
+            /><button type="button" className="password-toggle-button" onClick={() => setMostrarConfirmacion((visible) => !visible)} aria-label={mostrarConfirmacion ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{mostrarConfirmacion ? <Eye size={18} /> : <EyeOff size={18} />}</button></div>
           </label>
         </div>
         <p className="regadmin-password-hint">
