@@ -681,12 +681,12 @@ function GestionEstudios() {
          ========================================================================= */}
       {modalCrearAbierto && (
         <div
-          className="misestudios-modal-overlay"
+          className="misestudios-modal-backdrop"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-admin-crear-titulo"
         >
-          <div className="misestudios-modal-card" style={{ maxWidth: '620px', width: '92%' }}>
+          <div className="misestudios-modal" style={{ maxWidth: '620px', width: '92%' }}>
             <div className="misestudios-modal-header">
               <div>
                 <h3 id="modal-admin-crear-titulo" className="misestudios-modal-title">
@@ -877,12 +877,12 @@ function GestionEstudios() {
          ========================================================================= */}
       {modalEditarAbierto && estudioAEditar && (
         <div
-          className="misestudios-modal-overlay"
+          className="misestudios-modal-backdrop"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-admin-editar-titulo"
         >
-          <div className="misestudios-modal-card" style={{ maxWidth: '580px', width: '92%' }}>
+          <div className="misestudios-modal" style={{ maxWidth: '580px', width: '92%' }}>
             <div className="misestudios-modal-header">
               <div>
                 <h3 id="modal-admin-editar-titulo" className="misestudios-modal-title">
@@ -987,12 +987,12 @@ function GestionEstudios() {
          ========================================================================= */}
       {modalPdfAbierto && estudioPdf && (
         <div
-          className="misestudios-modal-overlay"
+          className="misestudios-modal-backdrop"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-admin-pdf-titulo"
         >
-          <div className="misestudios-pdf-modal-card">
+          <div className="misestudios-modal misestudios-modal--pdf">
             <div className="misestudios-pdf-modal-header">
               <div className="misestudios-pdf-modal-title-group">
                 <h3 id="modal-admin-pdf-titulo">{estudioPdf.nombre}</h3>
