@@ -1353,6 +1353,9 @@ function AgendaProfesional() {
           >
             Registrar turno
           </button>
+          <Link className="agenda-tab-link" to="/agenda/estudios">
+            Estudios médicos
+          </Link>
         </nav>
 
         {mensajeRegistro && pestana === 'agenda' && (

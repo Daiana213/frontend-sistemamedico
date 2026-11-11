@@ -1,0 +1,55 @@
+.professional-studies-page { min-height:100vh; padding:22px clamp(16px,4vw,56px) 52px; box-sizing:border-box; background:#eaf2fe; color:#172b4d; }
+.professional-studies-header { display:flex; justify-content:space-between; align-items:center; width:min(100%,1200px); margin:0 auto 34px; }
+.professional-studies-header a { display:inline-flex; align-items:center; gap:7px; color:#3159be; font-size:13px; font-weight:700; text-decoration:none; }
+.professional-studies-header img { display:block; width:auto; height:36px; }
+.professional-studies-content { width:min(100%,1200px); margin:0 auto; }
+.professional-studies-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.professional-studies-heading > div > span,.professional-study-form > div > span,.professional-study-list-heading > div > span,.professional-studies-patient-card > span,.professional-study-modal > span { color:#3159be; font-size:10px; font-weight:800; letter-spacing:.13em; }
+.professional-studies-heading h1 { margin:7px 0; font-size:clamp(25px,3vw,34px); }
+.professional-studies-heading p { margin:0; color:#65738a; font-size:14px; }
+.professional-studies-heading > svg { color:#3159be; }
+.professional-studies-patient-picker { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; padding:18px; border:1px solid #dfe7f4; border-radius:14px; background:#fff; }
+.professional-studies-patient-picker > div { display:grid; gap:7px; min-width:0; }
+.professional-studies-patient-picker label,.professional-study-form label,.professional-study-modal label { color:#43536f; font-size:12px; font-weight:700; }
+.professional-study-search { position:relative; display:flex; align-items:center; }
+.professional-study-search svg { position:absolute; left:11px; color:#7b89a0; }
+.professional-study-search input,.professional-studies-patient-picker select,.professional-study-form input,.professional-study-form textarea,.professional-study-modal input,.professional-study-modal textarea { width:100%; min-height:41px; padding:10px 12px; box-sizing:border-box; border:1px solid #d8e1ee; border-radius:8px; background:#fff; color:#263752; font:inherit; font-size:13px; }
+.professional-study-search input { padding-left:36px; }
+.professional-study-search input:focus,.professional-studies-patient-picker select:focus,.professional-study-form input:focus,.professional-study-form textarea:focus,.professional-study-modal input:focus,.professional-study-modal textarea:focus { outline:2px solid #c9d8f8; border-color:#3159be; }
+.professional-studies-patient-card { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px 16px; margin-bottom:16px; padding:14px 18px; border:1px solid #d5e3fa; border-radius:12px; background:#f8fbff; }
+.professional-studies-patient-card strong { color:#263b5b; font-size:14px; }
+.professional-studies-patient-card small { color:#697891; font-size:12px; }
+.professional-study-layout { display:grid; grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr); align-items:start; gap:16px; }
+.professional-study-form,.professional-study-list-section { display:grid; gap:14px; padding:20px; border:1px solid #dfe7f4; border-radius:14px; background:#fff; box-shadow:0 6px 18px -14px rgba(33,64,123,.3); }
+.professional-study-form > div h2,.professional-study-list-heading h2 { margin:5px 0 0; color:#1b2f4f; font-size:18px; }
+.professional-study-form > div p { margin:6px 0 0; color:#68778e; font-size:12px; line-height:1.5; }
+.professional-study-form label,.professional-study-modal label { display:grid; gap:6px; }
+.professional-study-form textarea,.professional-study-modal textarea { min-height:88px; resize:vertical; }
+.professional-study-form > button { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:42px; border:1px solid #3159be; border-radius:9px; background:#3159be; color:#fff; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.professional-study-form > button:disabled { opacity:.6; cursor:wait; }
+.professional-study-list-heading { display:flex; justify-content:space-between; align-items:center; padding-bottom:13px; border-bottom:1px solid #e6ebf3; }
+.professional-study-list-heading > span { display:grid; place-items:center; min-width:28px; height:28px; padding:0 6px; border-radius:999px; background:#edf2ff; color:#3159be; font-size:12px; font-weight:800; }
+.professional-study-list { display:grid; gap:10px; }
+.professional-study-list article { display:grid; gap:10px; padding:14px; border:1px solid #e4eaf2; border-radius:10px; background:#fbfcff; }
+.professional-study-item-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.professional-study-item-heading > div { display:grid; gap:5px; }
+.professional-study-item-heading strong { color:#263752; font-size:13px; }
+.professional-study-item-heading small { color:#78869c; font-size:11px; }
+.professional-study-item-heading button { display:grid; place-items:center; width:32px; height:32px; border:1px solid #dce4f0; border-radius:8px; background:#fff; color:#3159be; cursor:pointer; }
+.professional-study-list code { width:fit-content; max-width:100%; overflow-wrap:anywhere; padding:5px 7px; border-radius:6px; background:#f0f4fb; color:#415471; font-size:11px; }
+.professional-study-list article p { margin:0; color:#62718a; font-size:12px; line-height:1.55; white-space:pre-wrap; }
+.professional-studies-empty { display:flex; align-items:center; justify-content:center; gap:8px; min-height:100px; padding:16px; border:1px dashed #cfd9e8; border-radius:11px; color:#6b7a91; font-size:13px; text-align:center; }
+.professional-studies-alert { margin-bottom:14px; padding:12px 14px; border:1px solid; border-radius:9px; font-size:13px; }
+.professional-studies-alert--error { border-color:#f1c2c2; background:#fff5f5; color:#a53e3e; }
+.professional-studies-alert--success { border-color:#c1e3ca; background:#f0fbf3; color:#267145; }
+.professional-studies-spin { animation:professional-studies-spin .9s linear infinite; }
+@keyframes professional-studies-spin { to { transform:rotate(360deg); } }
+.professional-study-modal-backdrop { position:fixed; z-index:80; inset:0; display:grid; place-items:center; overflow:auto; padding:20px; box-sizing:border-box; background:rgba(15,28,48,.58); backdrop-filter:blur(3px); }
+.professional-study-modal { position:relative; display:grid; gap:14px; width:min(100%,560px); max-height:calc(100vh - 40px); overflow:auto; padding:28px; box-sizing:border-box; border:1px solid #dce4f0; border-radius:16px; background:#fff; box-shadow:0 24px 70px rgba(12,32,67,.25); }
+.professional-study-modal h2 { margin:0; color:#1b2f4f; font-size:21px; }
+.professional-study-modal-close { position:absolute; top:17px; right:17px; display:grid; place-items:center; width:34px; height:34px; border:0; border-radius:50%; background:#edf2ff; color:#3159be; cursor:pointer; }
+.professional-study-modal > div { display:flex; justify-content:flex-end; gap:9px; margin-top:4px; }
+.professional-study-modal > div button { min-height:39px; padding:0 14px; border:1px solid #d5deeb; border-radius:8px; background:#fff; color:#465772; font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+.professional-study-modal > div button[type="submit"] { border-color:#3159be; background:#3159be; color:#fff; }
+@media(max-width:820px) { .professional-study-layout { grid-template-columns:1fr; } }
+@media(max-width:620px) { .professional-studies-header { margin-bottom:24px; } .professional-studies-patient-picker { grid-template-columns:1fr; padding:14px; } .professional-studies-patient-card { grid-template-columns:1fr; gap:5px; } .professional-study-form,.professional-study-list-section { padding:16px; } .professional-study-modal { padding:24px 18px; } }

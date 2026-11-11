@@ -10,11 +10,23 @@ function inicioDia(fecha) {
   return new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate())
 }
 
+const ANTICIPACION_MINIMA_MS = 2 * 60 * 60 * 1000
+
+function esSeleccionable(fechaHora, ahora = Date.now()) {
+  return new Date(fechaHora).getTime() - ahora >= ANTICIPACION_MINIMA_MS
+}
+
 function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupados = [], seleccionado, onSeleccionar }) {
   const [mesVisible, setMesVisible] = useState(() => inicioDia(new Date()))
+  const [ahora, setAhora] = useState(() => Date.now())
   const [disponibilidadApi, setDisponibilidadApi] = useState(null)
   const [cargandoDisponibilidad, setCargandoDisponibilidad] = useState(false)
   const [errorDisponibilidad, setErrorDisponibilidad] = useState('')
+
+  useEffect(() => {
+    const intervalo = window.setInterval(() => setAhora(Date.now()), 60 * 1000)
+    return () => window.clearInterval(intervalo)
+  }, [])
   const turnosCalculados = useMemo(() => {
     const agrupados = new Map()
     const ocupados = new Set(turnosOcupados
@@ -35,7 +47,7 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
         for (let minutos = desde; minutos + duracion <= hasta; minutos += duracion) {
           const hora = `${String(Math.floor(minutos / 60)).padStart(2, '0')}:${String(minutos % 60).padStart(2, '0')}`
           const fechaHora = new Date(`${fecha}T${hora}:00-03:00`).toISOString()
-          if (new Date(fechaHora).getTime() <= Date.now() || ocupados.has(new Date(fechaHora).getTime())) continue
+          if (!esSeleccionable(fechaHora) || ocupados.has(new Date(fechaHora).getTime())) continue
           agrupados.set(fecha, [...(agrupados.get(fecha) || []), { fechaHora }])
         }
       }
@@ -66,7 +78,9 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
         if (resultado.status !== 'fulfilled') return
         const horarios = resultado.value.data.turnosDisponibles || []
         if (!horarios.length) return
-        turnosPorDia.set(fechas[indice], horarios.map((hora) => ({ fechaHora: new Date(`${fechas[indice]}T${hora}:00-03:00`).toISOString() })))
+        turnosPorDia.set(fechas[indice], horarios
+          .map((hora) => ({ fechaHora: new Date(`${fechas[indice]}T${hora}:00-03:00`).toISOString() }))
+          .filter((turno) => esSeleccionable(turno.fechaHora)))
       })
       if (resultados.every((resultado) => resultado.status === 'rejected')) {
         setErrorDisponibilidad('No pudimos cargar la disponibilidad del profesional.')
@@ -92,7 +106,11 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
   const celdas = [...Array(desplazamiento).fill(null), ...Array.from({ length: cantidadDias }, (_, indice) => indice + 1)]
   while (celdas.length % 7) celdas.push(null)
   const fechaSeleccionada = seleccionado ? fechaLocal(new Date(seleccionado)) : ''
-  const horarios = turnosPorDia.get(fechaSeleccionada) || []
+  const horarios = (turnosPorDia.get(fechaSeleccionada) || []).filter((turno) => esSeleccionable(turno.fechaHora, ahora))
+
+  useEffect(() => {
+    if (seleccionado && !esSeleccionable(seleccionado, ahora)) onSeleccionar?.('')
+  }, [ahora, seleccionado, onSeleccionar])
 
   const hoy = inicioDia(new Date())
   const mesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
@@ -111,7 +129,7 @@ function CalendarioTurnos({ idProfesional, agendaProfesional = [], turnosOcupado
       {celdas.map((dia, indice) => {
         if (!dia) return <span className="booking-calendar-empty" key={`vacio-${indice}`} />
         const fecha = fechaLocal(new Date(mesVisible.getFullYear(), mesVisible.getMonth(), dia))
-        const opciones = turnosPorDia.get(fecha) || []
+        const opciones = (turnosPorDia.get(fecha) || []).filter((turno) => esSeleccionable(turno.fechaHora, ahora))
         const activo = fechaSeleccionada === fecha
         const esFechaPasada = inicioDia(new Date(mesVisible.getFullYear(), mesVisible.getMonth(), dia)) < hoy
         return <button type="button" role="gridcell" key={fecha} className={`booking-calendar-day${opciones.length ? ' has-slots' : ''}${activo ? ' is-selected' : ''}`} disabled={esFechaPasada || !opciones.length} onClick={() => onSeleccionar?.(opciones[0].fechaHora)} aria-label={`${dia}, ${opciones.length} horarios disponibles`} aria-pressed={activo}>{dia}{Boolean(opciones.length) && <i aria-hidden="true" />}</button>
