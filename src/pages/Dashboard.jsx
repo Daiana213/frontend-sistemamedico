@@ -12,6 +12,7 @@ function Dashboard() {
   const location = useLocation()
   const [perfilIncompleto, setPerfilIncompleto] = useState(false)
   const [proximosTurnos, setProximosTurnos] = useState([])
+  const [puedeGestionarEstudios, setPuedeGestionarEstudios] = useState(false)
   const puedeGestionarUsuarios = tienePermiso('gestion_usuarios')
 
   useEffect(() => {
@@ -28,6 +29,15 @@ function Dashboard() {
         setProximosTurnos(proximos)
       }
     })
+  }, [rolActivo])
+
+  useEffect(() => {
+    if (rolActivo !== 'PROFESIONAL') return
+    const ahora = new Date()
+    const fecha = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`
+    api.get('/profesionales/me/turnos', { params: { fecha } })
+      .then(({ data }) => setPuedeGestionarEstudios(Boolean(data.profesional?.puedeCargarEstudios)))
+      .catch(() => setPuedeGestionarEstudios(false))
   }, [rolActivo])
 
   return (
@@ -158,6 +168,7 @@ function Dashboard() {
       {rolActivo === 'PROFESIONAL' && (
         <div className="dashboard-chips">
           <Link to="/agenda" className="dashboard-chip dashboard-chip--green"><div className="dashboard-chip-text"><span className="dashboard-chip-title">Agenda e historia clínica</span><span className="dashboard-chip-sub">Consultas, pacientes y estudios médicos</span></div><div className="dashboard-chip-icon"><Calendar size={24} /></div></Link>
+          <Link to="/agenda/estudios" className="dashboard-chip dashboard-chip--blue"><div className="dashboard-chip-text"><span className="dashboard-chip-title">Gestión de estudios médicos</span><span className="dashboard-chip-sub">{puedeGestionarEstudios ? 'Cargar y actualizar estudios de tus pacientes' : 'Disponible para perfiles profesionales habilitados'}</span></div><div className="dashboard-chip-icon"><FileText size={24} /></div></Link>
         </div>
       )}
 

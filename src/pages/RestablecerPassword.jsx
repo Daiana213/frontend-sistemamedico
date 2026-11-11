@@ -79,7 +79,12 @@ export default function RestablecerPassword() {
                 />
               </label>
               {error && <p className="reset-error" role="alert">{error}</p>}
-              <button className="reset-submit" disabled={cargando}>
+              <button
+                type="submit"
+                className="reset-submit"
+                disabled={cargando}
+                style={{ display: 'flex', minHeight: 48, alignItems: 'center', justifyContent: 'center', color: '#fff', backgroundColor: '#2F5EE0' }}
+              >
                 {cargando ? 'Guardando…' : 'Guardar contraseña'}
               </button>
               <Link className="reset-back-button" to="/login">

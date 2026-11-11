@@ -21,6 +21,7 @@ import GestionObrasSociales from './pages/GestionObrasSociales'
 import Reportes from './pages/Reportes'
 import LandingPage from './pages/LandingPage'
 import GestionAdministrativos from './pages/GestionAdministrativos'
+import EstudiosProfesional from './pages/EstudiosProfesional'
 
 function App() {
   return (
@@ -133,6 +134,11 @@ function App() {
             <AgendaProfesional />
           </RutaProtegida>
         }
+      />
+
+      <Route
+        path="/agenda/estudios"
+        element={<RutaProtegida rolesPermitidos={['PROFESIONAL']}><EstudiosProfesional /></RutaProtegida>}
       />
 
       <Route

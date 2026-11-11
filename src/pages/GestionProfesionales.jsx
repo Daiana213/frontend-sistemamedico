@@ -6,7 +6,7 @@ import { nombreValido } from '../utils/sesion'
 import '../styles/GestionProfesionales.css'
 
 const PROFESIONAL_VACIO = {
-  nombre: '', apellido: '', telefono: '', email: '', telefonoAlternativo: '', emailAlternativo: '', estado: 'ACTIVO',
+  nombre: '', apellido: '', telefono: '', email: '', telefonoAlternativo: '', emailAlternativo: '', estado: 'ACTIVO', puedeCargarEstudios: false,
 }
 const ESPECIALIDAD_VACIA = { nombre: '', descripcion: '' }
 
@@ -97,6 +97,7 @@ export default function GestionProfesionales() {
         telefonoAlternativo: data.telefonoAlternativo || '',
         emailAlternativo: data.emailAlternativo || '',
         estado: data.estado || 'ACTIVO',
+        puedeCargarEstudios: Boolean(data.puedeCargarEstudios),
       })
       setEspecialidadesSeleccionadas((data.especialidades || []).map((item) => item.idEspecialidad))
       setObrasSocialesSeleccionadas((obrasSocialesData || []).map((item) => item.idObraSocial))
@@ -130,6 +131,7 @@ export default function GestionProfesionales() {
         // Las bajas siempre pasan por DELETE para que el backend aplique el bloqueo por turnos y la auditoría.
         estado: requiereBaja ? 'ACTIVO' : estado,
         obrasSociales: obrasSocialesSeleccionadas,
+        puedeCargarEstudios: datosPersonales.puedeCargarEstudios,
       }
       const { data } = await api.put(`/profesionales/${profesionalId}`, payload)
       if (requiereBaja) {
@@ -269,6 +271,7 @@ export default function GestionProfesionales() {
         {bloqueoBaja && <div className="hu14-blocked-summary"><strong>Turnos pendientes que impiden la baja</strong><ul>{bloqueoBaja.map((turno) => <li key={turno.idTurno}>{fechaHoraLegible(turno.fechaHora)} · {turno.paciente} · DNI {turno.dniPaciente} · {turno.estado}</li>)}</ul></div>}
         <div className="hu14-form-grid"><label>Nombre<input required value={profesionalForm.nombre} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, nombre: event.target.value }))} /></label><label>Apellido<input required value={profesionalForm.apellido} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, apellido: event.target.value }))} /></label><label>Teléfono<input required inputMode="numeric" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números." value={profesionalForm.telefono} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, telefono: event.target.value.replace(/\D/g, '') }))} /></label><label>Email<input required type="email" value={profesionalForm.email} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, email: event.target.value }))} /></label><label>Teléfono alternativo (opcional)<input inputMode="numeric" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números." value={profesionalForm.telefonoAlternativo} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, telefonoAlternativo: event.target.value.replace(/\D/g, '') }))} /></label><label>Email alternativo (opcional)<input type="email" value={profesionalForm.emailAlternativo} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, emailAlternativo: event.target.value }))} /></label><label>Estado<select value={profesionalForm.estado} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, estado: event.target.value }))}><option value="ACTIVO">Activo</option><option value="INACTIVO">Inactivo (dar de baja)</option></select></label></div>
         <fieldset className="hu14-specialty-options"><legend>Especialidades asignadas</legend>{especialidadesActivas.map((item) => <label key={item.idEspecialidad}><input type="checkbox" checked={especialidadesSeleccionadas.includes(item.idEspecialidad)} onChange={() => setEspecialidadesSeleccionadas((actuales) => actuales.includes(item.idEspecialidad) ? actuales.filter((id) => id !== item.idEspecialidad) : [...actuales, item.idEspecialidad])} />{item.nombre}</label>)}</fieldset>
+        <fieldset className="hu14-specialty-options hu14-insurance-options"><legend>Permisos</legend><label><input type="checkbox" checked={Boolean(profesionalForm.puedeCargarEstudios)} onChange={(event) => setProfesionalForm((actual) => ({ ...actual, puedeCargarEstudios: event.target.checked }))} />Puede cargar y editar estudios médicos de sus pacientes</label><p className="hu14-immutable">Este permiso habilita la sección “Gestión de estudios médicos” en el panel profesional.</p></fieldset>
         <fieldset className="hu14-specialty-options hu14-insurance-options"><legend>Obras sociales que atiende</legend>{obrasSociales.length ? obrasSociales.map((item) => <label key={item.idObraSocial}><input type="checkbox" checked={obrasSocialesSeleccionadas.includes(item.idObraSocial)} onChange={() => setObrasSocialesSeleccionadas((actuales) => actuales.includes(item.idObraSocial) ? actuales.filter((id) => id !== item.idObraSocial) : [...actuales, item.idObraSocial])} />{item.nombre}</label>) : <span className="hu14-immutable">No hay obras sociales activas para asignar.</span>}</fieldset>
         <div className="hu14-modal-actions"><button type="button" className="hu14-secondary" onClick={cerrarModal} disabled={guardando}>Cancelar</button><button type="submit" className="hu14-primary-button" disabled={guardando || !profesionalActual}>{guardando ? 'Guardando…' : 'Guardar cambios'}</button></div>
       </form>}

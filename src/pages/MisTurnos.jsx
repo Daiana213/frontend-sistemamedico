@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
 import api from '../api/axios'
@@ -75,6 +75,7 @@ export default function MisTurnos() {
   const [turnoAReprogramar, setTurnoAReprogramar] = useState(null)
   const [nuevoHorario, setNuevoHorario] = useState('')
   const [solicitudAbierta, setSolicitudAbierta] = useState(false)
+  const solicitudConfirmada = useRef(false)
   const [especialidades, setEspecialidades] = useState([])
   const [profesionales, setProfesionales] = useState([])
   const [idObraSocialPaciente, setIdObraSocialPaciente] = useState(null)
@@ -208,7 +209,11 @@ export default function MisTurnos() {
   }
 
   useEffect(() => {
-    if (esPaginaSolicitud && !solicitudAbierta && !perfilIncompleto) abrirSolicitud()
+    if (!esPaginaSolicitud) {
+      solicitudConfirmada.current = false
+      return
+    }
+    if (!solicitudAbierta && !perfilIncompleto && !solicitudConfirmada.current) abrirSolicitud()
   }, [esPaginaSolicitud, solicitudAbierta, perfilIncompleto])
 
   const cerrarSolicitud = () => {
@@ -237,7 +242,10 @@ export default function MisTurnos() {
         aviso: data.avisoCobertura || cobertura?.aviso,
         requisitosConsulta: data.requisitosConsulta || cobertura?.requisitosConsulta || [],
       })
-      if (esPaginaSolicitud) navigate('/mis-turnos')
+      if (esPaginaSolicitud) {
+        solicitudConfirmada.current = true
+        navigate('/mis-turnos', { replace: true })
+      }
       setSolicitudAbierta(false)
       setIdEspecialidad('')
       setIdProfesionalNuevo('')

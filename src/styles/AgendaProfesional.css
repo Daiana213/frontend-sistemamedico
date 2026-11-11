@@ -157,6 +157,25 @@
   cursor: pointer;
 }
 
+.agenda-tabs .agenda-tab-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  padding: 13px 17px;
+  color: var(--ag-text-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.agenda-tabs .agenda-tab-link:hover {
+  color: var(--ag-primary);
+}
+
 .agenda-tabs button:hover {
   color: var(--ag-primary);
 }
