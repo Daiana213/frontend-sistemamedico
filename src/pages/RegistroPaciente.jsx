@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import api from '../api/axios'
 import '../styles/RegistroPaciente.css'
@@ -27,6 +27,8 @@ function calcularEdad(fechaNacimiento) {
 
 function RegistroPaciente() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const destinoRegreso = location.state?.returnTo === '/dashboard' ? '/dashboard' : '/'
   const [mostrarPassword, setMostrarPassword] = useState(false)
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
   const [form, setForm] = useState({
@@ -254,7 +256,7 @@ function RegistroPaciente() {
         </div>
       </div>
       <div className="registro-page">
-        <Link to="/" className="auth-back-link"><ArrowLeft size={17} /> Volver al inicio</Link>
+        <Link to={destinoRegreso} className="auth-back-link registro-back-link"><ArrowLeft size={17} /> Volver al inicio</Link>
         <div className="registro-brand">
           <Link to="/">
             <img

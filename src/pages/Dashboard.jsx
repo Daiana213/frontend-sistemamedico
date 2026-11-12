@@ -73,6 +73,7 @@ function Dashboard() {
       {rolActivo === 'ADMINISTRATIVO' && (
         <div className="dashboard-admin-categories">
           <section><h2>Atención y estudios</h2><div className="dashboard-chips">
+            <Link to="/registro-paciente" state={{ returnTo: '/dashboard' }} className="dashboard-chip dashboard-chip--green">Registrar paciente</Link>
             <Link to="/menores-pendientes" className="dashboard-chip dashboard-chip--blue">Ver menores pendientes de aprobación</Link>
             <Link to="/admin/estudios" className="dashboard-chip dashboard-chip--teal">Gestión de estudios médicos</Link>
             {puedeGestionarUsuarios && <><Link to="/admin/turnos" className="dashboard-chip dashboard-chip--orange">Gestión de turnos</Link><Link to="/admin/reportes" className="dashboard-chip dashboard-chip--teal">Reportes y métricas</Link></>}
